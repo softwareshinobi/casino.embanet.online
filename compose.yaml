@@ -1,0 +1,17 @@
+services:
+
+    vembassy-sports-book-casino:
+
+        container_name: embassy-sports-book-casino
+
+        image: softwareshinobi/embassy-sports-book-casino
+
+        build: 
+
+            context: .
+
+            dockerfile: Dockerfile
+
+        ports:
+
+            - 8080:80
