@@ -1,73 +1,36 @@
-# Embassy Sports Book & Casino
+# The Software Shinobi Sportsbook and Casino
 
-a simulated casino sports book. the odds are real but the money is fake.
+Welcome to **The Software Shinobi Sportsbook and Casino**, a collection of classic casino games stitched together and enhanced for your entertainment.
 
-![Vivamus ac nisl ipsum](cover.jpg)
+![Shinobi Sports Book & Casinom](cover.png)
 
-## prologue
+This project brings together popular open-source casino games, customized and upgraded to offer a seamless gaming experience.
 
-I did this for Her.
+## Games Included
 
-I did this for the Universe.
+Dive into a variety of exciting casino games:
 
-## the games
+  * [**Blackjack**](https://www.google.com/search?q=/blackjack) - Test your strategy and try to hit 21!
+  * [**Casino War**](https://www.google.com/search?q=/casinowar) - A simple yet thrilling card game where high card wins.
+  * [**Roulette**](https://www.google.com/search?q=/roulette) - Place your bets and watch the wheel spin.
+  * [**Slots**](https://www.google.com/search?q=/slots) - Spin the reels and hope for a winning combination.
+  * [**Baccarat**](https://www.google.com/search?q=/baccarat) - Bet on the player, banker, or a tie in this elegant card game.
+  * [**Craps**](https://www.google.com/search?q=/craps) - Roll the dice and experience the excitement of the craps table.
 
-black jack
-casino war
+## Technologies Used
 
+This project is built with:
 
-## coming soon
+  * **HTML**
+  * **Bootstrap**
+  * **jQuery**
 
-nfl game odds
+-----
 
-odds converter calc
+## License
 
-## about this project
+This project is open-source and available under the **MIT License**.
 
-a sports book. a fake one.
+-----
 
-but using real bookmaker odds.
-
-i don't desire to sports bet, i just want to be able to track my picks.
-
-and i want to be able to go head-to-head with greg somewhere, since i can't use fanduel abroad.
-
-this project has been desired for so long, i've created similar things, but never exactly this.
-
-## the spicy fantasy
-
-tell me yours, i'll you mine.
-
-eventually it'll have this stuff:
-
-- [ ] integrate the sports book odds api
-- [ ] all on demend bet creation
-- [ ] dashboard for managing account activity
-- [ ] rest api with jobs server to get fresh odds
-- [ ] account management
-- [ ] support multi-tenancy
-
-## what is the embassy?
-
-My apartment. lol.
-
-shout out to [Drake](repository-documentation/readme.md).
-
-> All factual, I call the house "the embassy", the studio the chapel"
-
-## ciao
-
-From my universe to yours.
-
-with lots of love,
-
-Software Shinobi
-
-[www.softwareshinobi.digital](http://softwaredeveloperthings.com/softwareshinobi.digital/)
-
-## demo
-
-for now the apps are all java script. so you can just play with them, no server.
-
-<a href="https://softwareshinobi.github.io/embassy-sports-book-casino/">Have Fun</a>
-
+Ready to try your luck? Visit the live casino site at [casino.softwareshinobi.com](https://www.google.com/search?q=https://casino.softwareshinobi.com)!
