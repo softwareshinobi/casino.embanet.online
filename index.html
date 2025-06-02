@@ -1,128 +1,100 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<title>Casino / Software Shinobi</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casino / Software Shinobi</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/sketchy/bootstrap.min.css">
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+            background-color: #f8f9fa; /* Light background for contrast with sketchy theme */
+        }
+        .jumbotron {
+            background-color: #e9ecef; /* Lighter background for jumbotron */
+            border-radius: 15px; /* Rounded corners for the jumbotron */
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Subtle shadow */
+        }
+        .game-links .btn {
+            margin-bottom: 15px; /* Space between buttons */
+            border-radius: 10px; /* Rounded corners for buttons */
+            padding: 15px 25px; /* Larger padding for better touch targets */
+            font-size: 1.25rem; /* Larger font size */
+            font-weight: bold;
+            transition: all 0.3s ease; /* Smooth transition for hover effects */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow for buttons */
+        }
+        .game-links .btn:hover {
+            transform: translateY(-3px); /* Slight lift on hover */
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2); /* Enhanced shadow on hover */
+        }
+        .navbar {
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .container {
+            max-width: 960px; /* Max width for content on large screens */
+        }
+    </style>
 </head>
 <body>
 
-
-<h1> casino! </h1>
-
-<br />
-
-
-<br />
-
-
-  <a
-
-    class="link"
-
-    tdarget="countdown"
-
-    href="/blackjack"
-
-    >
-
-        <i class="">&nbsp;</i> blackjack
-
-    </a>
-
-<br />
-
-
-  <a
-
-    class="link"
-
-    tdarget="countdown"
-
-    href="/casinowar"
-
-    >
-
-        <i class="">&nbsp;</i> casino war
-
-    </a>
-
-
-<br />
-
-
-  <a
-
-    class="link"
-
-    tdarget="countdown"
-
-    href="/roulette"
-
-    >
-
-        <i class="">&nbsp;</i> roulette
-
-    </a>
-
-
-<br />
-
-
-
-
-
-  <a
-
-    class="link"
-
-    tdarget="countdown"
-
-    href="/slots"
-
-    >
-
-        <i class="">&nbsp;</i> slots
-
-    </a>
-
-
-<br />
-
-
-
-
-
-  <a
-
-    class="link"
-
-    tdarget="countdown"
-
-    href="/baccarat"
-
-    >
-
-        <i class="">&nbsp;</i> baccarat
-
-    </a>
-
-<br />
-
-
-
-
-
-  <a
-
-    class="link"
-
-    tdarget="craps"
-
-    href="/craps"
-
-    >
-
-        <i class="">&nbsp;</i> craps
-
-    </a>
-
-
-</body></html>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">Software Shinobi Casino</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://casino.softwareshinobi.com" target="_blank">Visit Full Casino Site</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="jumbotron text-center">
+            <h1 class="display-4">Welcome to Software Shinobi Casino!</h1>
+            <p class="lead">
+                Step into our virtual casino and enjoy a curated selection of classic games. We've taken popular open-source casino games, customized them, and added a few upgrades to bring you a truly engaging experience. Pick your favorite game below and let the good times roll!
+            </p>
+            <hr class="my-4">
+            <p>Ready to try your luck? Choose your game:</p>
+        </div>
+
+        <div class="row game-links">
+            <div class="col-12 col-md-6 col-lg-4">
+                <a class="btn btn-primary btn-lg btn-block" href="/blackjack">Blackjack</a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                <a class="btn btn-primary btn-lg btn-block" href="/casinowar">Casino War</a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                <a class="btn btn-primary btn-lg btn-block" href="/roulette">Roulette</a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                <a class="btn btn-primary btn-lg btn-block" href="/slots">Slots</a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                <a class="btn btn-primary btn-lg btn-block" href="/baccarat">Baccarat</a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                <a class="btn btn-primary btn-lg btn-block" href="/craps">Craps</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
