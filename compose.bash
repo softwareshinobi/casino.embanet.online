@@ -8,6 +8,6 @@ set -e
 
 set -x
 
-docker-compose down 
+docker compose down --remove-orphans
 
-docker-compose up --build
+docker compose up -d --build
