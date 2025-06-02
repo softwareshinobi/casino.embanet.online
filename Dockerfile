@@ -1,5 +1,5 @@
-FROM nginx
+FROM nginx:latest
 
-WORKDIR /usr/share/nginx/html/
+WORKDIR /usr/share/nginx/html
 
-COPY . .
+COPY --chown=www-data:www-data --chmod=755 . .

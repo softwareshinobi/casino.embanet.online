@@ -1,12 +1,12 @@
 services:
 
-    vembassy-sports-book-casino:
+    casino.softwareshinobi.com:
 
-        container_name: embassy-sports-book-casino
+        container_name: casino.softwareshinobi.com
 
-        image: softwareshinobi/embassy-sports-book-casino
+        image: softwareshinobi/casino.softwareshinobi.com
 
-        build: 
+        build:
 
             context: .
 
@@ -14,4 +14,4 @@ services:
 
         ports:
 
-            - 8080:80
+            - 8000:80
