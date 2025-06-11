@@ -12,7 +12,7 @@ Dive into a variety of exciting casino games:
 
   * [**Blackjack**](https://casino.softwareshinobi.com/blackjack/index.html) - Test your strategy and try to hit 21!
   * [**Casino War**](https://casino.softwareshinobi.com/casinowar/index.html) - A simple yet thrilling card game where high card wins.
-  * [**Roulette**](https://www.google.com/search?q=/roulette) - Place your bets and watch the wheel spin.
+  * [**Roulette**](https://casino.softwareshinobi.com/roulette/index.html) - Place your bets and watch the wheel spin.
   * [**Slots**](https://casino.softwareshinobi.com/slots/index.html) - Spin the reels and hope for a winning combination.
   * [**Baccarat**](https://casino.softwareshinobi.com/baccarat/index.html) - Bet on the player, banker, or a tie in this elegant card game.
   * [**Craps**](https://casino.softwareshinobi.com/craps/index.html) - Roll the dice and experience the excitement of the craps table.
