@@ -1,255 +1,528 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-  <link rel="stylesheet" type="text/css" href="css/style.css">
-  <!-- <link rel="stylesheet" type="text/css" href="css/dice.css"> -->
-  <title>Craps in Javascript</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Craps - Quartz</title>
+    <!-- Bootswatch Quartz Theme -->
+    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/quartz/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts for a retro feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles adapted for the Quartz theme */
+        :root {
+            --quartz-primary: #593196;
+            --quartz-secondary: #18b2b2;
+            --quartz-dark: #343f56;
+            --quartz-light: #f8f9fa;
+            --craps-felt: #343f56; /* Changed from green to match theme */
+        }
 
-<script src="https://unpkg.com/driver.js/dist/driver.min.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/driver.js/dist/driver.min.css">
+        html, body {
+            height: 100%;
+            margin: 0;
+            overflow: hidden; /* Prevent scrolling on desktop */
+        }
+
+        body {
+            font-family: 'Orbitron', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0.5rem; /* Padding for small screens */
+            background-color: var(--bs-body-bg);
+        }
+
+        .game-console {
+            background: linear-gradient(to bottom, #212529, #343f56);
+            border: 5px solid var(--quartz-secondary);
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(24, 178, 178, 0.5), inset 0 0 20px rgba(0, 0, 0, 0.5);
+            padding: 1.5rem;
+            width: 100%;
+            max-width: 900px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .playing-surface {
+            background-color: var(--craps-felt);
+            border-radius: 15px;
+            padding: 1rem;
+            border: 3px solid #495057;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
+        }
+
+        .dice-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            min-height: 80px;
+        }
+
+        .die {
+            width: 60px;
+            height: 60px;
+            background-color: #fff;
+            border: 2px solid #333;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .betting-layout {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 0.5rem;
+        }
+
+        .bet-area {
+            border: 2px solid var(--quartz-light);
+            border-radius: 10px;
+            padding: 0.5rem;
+            text-align: center;
+            font-family: 'Roboto Condensed', sans-serif;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--quartz-light);
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .bet-area:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .bet-area.pass-line {
+            grid-column: 1 / 4; /* Span half width */
+            background-color: rgba(24, 178, 178, 0.3);
+            margin-top: 0.5rem; /* Space from place bets */
+        }
+
+        .bet-area.dont-pass-line {
+            grid-column: 4 / -1; /* Span other half width */
+            background-color: rgba(220, 53, 69, 0.3);
+            margin-top: 0.5rem;
+        }
+
+        .bet-area.field-bet {
+            grid-column: 1 / -1;
+            margin-top: 0.5rem;
+            background-color: rgba(108, 117, 125, 0.3);
+        }
+
+
+        .bet-area .bet-amount {
+            display: block;
+            font-size: 1rem;
+            color: #ffc107;
+            min-height: 20px;
+            font-weight: normal;
+        }
+
+        .point-marker {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .point-puck {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #333;
+            color: #fff;
+            font-weight: bold;
+            line-height: 60px;
+            border: 3px solid #fff;
+            text-align: center;
+        }
+
+        .point-puck.on {
+            background-color: #fff;
+            color: #333;
+        }
+
+
+        .actions-panel, .betting-panel, .info-panel {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+        }
+        .actions-panel{
+             border-top: 3px solid var(--quartz-secondary);
+        }
+        .betting-panel, .info-panel {
+            border-top: 2px solid #212529;
+         }
+
+        .action-button, .bet-button {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            transition: all 0.1s ease-in-out;
+            padding: 0.75rem 0;
+            width: 100%;
+        }
+
+        .action-button { font-size: 1.5rem; }
+        .bet-button { font-size: 1rem; }
+
+        .status-message {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.9);
+            color: var(--quartz-secondary);
+            font-size: 1.5rem;
+            font-family: 'Press Start 2P', cursive;
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 4px solid var(--quartz-secondary);
+            z-index: 100;
+            text-align: center;
+            display: none;
+            width: 90%;
+        }
+
+        .info-display {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--quartz-light);
+            text-align: center;
+        }
+        .info-display span {
+            color: var(--quartz-secondary);
+        }
+
+        /* --- Mobile Responsiveness --- */
+        @media (max-width: 768px) {
+            body { overflow: auto; align-items: flex-start; }
+            .game-console { padding: 1rem; margin-top: 1rem; }
+            .action-button { font-size: 1.2rem; }
+            .bet-button { font-size: 0.8rem; }
+            .info-display { font-size: 1rem; }
+            .actions-panel, .betting-panel, .info-panel { padding: 0.75rem; }
+            .bet-area { font-size: 1rem; padding: 0.25rem; }
+            .die { width: 45px; height: 45px; font-size: 1.5rem; }
+            .point-puck { width: 45px; height: 45px; line-height: 45px; font-size: 0.8rem; }
+        }
+    </style>
 </head>
-
 <body>
-       <div><img src="img/derek.png" id="derek"></div>
-        <div><img src="img/hansel.png" id="hansel"></div>
 
-  <div class="container text-center">
-<!-- header -->
-   <div class="row">
-      <div class="col-12"> 
-      <img src="img/settings-solid.png"  class="float-right" data-toggle="modal" data-target="#myModal" id="settings-icon">
-      <h1>Craps in Javascript</h1>
-      <h2>Let's Roll!</h2>
-      </div>
-    </div>
-    <!-- Main Play Area 3 Columns-->
-    <div class="row rowcenter">
-      <div class="col-12 col-sm-2" id="left-column">
-        <!-- left player Info and Bet Size -->
-        <div class="row rowcenter">
-          <div class="col-12 border rounded" id="player-info">
-            <h3>Player Info</h3>
-          <ul class="ml-1">
-            <li>Name: Turing</li>
-            <li>Bank: $1000.00</li>
-            <li>Wins: $0.00 </li>
-            <li>Losses: $0.00</li>
-            <li>Games Played: 0</li>
-          </ul>
+    <div class="game-console">
+        <div id="statusMessage" class="status-message"></div>
 
+        <div class="playing-surface">
+            <div class="point-marker">
+                <div id="pointPuck" class="point-puck">OFF</div>
+            </div>
+            <div class="dice-area">
+                <div id="die1" class="die">?</div>
+                <div id="die2" class="die">?</div>
+            </div>
+            <div class="betting-layout">
+                <div class="bet-area" data-bet-type="place" data-number="4">4 <span class="bet-amount" id="placeBetAmount4"></span></div>
+                <div class="bet-area" data-bet-type="place" data-number="5">5 <span class="bet-amount" id="placeBetAmount5"></span></div>
+                <div class="bet-area" data-bet-type="place" data-number="6">6 <span class="bet-amount" id="placeBetAmount6"></span></div>
+                <div class="bet-area" data-bet-type="place" data-number="8">8 <span class="bet-amount" id="placeBetAmount8"></span></div>
+                <div class="bet-area" data-bet-type="place" data-number="9">9 <span class="bet-amount" id="placeBetAmount9"></span></div>
+                <div class="bet-area" data-bet-type="place" data-number="10">10 <span class="bet-amount" id="placeBetAmount10"></span></div>
 
-          
-          </div>
-          <div class="col-12" id="bet-size">
-              <div class="row rowcenter">
-              <div class="col-12 all-bets" id="bet-size">Bet Size</div>
-              <div class="col-6">
-            <button class="btn btn-success responsive-width bet" id="plus1" value="1">+$1</button>
-              </div>
-              <div class="col-6">
-            <button class="btn btn-danger responsive-width bet" id="minus1" value="-1">-$1</button>
-              </div>
+                <div id="fieldBetArea" class="bet-area field-bet" data-bet-type="field">
+                    FIELD <small>(2,3,4,9,10,11,12)</small>
+                    <span id="fieldBetAmount" class="bet-amount"></span>
+                </div>
 
-              <div class="col-6">
-            <button class="btn btn-success responsive-width bet" id="plus5" value="5">+$5</button>
-              </div>
-              <div class="col-6">
-            <button class="btn btn-danger responsive-width bet" id="minus5" value="-5">-$5</button>
-              </div>
-
-
-                            <div class="col-6">
-            <button class="btn btn-success responsive-width bet" id="plus10" value="10">+$10</button>
-              </div>
-              <div class="col-6">
-            <button class="btn btn-danger responsive-width bet" id="minus10" value="-10">-$10</button>
-              </div>
-
-                            <div class="col-6">
-            <button class="btn btn-success responsive-width bet" id="plus50" value="50">+$50</button>
-              </div>
-              <div class="col-6">
-            <button class="btn btn-danger responsive-width bet" id="minus50" value="-50">-$50</button>
-              </div>
-                            <div class="col-6">
-            <button class="btn btn-success responsive-width bet" id="plus100" value="100">+$100</button>
-              </div>
-              <div class="col-6">
-            <button class="btn btn-danger responsive-width bet" id="minus100" value="-100">-$100</button>
-              </div>
-
-                                          <div class="col-6">
-            <button class="btn btn-success responsive-width bet" id="yolo" value="yolo">YOLO!</button>
-              </div>
-              <div class="col-6">
-            <button class="btn btn-danger responsive-width bet" id="clear" value="clear">Clear</button>
-              </div>
-
-              </div>
-              <!-- end bet size area -->
-          </div>
-          <!-- end internal left column area -->
+                <div id="passLineBetArea" class="bet-area pass-line" data-bet-type="pass">
+                    PASS LINE
+                    <span id="passLineBetAmount" class="bet-amount"></span>
+                </div>
+                 <div id="dontPassLineBetArea" class="bet-area dont-pass-line" data-bet-type="dontpass">
+                    DON'T PASS
+                    <span id="dontPassBetAmount" class="bet-amount"></span>
+                </div>
+            </div>
         </div>
-<!-- end left columnn -->
-      </div>
 
-      <!-- begin middle column -->
-      <div class="col-12 col-sm-8">
-        <div class="row" >
-         <div class="col-12" id="bet-point-area"> 
-          <div class="row">
+        <div class="actions-panel mt-3">
+            <div class="row g-2 justify-content-center">
+                <div class="col-8">
+                    <button id="btnRoll" class="btn btn-secondary action-button">Roll</button>
+                </div>
+            </div>
+        </div>
 
-          <!-- split to come out and odds bets -->
-          <div class="col-12" id="display-bet-area">
+        <div class="betting-panel mt-3">
+             <div class="row g-2">
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="100">$100</button></div>
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="500">$500</button></div>
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="1000">$1000</button></div>
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="max">MAX</button></div>
+            </div>
+             <div class="row g-2 mt-2">
+                <div class="col-12">
+                    <button id="btnClearBets" class="btn btn-danger w-100">Clear Place Bets</button>
+                </div>
+             </div>
+        </div>
+
+        <div class="info-panel mt-3">
             <div class="row">
-            <div class="col-2"></div>
-            <div class="col-4" id="display-current-bet">
-            <h3>Come Out Bet</h3>
-            <button type="button" class="btn btn-info btn-lg" id="current-bet">$5</button>
-            </div>
-            <div class="col-4" id="display-odds-bet">
-            <h3>Odds Bet</h3>
-            <button type="button" class="btn btn-info btn-lg" id="odds-bet">$0</button>
-            </div>
-            <div class="col-2"></div>
-            </div>
-          </div>
-          <!-- end bet split -->
-
-           <div class="col-12" id="display-come-out-number">
-            <h3>Your Point</h3>
-            <button type="button" class="btn btn-info btn-lg" id="come-out-number" ></button>
-          </div>
-        </div>
-        <!-- info section -->
-        <div class="row">
-            <div class="col rowcenter" id="info-section" >
-              <div class="border bg-success rounded w-75 p-3" id="win-lose" style="display: none;">
-              <h3>Winner, Winner, Chicken Dinner!<br>
-              $5!</h3></div>
-              <div class="rowcenter" id="name-section"></div>
-              </div>
-          </div>
-        </div>
-      </div>
-<!-- rules section -->
-        <div class="row">
-            <div class="col rowcenter" id="rules-section" >
-              <div class="border rounded w-75 p-3" id="rules">
-              <h3>How to Play</h3>
-              <p class="text-left mt-0 mb-0">'Come Out Roll' (Initial Roll)</p>
-              <ul class="ml-1">
-                <li>Roll a 7 or 11 you win! ($10 bet pays $10)</li>
-                <li>Roll a 2, 3 or 12 you lose (craps)</li>
-                <li>Roll any other number that becomes 'The Point'</li>
-                <li>Once a bet is placed, and a roll made, it can not be changed</li>
-              </ul>
-                <p class="text-left mt-0 mb-0">'Point Roll' (Subsequent Rolls)</p>
-              <ul class="ml-1">
-                <li>Roll 'The Point', you win! ($10 bet pays $10)</li>
-                <li>Roll a 7 and you lose (seven out)</li>
-                <li>Roll any other number, roll again till you hit the point, or you seven out</li>
-              </ul>                
-                <p class="text-left mt-0 mb-0">'Odds Bet' (Point Roll)</p>
-              <ul class="ml-1">
-                <li>You can place an additional bet of up to 3x your initial bet on "The Point"</li>
-                <li>These are 'True Odds' and reduce the house edge</li>
-                <li>The payout will vary depending on the point odds</li>
-                <li>Payout: 1/2 against 4, 10; 2/3 against 5, 9; 5/6 against 6, 8</li>
-              </ul>
-              </div> 
-            </div>
-          </div>
-
-<!-- end middle column -->
-      </div>
-
-      <!-- begin right column -->
-      <div class="col-12 col-sm-2" id="right-column">
-          
-          <div class="row">
-            <div class="col-12" id="dice-area">
-              <h3>Current Roll</h3>
-              <div class="show-dice"></div>
-            
-<!-- insert of dice -->
-
-<img src="img/dice1.png" class="dice" id="dice1"><img src="img/dice3.png" class="dice" id="dice2">
-
-
-
-<!-- end dice show -->
-              <h2 id="dice-total">4</h2>
-            </div>
-            <div class="col" id="roll-area"> 
-        <button type="button" class="btn btn-secondary btn-lg responsive-width" id="roll-button">Roll Dice</button>
-        <button type="button" class="btn btn-secondary btn-lg responsive-width" id="auto-roll-button">Auto Roll</button>
+                <div class="col-6 info-display">Bet: $<span id="betAmount">100</span></div>
+                <div class="col-6 info-display">Wallet: $<span id="walletAmount">10000</span></div>
             </div>
         </div>
-        <div class="row">
-           <div class="col-12" id="graph-area">
-            <canvas id="myChart" width="400" height="400"></canvas>
-           </div>
-         </div>
-<!-- end right column -->
-          </div>
-<!-- end main play area -->
-     </div>
-<!-- end container -->
-  </div>
-
-
-<!-- settings modal  -->
-
-<div class="bg-modal">
-  <div class="modal-contents">
-
-    <div class="close">+</div>
-Change the default settings
-    <div class="text-left">
-
-
-      <div class="form-group">
-        <label for="formGroupBankrollInput">Bankroll ($1000 Default)</label>
-        <input type="text" class="form-control" id="bankrollInput" placeholder="1000">
-        <small id="bankrollHelpBlock" class="form-text text-muted">
-        Changing this will update your current bankroll.
-        </small>
-      </div>
-
-
-    <div class="form-group">
-      <label for="odds-select">Odds Ratio (3x Default):</label>
-      <select class="form-control" id="odds-select">
-        <option value='2' id="odds2">2</option>
-        <option value='3' id="odds3">3</option>
-        <option value='5' id="odds5">5</option>
-        <option value='10' id="odds10">10</option>
-        <option value='100' id="odds100">100</option>
-      </select>
     </div>
 
-    <div class="form-group">
-      <label for="sound-select">Sounds:</label>
-      <select class="form-control" id="sound-select">
-        <option value='on' id="sound-on">On</option>
-        <option value='off' id="sound-off">Off</option>
-      </select>
-    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // --- DOM Elements ---
+        const die1El = document.getElementById('die1');
+        const die2El = document.getElementById('die2');
+        const pointPuckEl = document.getElementById('pointPuck');
+        const statusMessageEl = document.getElementById('statusMessage');
+        const btnRoll = document.getElementById('btnRoll');
+        const btnClearBets = document.getElementById('btnClearBets');
+        const betButtons = document.querySelectorAll('.bet-button');
+        const walletAmountEl = document.getElementById('walletAmount');
+        const betAmountEl = document.getElementById('betAmount');
+        const placeBetAreas = document.querySelectorAll('.bet-area[data-bet-type="place"]');
+        const passLineBetArea = document.getElementById('passLineBetArea');
+        const dontPassLineBetArea = document.getElementById('dontPassLineBetArea');
+        const fieldBetArea = document.getElementById('fieldBetArea');
 
+        // --- Game State ---
+        let wallet = 10000;
+        let currentBet = 100;
+        let passLineBet = 0;
+        let dontPassBet = 0;
+        let fieldBet = 0;
+        let placeBets = { 4: 0, 5: 0, 6: 0, 8: 0, 9: 0, 10: 0 };
+        let point = 0; // 0 means point is OFF
+        let canRoll = false;
 
-    <button type="submit" class="btn btn-primary" id="updateDefaults">Update</button>
-  </div>
-        <div class="marquee" id='marquee-area'></div> 
+        function showStatusMessage(message, duration = 3000) {
+            statusMessageEl.innerHTML = message;
+            statusMessageEl.style.display = 'block';
+            setTimeout(() => statusMessageEl.style.display = 'none', duration);
+        }
 
-  <script src="js/script.js"></script>
-  <script src="js/graph.js"></script>
-  <script src="js/driver.js"></script>
-<!--     <script src="js/dice.js"></script> -->
+        function updateButtonState(state) {
+            // States: 'betting', 'readyToRoll', 'inProgress'
+            canRoll = state === 'readyToRoll';
+            btnRoll.disabled = !canRoll;
+            btnClearBets.disabled = point === 0;
+            // You can always place a Field bet, so we don't disable bet buttons based on state
+        }
+
+        function updateActiveBetButton(selectedBet) {
+             betButtons.forEach(btn => {
+                if(btn.dataset.bet === 'max' && selectedBet === wallet) btn.classList.add('active');
+                else if (parseInt(btn.dataset.bet) === selectedBet) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+        }
+
+        function updatePointPuck() {
+            if (point === 0) {
+                pointPuckEl.textContent = 'OFF';
+                pointPuckEl.classList.remove('on');
+            } else {
+                pointPuckEl.textContent = point;
+                pointPuckEl.classList.add('on');
+            }
+        }
+
+        function renderAllBets() {
+            document.getElementById('passLineBetAmount').textContent = passLineBet > 0 ? `$${passLineBet}` : '';
+            document.getElementById('dontPassBetAmount').textContent = dontPassBet > 0 ? `$${dontPassBet}` : '';
+            document.getElementById('fieldBetAmount').textContent = fieldBet > 0 ? `$${fieldBet}` : '';
+            for(const num in placeBets){
+                document.getElementById(`placeBetAmount${num}`).textContent = placeBets[num] > 0 ? `$${placeBets[num]}` : '';
+            }
+        }
+
+        function clearBoardForNewRound() {
+            passLineBet = 0;
+            dontPassBet = 0;
+            for(const num in placeBets) { placeBets[num] = 0; }
+            point = 0;
+            renderAllBets();
+            updatePointPuck();
+            updateButtonState('betting');
+            walletAmountEl.textContent = wallet;
+            if(wallet <= 0) showStatusMessage("Game Over", 5000);
+        }
+
+        function clearPlaceBets() {
+            if (point === 0) return;
+            let returnedAmount = 0;
+            for(const num in placeBets) {
+                returnedAmount += placeBets[num];
+                placeBets[num] = 0;
+            }
+            if(returnedAmount > 0) {
+                wallet += returnedAmount;
+                walletAmountEl.textContent = wallet;
+                renderAllBets();
+                showStatusMessage(`Place bets cleared: +$${returnedAmount}`);
+            }
+        }
+
+        function handleRollResult(roll) {
+            let messages = [];
+
+            // Resolve one-roll field bet first
+            if (fieldBet > 0) {
+                if ([3, 4, 9, 10, 11].includes(roll)) {
+                    wallet += fieldBet * 2; // Payout 1:1
+                    messages.push(`Field bet wins +$${fieldBet}!`);
+                } else if ([2, 12].includes(roll)) {
+                    wallet += fieldBet * 3; // Payout 2:1
+                    messages.push(`Field bet wins +$${fieldBet*2} on ${roll}!`);
+                } else {
+                    messages.push(`Field bet loses.`);
+                }
+                fieldBet = 0; // Field bet is for one roll only
+            }
+
+            // Point is ON
+            if (point !== 0) {
+                if(placeBets[roll]){
+                    const bet = placeBets[roll];
+                    let payout = 0;
+                    if([4, 10].includes(roll)) payout = Math.floor(bet * 9 / 5);
+                    else if([5, 9].includes(roll)) payout = Math.floor(bet * 7 / 5);
+                    else if([6, 8].includes(roll)) payout = Math.floor(bet * 7 / 6);
+                    wallet += bet + payout;
+                    messages.push(`Place ${roll} wins +$${payout}!`);
+                    placeBets[roll] = 0;
+                }
+
+                if (roll === point) {
+                    messages.push(`Point ${point} Hit! Pass Wins.`);
+                    if(passLineBet > 0) wallet += passLineBet * 2;
+                    if(dontPassBet > 0) messages.push("Don't Pass loses.");
+                    clearBoardForNewRound();
+                } else if (roll === 7) {
+                    messages.push(`Seven Out!`);
+                    if(passLineBet > 0) messages.push("Pass Line loses.");
+                    if(dontPassBet > 0) { wallet += dontPassBet * 2; messages.push("Don't Pass Wins!"); }
+                    clearBoardForNewRound();
+                }
+            }
+            // Come-out roll
+            else {
+                if ([7, 11].includes(roll)) {
+                    messages.push(`${roll}! Pass Line Wins!`);
+                    if(passLineBet > 0) wallet += passLineBet * 2;
+                    if(dontPassBet > 0) messages.push("Don't Pass loses.");
+                    clearBoardForNewRound();
+                } else if ([2, 3].includes(roll)) {
+                    messages.push(`${roll}! Craps! Pass loses.`);
+                    if(dontPassBet > 0) { wallet += dontPassBet * 2; messages.push("Don't Pass wins!"); }
+                    clearBoardForNewRound();
+                } else if (roll === 12) {
+                    messages.push(`12! Pass loses. Don't Pass PUSH.`);
+                    if(dontPassBet > 0) wallet += dontPassBet;
+                    clearBoardForNewRound();
+                } else {
+                    point = roll;
+                    messages.push(`Point is now ${point}.`);
+                    updatePointPuck();
+                }
+            }
+
+            showStatusMessage(messages.length > 0 ? messages.join('<br>') : `Rolled ${roll}.`, 4000);
+            walletAmountEl.textContent = wallet;
+            renderAllBets();
+            if(point !== 0) updateButtonState('readyToRoll');
+        }
+
+        function rollDice() {
+            if (!canRoll && passLineBet === 0 && dontPassBet === 0 && fieldBet === 0) {
+                 showStatusMessage("Place a bet to roll!");
+                 return;
+            }
+            updateButtonState('inProgress');
+            let rollCount = 0;
+            const rollInterval = setInterval(() => {
+                die1El.textContent = Math.floor(Math.random() * 6) + 1;
+                die2El.textContent = Math.floor(Math.random() * 6) + 1;
+                rollCount++;
+                if (rollCount > 10) {
+                    clearInterval(rollInterval);
+                    const d1 = Math.floor(Math.random() * 6) + 1;
+                    const d2 = Math.floor(Math.random() * 6) + 1;
+                    die1El.textContent = d1;
+                    die2El.textContent = d2;
+                    handleRollResult(d1 + d2);
+                }
+            }, 100);
+        }
+
+        function handleBetPlacement(area) {
+            const type = area.dataset.betType;
+            if (currentBet <= 0 || wallet < currentBet) {
+                showStatusMessage("Invalid Bet!");
+                return;
+            }
+
+            if (type === 'pass' || type === 'dontpass') {
+                if (point !== 0) { showStatusMessage("Line bets only on Come-Out."); return; }
+                if(type === 'pass') passLineBet += currentBet;
+                else dontPassBet += currentBet;
+            } else if (type === 'place') {
+                if (point === 0) { showStatusMessage("Set Point before Place bets."); return; }
+                const num = parseInt(area.dataset.number);
+                placeBets[num] += currentBet;
+            } else if (type === 'field') {
+                 fieldBet += currentBet;
+            }
+
+            wallet -= currentBet;
+            walletAmountEl.textContent = wallet;
+            renderAllBets();
+            updateButtonState('readyToRoll');
+        }
+
+        placeBetAreas.forEach(area => area.addEventListener('click', () => handleBetPlacement(area)));
+        passLineBetArea.addEventListener('click', () => handleBetPlacement(passLineBetArea));
+        dontPassLineBetArea.addEventListener('click', () => handleBetPlacement(dontPassLineBetArea));
+        fieldBetArea.addEventListener('click', () => handleBetPlacement(fieldBetArea));
+        btnRoll.addEventListener('click', rollDice);
+        btnClearBets.addEventListener('click', clearPlaceBets);
+
+        betButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const betValue = button.dataset.bet;
+                currentBet = (betValue === 'max') ? wallet : parseInt(betValue);
+                if (currentBet > wallet) currentBet = wallet;
+                betAmountEl.textContent = currentBet;
+                updateActiveBetButton(currentBet);
+            });
+        });
+
+        window.onload = () => {
+            updateButtonState('betting');
+            updateActiveBetButton(currentBet);
+            renderAllBets();
+        };
+    </script>
 </body>
 </html>

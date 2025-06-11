@@ -3,93 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Casino / Software Shinobi</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/sketchy/bootstrap.min.css">
+    <title>Casino Portal - Quartz</title>
+    <!-- Bootswatch Quartz Theme -->
+    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/quartz/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts for a retro feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet">
     <style>
+        /* Custom styles adapted for the Quartz theme */
+        :root {
+            --quartz-primary: #593196;
+            --quartz-secondary: #18b2b2;
+            --quartz-dark: #343f56;
+            --quartz-light: #f8f9fa;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            overflow: hidden; /* Prevent scrolling on desktop */
+        }
+
         body {
-            font-family: "Inter", sans-serif;
-            background-color: #f8f9fa; /* Light background for contrast with sketchy theme */
+            font-family: 'Orbitron', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0.5rem; /* Padding for small screens */
+            background-color: var(--bs-body-bg);
         }
-        .jumbotron {
-            background-color: #e9ecef; /* Lighter background for jumbotron */
-            border-radius: 15px; /* Rounded corners for the jumbotron */
+
+        .game-console {
+            background: linear-gradient(to bottom, #212529, #343f56);
+            border: 5px solid var(--quartz-secondary);
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(24, 178, 178, 0.5), inset 0 0 20px rgba(0, 0, 0, 0.5);
             padding: 2rem;
+            width: 100%;
+            max-width: 900px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .portal-header {
+            text-align: center;
+            border-bottom: 2px solid var(--quartz-secondary);
+            padding-bottom: 1.5rem;
             margin-bottom: 2rem;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Subtle shadow */
         }
+
+        .portal-header h1 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 2.5rem;
+            color: var(--quartz-light);
+        }
+
+        .portal-header p {
+            font-size: 1.1rem;
+            color: var(--bs-gray-400);
+            max-width: 600px;
+            margin: 1rem auto 0;
+        }
+
         .game-links .btn {
-            margin-bottom: 15px; /* Space between buttons */
-            border-radius: 10px; /* Rounded corners for buttons */
-            padding: 15px 25px; /* Larger padding for better touch targets */
-            font-size: 1.25rem; /* Larger font size */
+            padding: 1rem;
+            font-size: 1.25rem;
             font-weight: bold;
-            transition: all 0.3s ease; /* Smooth transition for hover effects */
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow for buttons */
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
         }
+
         .game-links .btn:hover {
-            transform: translateY(-3px); /* Slight lift on hover */
-            box-shadow: 0 6px 12px rgba(0,0,0,0.2); /* Enhanced shadow on hover */
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+            filter: brightness(1.1);
         }
-        .navbar {
-            border-bottom-left-radius: 15px;
-            border-bottom-right-radius: 15px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .container {
-            max-width: 960px; /* Max width for content on large screens */
+
+        /* --- Mobile Responsiveness --- */
+        @media (max-width: 768px) {
+            body { overflow: auto; align-items: flex-start; }
+            .game-console { padding: 1rem; margin-top: 1rem; }
+            .portal-header h1 { font-size: 1.8rem; }
+            .portal-header p { font-size: 1rem; }
+            .game-links .btn { font-size: 1rem; padding: 0.75rem; }
         }
     </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" href="#">Software Shinobi Casino</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <div class="container mt-5">
-        <div class="jumbotron text-center">
-            <h1 class="display-4">Welcome to Software Shinobi Casino!</h1>
+    <div class="game-console">
+        
+        <div class="portal-header">
+            <h1 class="display-4">Casino Portal</h1>
             <p class="lead">
-                Step into our virtual casino and enjoy a curated selection of classic games. We've taken popular open-source casino games, customized them, and added a few upgrades to bring you a truly engaging experience. Pick your favorite game below and let the good times roll!
+                A curated selection of classic games, rebuilt and upgraded. Pick a game below to begin.
             </p>
-            <hr class="my-4">
-            <p>Ready to try your luck? Choose your game:</p>
         </div>
 
-        <div class="row game-links">
+        <div class="row g-3 game-links">
             <div class="col-12 col-md-6 col-lg-4">
-                <a class="btn btn-primary btn-lg btn-block" href="/blackjack">Blackjack</a>
+                <a class="btn btn-secondary btn-lg d-block" href="blackjack/index.html">Blackjack</a>
             </div>
             <div class="col-12 col-md-6 col-lg-4">
-                <a class="btn btn-primary btn-lg btn-block" href="/casinowar">Casino War</a>
+                <a class="btn btn-secondary btn-lg d-block" href="casinowar/index.html">Casino War</a>
             </div>
             <div class="col-12 col-md-6 col-lg-4">
-                <a class="btn btn-primary btn-lg btn-block" href="/roulette">Roulette</a>
+                <a class="btn btn-secondary btn-lg d-block" href="baccarat/index.html">Baccarat</a>
             </div>
             <div class="col-12 col-md-6 col-lg-4">
-                <a class="btn btn-primary btn-lg btn-block" href="/slots">Slots</a>
+                <a class="btn btn-secondary btn-lg d-block" href="slots/index.html">Slots</a>
             </div>
             <div class="col-12 col-md-6 col-lg-4">
-                <a class="btn btn-primary btn-lg btn-block" href="/baccarat">Baccarat</a>
+                <a class="btn btn-secondary btn-lg d-block" href="roulette/index.html">Roulette</a>
             </div>
             <div class="col-12 col-md-6 col-lg-4">
-                <a class="btn btn-primary btn-lg btn-block" href="/craps">Craps</a>
+                <a class="btn btn-secondary btn-lg d-block" href="craps/index.html">Craps</a>
             </div>
         </div>
+
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Bootstrap JS is not strictly necessary for this static page but included for consistency -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

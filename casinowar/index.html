@@ -1,94 +1,400 @@
 <!DOCTYPE html>
-
 <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casino War - Quartz</title>
+    <!-- Bootswatch Quartz Theme -->
+    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/quartz/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts for a retro feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles adapted for the Quartz theme */
+        :root {
+            --quartz-primary: #593196;
+            --quartz-secondary: #18b2b2;
+            --quartz-dark: #343f56;
+            --quartz-light: #f8f9fa;
+            --surrender-red: #B71C1C;
+        }
 
-  <head>
+        html, body {
+            height: 100%;
+            margin: 0;
+            overflow: hidden; /* Prevent scrolling on desktop */
+        }
 
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-<title>
+        body {
+            font-family: 'Orbitron', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0.5rem; /* Padding for small screens */
+            background-color: var(--bs-body-bg);
+        }
 
-Casino War / Chimba Sportsbook & Casino 
+        .game-console {
+            background: linear-gradient(to bottom, #212529, #343f56);
+            border: 5px solid var(--quartz-secondary);
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(24, 178, 178, 0.5), inset 0 0 20px rgba(0, 0, 0, 0.5);
+            padding: 1.5rem;
+            width: 100%;
+            max-width: 900px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
 
-</title>
+        .playing-surface {
+            background-color: var(--quartz-dark);
+            border-radius: 15px;
+            padding: 1rem;
+            border: 3px solid #495057;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            min-height: 250px;
+        }
 
-<link rel="icon" type="image/svg+xml" href="./assets/images/javascript-logo.svg" />
+        .hand-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
 
-<link rel="stylesheet" href="./assets/css/bootstrap.min.css" />
+        .hand-area {
+            min-height: 125px; /* Adjust height */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
 
-<!-- My CSS styles -->
+        .hand-label {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1rem;
+            color: var(--quartz-light);
+            text-transform: uppercase;
+        }
 
-<link rel="stylesheet" href="./assets/css/styles.css" />
+        .card {
+            width: 80px;
+            height: 120px;
+            background-color: white;
+            border-radius: 8px;
+            border: 1px solid #333;
+            color: black;
+            font-size: 2rem;
+            font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 5px;
+            box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
+            position: relative;
+        }
+        
+        .card .suit { font-size: 1.5rem; line-height: 1; }
+        .card.red { color: #e95420; }
+        .card.black { color: #212121; }
+        .card-top { align-self: flex-start; }
+        .card-bottom { align-self: flex-end; transform: rotate(180deg); }
 
+        .actions-panel, .betting-panel, .info-panel {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+        }
+        .actions-panel{
+             border-top: 3px solid var(--quartz-secondary);
+        }
+        .betting-panel, .info-panel {
+            border-top: 2px solid #212529;
+         }
+
+        .action-button, .bet-button {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            transition: all 0.1s ease-in-out;
+            padding: 0.75rem 0;
+            width: 100%;
+        }
+        
+        .btn-surrender {
+            background-color: var(--surrender-red);
+            border-color: var(--surrender-red);
+        }
+
+        .action-button { font-size: 1.2rem; }
+        .bet-button { font-size: 1rem; }
+
+        .status-message {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.9);
+            color: var(--quartz-secondary);
+            font-size: 2rem;
+            font-family: 'Press Start 2P', cursive;
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 4px solid var(--quartz-secondary);
+            z-index: 100;
+            text-align: center;
+            display: none;
+            width: 90%;
+        }
+        
+        .info-display {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--quartz-light);
+            text-align: center;
+        }
+        .info-display span {
+            color: var(--quartz-secondary);
+        }
+
+        /* --- Mobile Responsiveness --- */
+        @media (max-width: 768px) {
+            body {
+                overflow: auto;
+                align-items: flex-start;
+            }
+            .game-console { padding: 1rem; margin-top: 1rem; }
+            .hand-area { min-height: 105px; gap: 5px; }
+            .card { width: 60px; height: 90px; font-size: 1.5rem; }
+            .card .suit { font-size: 1rem; }
+            .action-button { font-size: 1rem; }
+            .bet-button { font-size: 0.8rem; }
+            .info-display { font-size: 1rem; }
+            .actions-panel, .betting-panel, .info-panel { padding: 0.75rem; }
+        }
+    </style>
 </head>
-
 <body>
 
-<header class="mt-4">
+    <div class="game-console">
+        <div id="statusMessage" class="status-message"></div>
 
-</header>
+        <div class="playing-surface">
+            <!-- Dealer's Hand -->
+            <div class="hand-container">
+                <span class="hand-label">Dealer</span>
+                <div id="dealerHand" class="hand-area"></div>
+            </div>
+            
+            <!-- Player's Hand -->
+            <div class="hand-container">
+                 <span class="hand-label">Player</span>
+                <div id="playerHand" class="hand-area"></div>
+            </div>
+        </div>
 
-<br />
+        <div class="actions-panel mt-3">
+            <div class="row g-2">
+                <div class="col-6"><button id="btnWar" class="btn btn-secondary action-button">War</button></div>
+                <div class="col-6"><button id="btnSurrender" class="btn btn-danger action-button btn-surrender">Surrender</button></div>
+                <div class="col-12 mt-2">
+                    <button id="btnDeal" class="btn btn-secondary action-button">Deal</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="betting-panel mt-3">
+             <div class="row g-2">
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="100">$100</button></div>
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="500">$500</button></div>
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="1000">$1000</button></div>
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="max">MAX</button></div>
+            </div>
+        </div>
 
-<br />
+        <div class="info-panel mt-3">
+            <div class="row">
+                <div class="col-6 info-display">Bet: $<span id="betAmount">100</span></div>
+                <div class="col-6 info-display">Wallet: $<span id="walletAmount">10000</span></div>
+            </div>
+        </div>
+    </div>
 
-<div class="d-flex justify-content-center mt-4 gap-4">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // --- DOM Elements ---
+        const dealerHandEl = document.getElementById('dealerHand');
+        const playerHandEl = document.getElementById('playerHand');
+        const statusMessageEl = document.getElementById('statusMessage');
+        const btnWar = document.getElementById('btnWar');
+        const btnSurrender = document.getElementById('btnSurrender');
+        const btnDeal = document.getElementById('btnDeal');
+        const betButtons = document.querySelectorAll('.bet-button');
+        const walletAmountEl = document.getElementById('walletAmount');
+        const betAmountEl = document.getElementById('betAmount');
 
-<div class="col-md-2">
+        // --- Game State Variables ---
+        let deck = [], playerCard, dealerCard;
+        let wallet = 10000, currentBet = 100, warBet = 0;
+        let gameInProgress = false;
 
-<button id="new-game-button" class="btn w-100">
+        // --- Game Logic ---
+        function createDeck() {
+            const suits = ['♥', '♦', '♣', '♠'];
+            const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+            deck = [];
+            for (let suit of suits) for (let value of values) deck.push({ suit, value });
+        }
 
-Deal Hand
+        function shuffleDeck() {
+            for (let i = deck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [deck[i], deck[j]] = [deck[j], deck[i]];
+            }
+        }
+        
+        function getCardValue(card) {
+            const value = card.value;
+            if (value === 'A') return 14;
+            if (value === 'K') return 13;
+            if (value === 'Q') return 12;
+            if (value === 'J') return 11;
+            return parseInt(value);
+        }
 
-</button>
+        function createCardElement(card) {
+            const cardEl = document.createElement('div');
+            cardEl.className = 'card';
+            cardEl.classList.add((card.suit === '♥' || card.suit === '♦') ? 'red' : 'black');
+            cardEl.innerHTML = `<div class="card-top"><span>${card.value}</span><span class="suit">${card.suit}</span></div><div class="card-bottom"><span>${card.value}</span><span class="suit">${card.suit}</span></div>`;
+            return cardEl;
+        }
 
-</div>
+        function renderHands(pCard, dCard) {
+            playerHandEl.innerHTML = '';
+            dealerHandEl.innerHTML = '';
+            if (pCard) playerHandEl.appendChild(createCardElement(pCard));
+            if (dCard) dealerHandEl.appendChild(createCardElement(dCard));
+        }
 
-</div>
+        function showStatusMessage(message, duration = 2000) {
+            statusMessageEl.innerHTML = message;
+            statusMessageEl.style.display = 'block';
+            setTimeout(() => statusMessageEl.style.display = 'none', duration);
+        }
 
-<div class="container text-center mt-5">
+        function updateButtonState(state) {
+            // States: 'deal', 'war', 'inprogress'
+            btnDeal.disabled = state !== 'deal';
+            btnWar.disabled = state !== 'war';
+            btnSurrender.disabled = state !== 'war';
+            betButtons.forEach(btn => btn.disabled = state !== 'deal');
+        }
+        
+        function updateActiveBetButton(selectedBet) {
+             betButtons.forEach(btn => {
+                if(btn.dataset.bet === 'max' && selectedBet === wallet) btn.classList.add('active');
+                else if (parseInt(btn.dataset.bet) === selectedBet) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+        }
+        
+        function endRound(outcome) {
+            let message = '';
+            if(outcome === 'win') { message = "You Win!"; wallet += currentBet + warBet; }
+            else if(outcome === 'loss') { message = "You Lose!"; wallet -= (currentBet + warBet); }
+            else if(outcome === 'surrender') { message = "Surrendered"; wallet -= Math.ceil(currentBet/2); }
+            
+            showStatusMessage(message, 3000);
+            walletAmountEl.textContent = wallet;
+            warBet = 0;
+            updateButtonState('deal');
+            if (wallet <= 0) showStatusMessage("Game Over!", 5000);
+        }
 
-<h1 id="serverChat"> 
+        function compareCards(pCard, dCard, isWar = false) {
+             const playerValue = getCardValue(pCard);
+             const dealerValue = getCardValue(dCard);
 
---
+             if(playerValue > dealerValue) endRound('win');
+             else if (dealerValue > playerValue) endRound('loss');
+             else { // Tie
+                if(isWar) { endRound('win'); } // Tie on war is a win
+                else {
+                    showStatusMessage('TIE! Go to War?', 4000);
+                    updateButtonState('war');
+                }
+             }
+        }
+        
+        function handleSurrender() {
+            endRound('surrender');
+        }
 
-</h1>
+        function handleWar() {
+            if (wallet < currentBet) {
+                showStatusMessage("Not enough for War!");
+                return;
+            }
+            updateButtonState('inprogress');
+            wallet -= currentBet; // Player places an additional bet
+            warBet = currentBet;
+            
+            showStatusMessage("Burning cards...", 1500);
 
-<div class="row row-cols-1 row-cols-md-2">
+            setTimeout(() => {
+                if (deck.length < 5) { createDeck(); shuffleDeck(); } // Ensure enough cards
+                deck.pop(); deck.pop(); deck.pop(); // Burn 3
 
-<div class="col mt-5">
+                const playerWarCard = deck.pop();
+                const dealerWarCard = deck.pop();
+                renderHands(playerWarCard, dealerWarCard);
+                
+                setTimeout(() => compareCards(playerWarCard, dealerWarCard, true), 1000);
 
-<h2>Player - <span>0</span></h2>
+            }, 1500);
+        }
 
-<div class="d-flex flex-wrap mt-5 gap-2 cards-container"></div>
+        function dealNewHand() {
+            if (currentBet === 0 || wallet < currentBet) {
+                showStatusMessage("Invalid Bet!");
+                return;
+            }
+            updateButtonState('inprogress');
+            createDeck();
+            shuffleDeck();
+            playerCard = deck.pop();
+            dealerCard = deck.pop();
+            renderHands(playerCard, dealerCard);
+            setTimeout(() => compareCards(playerCard, dealerCard), 1000);
+        }
 
-</div>
-
-<div class="col mt-5">
-
-<h2>Dealer - <span>0</span></h2>
-
-<!-- The dealer's cards will be displayed here -->
-
-<div class="d-flex flex-wrap mt-5 gap-2 cards-container"></div>
-
-</div>
-
-</div>
-
-</div>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-
-<script src="assets/scripting/casinowar.js"></script>
-
-<script>
-
-    blackjackGame.newGame();
-
-</script>
-
+        btnDeal.addEventListener('click', dealNewHand);
+        btnWar.addEventListener('click', handleWar);
+        btnSurrender.addEventListener('click', handleSurrender);
+        
+        betButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const betValue = button.dataset.bet;
+                currentBet = (betValue === 'max') ? wallet : parseInt(betValue);
+                if (currentBet > wallet) currentBet = wallet;
+                betAmountEl.textContent = currentBet;
+                updateActiveBetButton(currentBet);
+            });
+        });
+        
+        window.onload = () => {
+            updateButtonState('deal');
+            updateActiveBetButton(currentBet);
+            playerHandEl.innerHTML = '';
+            dealerHandEl.innerHTML = '';
+        };
+    </script>
 </body>
-
 </html>
