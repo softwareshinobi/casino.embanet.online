@@ -24,6 +24,7 @@ This project is built with:
   * **HTML**
   * **Bootstrap**
   * **jQuery**
+  * **Gemini Pro 2.5**
 
 -----
 
