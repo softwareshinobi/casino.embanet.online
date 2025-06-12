@@ -26,11 +26,9 @@ This project is built with:
   * **jQuery**
   * **Gemini Pro 2.5**
 
------
+## Bugs & Issues
 
-## License
-
-This project is open-source and available under the **MIT License**.
+- [`blackjack`] when you double a bet, on the next hand your default bet is the value of the double. when it shouldn't have increased
 
 -----
 
