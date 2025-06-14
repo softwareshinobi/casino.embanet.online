@@ -257,7 +257,7 @@
         <div class="actions-panel mt-3">
             <div class="row g-2 justify-content-center">
                 <div class="col-8">
-                    <button id="btnRoll" class="btn btn-secondary action-button">Roll</button>
+                    <button id="btnRoll" class="btn btn-info action-button">Roll</button>
                 </div>
             </div>
         </div>
@@ -364,18 +364,31 @@
             if(wallet <= 0) showStatusMessage("Game Over", 5000);
         }
 
-        function clearPlaceBets() {
+        // --- MODIFIED FUNCTION ---
+        // This function now clears both Place bets and the Field bet.
+        function clearActiveBets() {
+            // The button is only enabled when the point is ON.
+            // This function will clear any standing Place bets and the one-roll Field bet.
             if (point === 0) return;
+
             let returnedAmount = 0;
+
+            // Tally up and clear all Place Bets
             for(const num in placeBets) {
                 returnedAmount += placeBets[num];
                 placeBets[num] = 0;
             }
+
+            // Tally up and clear the Field Bet
+            returnedAmount += fieldBet;
+            fieldBet = 0;
+
+            // If any bets were cleared, refund the player and update the UI
             if(returnedAmount > 0) {
                 wallet += returnedAmount;
                 walletAmountEl.textContent = wallet;
                 renderAllBets();
-                showStatusMessage(`Place bets cleared: +$${returnedAmount}`);
+                showStatusMessage(`Active bets cleared: +$${returnedAmount}`);
             }
         }
 
@@ -413,7 +426,7 @@
                     messages.push(`Point ${point} Hit! Pass Wins.`);
                     if(passLineBet > 0) wallet += passLineBet * 2;
                     if(dontPassBet > 0) messages.push("Don't Pass loses.");
-                    
+
                     // --- BUG FIX ---
                     // Before clearing the board, calculate and refund all remaining place bets.
                     let returnedPlaceBets = 0;
@@ -516,7 +529,8 @@
         dontPassLineBetArea.addEventListener('click', () => handleBetPlacement(dontPassLineBetArea));
         fieldBetArea.addEventListener('click', () => handleBetPlacement(fieldBetArea));
         btnRoll.addEventListener('click', rollDice);
-        btnClearBets.addEventListener('click', clearPlaceBets);
+        // --- MODIFIED EVENT LISTENER ---
+        btnClearBets.addEventListener('click', clearActiveBets);
 
         betButtons.forEach(button => {
             button.addEventListener('click', () => {
