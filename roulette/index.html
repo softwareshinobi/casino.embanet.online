@@ -160,7 +160,7 @@
         .status-message {
             position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%);
             background-color: rgba(0, 0, 0, 0.9); color: var(--quartz-secondary); font-size: 1.5rem;
-            font-family: 'Press Start 2P', cursive; padding: 1.5rem; border-radius: 15px;
+             padding: 1.5rem; border-radius: 15px;
             border: 4px solid var(--quartz-secondary); z-index: 100; text-align: center;
             display: none; width: 90%;
         }
@@ -345,7 +345,7 @@
             });
         }
         
-        function showStatusMessage(message, duration = 3000) {
+        function showStatusMessage(message, duration = 1000) {
             statusMessageEl.innerHTML = message;
             statusMessageEl.style.display = 'block';
             setTimeout(() => {

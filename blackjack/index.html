@@ -323,7 +323,7 @@
             dealerScoreEl.textContent = gameInProgress ? getScore([dealerHand[1]]) : getScore(dealerHand);
         }
 
-        function showStatusMessage(message, duration = 2000) {
+        function showStatusMessage(message, duration = 1000) {
             statusMessageEl.innerHTML = message;
             statusMessageEl.style.display = 'block';
             setTimeout(() => statusMessageEl.style.display = 'none', duration);
@@ -401,28 +401,58 @@
             }
             gameInProgress = true;
 
-            // Set the bet for this specific hand
             handBet = currentBet;
             wallet -= handBet;
             walletAmountEl.textContent = wallet;
+            betAmountEl.textContent = handBet;
 
             createDeck();
             shuffleDeck();
             playerHand = [deck.pop(), deck.pop()];
-            dealerHand = [deck.pop(), deck.pop()];
+            dealerHand = [deck.pop(), deck.pop()]; // Deal both dealer cards immediately
             renderHands();
             updateButtonState('play');
 
-            // Check for player blackjack
+            // Check for player Blackjack first.
             if (getScore(playerHand) === 21) {
                 gameInProgress = false;
-                renderHands();
-                showStatusMessage('Blackjack!', 3000);
-                // Payout 3:2, return stake + winnings
-                wallet += handBet + Math.floor(handBet * 1.5);
+                renderHands(); // Show both player cards
+                const dealerScore = getScore(dealerHand);
+                if (dealerScore === 21) {
+                    showStatusMessage('Push! Both have Blackjack.', 1000);
+                    wallet += handBet; // Return player's stake
+                } else {
+                    showStatusMessage('Blackjack!', 2000);
+                    wallet += handBet + Math.floor(handBet * 1.5); // Payout 3:2
+                }
                 walletAmountEl.textContent = wallet;
-                setTimeout(() => updateButtonState('bet'), 2000);
+                setTimeout(() => {
+                    updateButtonState('bet');
+                    betAmountEl.textContent = currentBet;
+                }, 2000);
+                return; // End the hand here
             }
+
+            // If player doesn't have BJ, check for dealer BJ if applicable
+            const dealerUpCard = dealerHand[1];
+            if (['10', 'J', 'Q', 'K', 'A'].includes(dealerUpCard.value)) {
+                if (getScore(dealerHand) === 21) {
+                    gameInProgress = false;
+                    renderHands(); // Reveal dealer's hand
+                    showStatusMessage('Dealer has Blackjack!', 1000);
+                    // Player loses their bet, which was already subtracted.
+                    setTimeout(() => {
+                        updateButtonState('bet');
+                        betAmountEl.textContent = currentBet;
+                        if (wallet <= 0) {
+                            showStatusMessage("Game Over!", 5000);
+                            btnDeal.disabled = true;
+                        }
+                    }, 2000);
+                    return; // End the hand here
+                }
+            }
+            // If neither has blackjack, the game continues with player's turn.
         }
 
         btnDeal.addEventListener('click', dealNewHand);
@@ -442,19 +472,15 @@
         btnDouble.addEventListener('click', () => {
             if (!gameInProgress || playerHand.length !== 2 || wallet < currentBet) return;
 
-            // Debit the second part of the bet
             wallet -= currentBet;
-            // The bet for this hand is now doubled
             handBet += currentBet;
 
-            // Update UI to show doubled bet for this hand only
             betAmountEl.textContent = handBet;
             walletAmountEl.textContent = wallet;
 
             playerHand.push(deck.pop());
             renderHands();
 
-            // The hand immediately ends after doubling and receiving one card
             if (getScore(playerHand) > 21) {
                 endGame();
             } else {
@@ -465,7 +491,6 @@
         betButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const betValue = button.dataset.bet;
-                // currentBet stores the selected bet size for the *next* round
                 currentBet = (betValue === 'max') ? wallet : parseInt(betValue);
                 if (currentBet > wallet) currentBet = wallet;
 

@@ -140,7 +140,6 @@
             background-color: rgba(0, 0, 0, 0.9);
             color: var(--quartz-secondary);
             font-size: 2rem;
-            font-family: 'Press Start 2P', cursive;
             padding: 1.5rem;
             border-radius: 15px;
             border: 4px solid var(--quartz-secondary);
@@ -291,7 +290,7 @@
             return el;
         }
 
-        function showStatusMessage(message, duration = 2000) {
+        function showStatusMessage(message, duration = 1000) {
             statusMessageEl.innerHTML = message;
             statusMessageEl.style.display = 'block';
             setTimeout(() => statusMessageEl.style.display = 'none', duration);
@@ -347,7 +346,7 @@
                 const winnings = currentBet * winMultiplier;
                 wallet += winnings;
                 walletAmountEl.textContent = wallet;
-                showStatusMessage(`${winMessage}<br>+$${winnings}`, 3000);
+                showStatusMessage(`${winMessage}<br>+$${winnings}`, 1000);
             }
         }
         

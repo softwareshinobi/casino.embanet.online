@@ -281,7 +281,7 @@
             if (dCard) dealerHandEl.appendChild(createCardElement(dCard));
         }
 
-        function showStatusMessage(message, duration = 2000) {
+        function showStatusMessage(message, duration = 1000) {
             statusMessageEl.innerHTML = message;
             statusMessageEl.style.display = 'block';
             setTimeout(() => statusMessageEl.style.display = 'none', duration);
@@ -309,7 +309,7 @@
             else if(outcome === 'loss') { message = "You Lose!"; wallet -= (currentBet + warBet); }
             else if(outcome === 'surrender') { message = "Surrendered"; wallet -= Math.ceil(currentBet/2); }
             
-            showStatusMessage(message, 3000);
+            showStatusMessage(message, 1000);
             walletAmountEl.textContent = wallet;
             warBet = 0;
             updateButtonState('deal');
@@ -325,7 +325,7 @@
              else { // Tie
                 if(isWar) { endRound('win'); } // Tie on war is a win
                 else {
-                    showStatusMessage('TIE! Go to War?', 4000);
+                    showStatusMessage('TIE! Go to War?', 2000);
                     updateButtonState('war');
                 }
              }

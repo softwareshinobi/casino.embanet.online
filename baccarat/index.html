@@ -315,7 +315,7 @@
             bankerScoreEl.textContent = getHandScore(bankerHand);
         }
 
-        function showStatusMessage(message, duration = 2000) {
+        function showStatusMessage(message, duration = 1000) {
             statusMessageEl.innerHTML = message;
             statusMessageEl.style.display = 'block';
             setTimeout(() => statusMessageEl.style.display = 'none', duration);
@@ -356,7 +356,7 @@
                 wallet -= currentBet;
             }
 
-            showStatusMessage(msg, 3000);
+            showStatusMessage(msg, 1000);
             walletAmountEl.textContent = wallet;
             playerBetType = null;
             betTypeButtons.forEach(b => b.classList.remove('active'));
