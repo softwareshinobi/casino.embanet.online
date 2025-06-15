@@ -92,14 +92,26 @@
             font-weight: bold;
             color: var(--quartz-light);
             cursor: pointer;
-            transition: background-color 0.2s ease;
+            transition: all 0.2s ease;
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
 
-        .bet-area:hover {
+        .bet-area:not(.disabled):hover {
             background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .bet-area.point-on {
+            border-color: var(--quartz-secondary);
+            box-shadow: 0 0 12px var(--quartz-secondary), inset 0 0 8px rgba(24, 178, 178, 0.5);
+            transform: scale(1.05);
+        }
+
+        .bet-area.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            pointer-events: none;
         }
 
         .bet-area.pass-line {
@@ -126,29 +138,6 @@
             color: #ffc107;
             min-height: 20px;
             font-weight: normal;
-        }
-
-        .point-marker {
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-
-        .point-puck {
-            display: inline-block;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background-color: #333;
-            color: #fff;
-            font-weight: bold;
-            line-height: 60px;
-            border: 3px solid #fff;
-            text-align: center;
-        }
-
-        .point-puck.on {
-            background-color: #fff;
-            color: #333;
         }
 
         .actions-panel, .betting-panel, .info-panel {
@@ -213,7 +202,6 @@
             .actions-panel, .betting-panel, .info-panel { padding: 0.75rem; }
             .bet-area { font-size: 1rem; padding: 0.25rem; }
             .die { width: 45px; height: 45px; font-size: 1.5rem; }
-            .point-puck { width: 45px; height: 45px; line-height: 45px; font-size: 0.8rem; }
         }
     </style>
 </head>
@@ -223,9 +211,6 @@
         <div id="statusMessage" class="status-message"></div>
 
         <div class="playing-surface">
-            <div class="point-marker">
-                <div id="pointPuck" class="point-puck">OFF</div>
-            </div>
             <div class="dice-area">
                 <div id="die1" class="die">?</div>
                 <div id="die2" class="die">?</div>
@@ -265,8 +250,8 @@
         <div class="betting-panel mt-3">
              <div class="row g-2">
                 <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="100">$100</button></div>
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="500">$500</button></div>
                 <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="1000">$1000</button></div>
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="5000">$5000</button></div>
                 <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="max">MAX</button></div>
             </div>
              <div class="row g-2 mt-2">
@@ -289,7 +274,6 @@
         // --- DOM Elements ---
         const die1El = document.getElementById('die1');
         const die2El = document.getElementById('die2');
-        const pointPuckEl = document.getElementById('pointPuck');
         const statusMessageEl = document.getElementById('statusMessage');
         const btnRoll = document.getElementById('btnRoll');
         const btnClearBets = document.getElementById('btnClearBets');
@@ -311,6 +295,7 @@
         let point = 0; // 0 means point is OFF
         let canRoll = false;
 
+        // --- Game Functions ---
         function showStatusMessage(message, duration = 3000) {
             statusMessageEl.innerHTML = message;
             statusMessageEl.style.display = 'block';
@@ -321,8 +306,22 @@
             // States: 'betting', 'readyToRoll', 'inProgress'
             canRoll = state === 'readyToRoll';
             btnRoll.disabled = !canRoll;
-            btnClearBets.disabled = point === 0;
-            // You can always place a Field bet, so we don't disable bet buttons based on state
+
+            // Enable/disable the "Clear Bets" button
+            let canClear = false;
+            if (point === 0) {
+                // Before a point, can clear line and field bets
+                if (passLineBet > 0 || dontPassBet > 0 || fieldBet > 0) {
+                    canClear = true;
+                }
+            } else {
+                // After a point, can only clear place and field bets
+                const hasPlaceBets = Object.values(placeBets).some(bet => bet > 0);
+                if (fieldBet > 0 || hasPlaceBets) {
+                    canClear = true;
+                }
+            }
+            btnClearBets.disabled = !canClear;
         }
 
         function updateActiveBetButton(selectedBet) {
@@ -330,18 +329,27 @@
                 if(btn.dataset.bet === 'max' && selectedBet === wallet) btn.classList.add('active');
                 else if (parseInt(btn.dataset.bet) === selectedBet) btn.classList.add('active');
                 else btn.classList.remove('active');
+             });
+        }
+
+        function updatePointIndicator() {
+            placeBetAreas.forEach(area => {
+                const number = area.dataset.number;
+                // Always clear previous state
+                area.classList.remove('point-on', 'disabled');
+
+                if (point === 0) {
+                    // If point is off, disable place bets
+                    area.classList.add('disabled');
+                } else {
+                    // If point is on, highlight the correct number
+                    if (point.toString() === number) {
+                        area.classList.add('point-on');
+                    }
+                }
             });
         }
 
-        function updatePointPuck() {
-            if (point === 0) {
-                pointPuckEl.textContent = 'OFF';
-                pointPuckEl.classList.remove('on');
-            } else {
-                pointPuckEl.textContent = point;
-                pointPuckEl.classList.add('on');
-            }
-        }
 
         function renderAllBets() {
             document.getElementById('passLineBetAmount').textContent = passLineBet > 0 ? `$${passLineBet}` : '';
@@ -358,24 +366,43 @@
             for(const num in placeBets) { placeBets[num] = 0; }
             point = 0;
             renderAllBets();
-            updatePointPuck();
+            updatePointIndicator();
             updateButtonState('betting');
             walletAmountEl.textContent = wallet;
             if(wallet <= 0) showStatusMessage("Game Over", 5000);
         }
 
-        function clearPlaceBets() {
-            if (point === 0) return;
+        function clearActiveBets() {
             let returnedAmount = 0;
-            for(const num in placeBets) {
-                returnedAmount += placeBets[num];
-                placeBets[num] = 0;
+
+            // Before a point is set (come-out roll), clear Pass, Don't Pass, and Field bets.
+            if (point === 0) {
+                returnedAmount = passLineBet + dontPassBet + fieldBet;
+                passLineBet = 0;
+                dontPassBet = 0;
+                fieldBet = 0;
             }
-            if(returnedAmount > 0) {
+            // After a point is set, only clear Place and Field bets.
+            else {
+                returnedAmount += fieldBet;
+                fieldBet = 0;
+                for (const num in placeBets) {
+                    returnedAmount += placeBets[num];
+                    placeBets[num] = 0;
+                }
+            }
+
+            if (returnedAmount > 0) {
                 wallet += returnedAmount;
                 walletAmountEl.textContent = wallet;
                 renderAllBets();
-                showStatusMessage(`Place bets cleared: +$${returnedAmount}`);
+                showStatusMessage(`Bets cleared: +$${returnedAmount}`);
+                // Re-evaluate button states. If all bets are cleared, disable rolling.
+                if (passLineBet === 0 && dontPassBet === 0 && fieldBet === 0 && Object.values(placeBets).every(b => b === 0)) {
+                    updateButtonState('betting');
+                } else {
+                    updateButtonState('readyToRoll');
+                }
             }
         }
 
@@ -396,8 +423,9 @@
                 fieldBet = 0; // Field bet is for one roll only
             }
 
-            // Point is ON
+            // --- POINT IS ON ---
             if (point !== 0) {
+                // Check for winning place bets
                 if(placeBets[roll]){
                     const bet = placeBets[roll];
                     let payout = 0;
@@ -413,9 +441,8 @@
                     messages.push(`Point ${point} Hit! Pass Wins.`);
                     if(passLineBet > 0) wallet += passLineBet * 2;
                     if(dontPassBet > 0) messages.push("Don't Pass loses.");
-                    
-                    // --- BUG FIX ---
-                    // Before clearing the board, calculate and refund all remaining place bets.
+
+                    // Return remaining place bets to wallet before clearing
                     let returnedPlaceBets = 0;
                     for (const num in placeBets) {
                         returnedPlaceBets += placeBets[num];
@@ -424,19 +451,17 @@
                         wallet += returnedPlaceBets;
                         messages.push(`Place bets returned: +$${returnedPlaceBets}`);
                     }
-                    // --- END BUG FIX ---
-
                     clearBoardForNewRound();
 
                 } else if (roll === 7) {
                     messages.push(`Seven Out!`);
                     if(passLineBet > 0) messages.push("Pass Line loses.");
                     if(dontPassBet > 0) { wallet += dontPassBet * 2; messages.push("Don't Pass Wins!"); }
-                    // On a seven-out, place bets are lost, so we just clear them without refunding.
+                    // On a seven-out, place bets are lost
                     clearBoardForNewRound();
                 }
             }
-            // Come-out roll
+            // --- COME-OUT ROLL ---
             else {
                 if ([7, 11].includes(roll)) {
                     messages.push(`${roll}! Pass Line Wins!`);
@@ -454,7 +479,7 @@
                 } else {
                     point = roll;
                     messages.push(`Point is now ${point}.`);
-                    updatePointPuck();
+                    updatePointIndicator();
                 }
             }
 
@@ -462,6 +487,7 @@
             walletAmountEl.textContent = wallet;
             renderAllBets();
             if(point !== 0) updateButtonState('readyToRoll');
+            else updateButtonState('betting'); // After a come-out resolution, check button states
         }
 
         function rollDice() {
@@ -498,6 +524,7 @@
                 if(type === 'pass') passLineBet += currentBet;
                 else dontPassBet += currentBet;
             } else if (type === 'place') {
+                // This check is redundant due to the .disabled class, but good for safety
                 if (point === 0) { showStatusMessage("Set Point before Place bets."); return; }
                 const num = parseInt(area.dataset.number);
                 placeBets[num] += currentBet;
@@ -511,12 +538,13 @@
             updateButtonState('readyToRoll');
         }
 
+        // --- Event Listeners ---
         placeBetAreas.forEach(area => area.addEventListener('click', () => handleBetPlacement(area)));
         passLineBetArea.addEventListener('click', () => handleBetPlacement(passLineBetArea));
         dontPassLineBetArea.addEventListener('click', () => handleBetPlacement(dontPassLineBetArea));
         fieldBetArea.addEventListener('click', () => handleBetPlacement(fieldBetArea));
         btnRoll.addEventListener('click', rollDice);
-        btnClearBets.addEventListener('click', clearPlaceBets);
+        btnClearBets.addEventListener('click', clearActiveBets);
 
         betButtons.forEach(button => {
             button.addEventListener('click', () => {
@@ -528,10 +556,12 @@
             });
         });
 
+        // --- Initial Game Setup ---
         window.onload = () => {
             updateButtonState('betting');
             updateActiveBetButton(currentBet);
             renderAllBets();
+            updatePointIndicator(); // Set initial disabled state for place bets
         };
     </script>
 </body>
