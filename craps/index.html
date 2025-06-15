@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Craps / Shinobi Casino</title>
-    <!-- Bootswatch Quartz Theme -->
     <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/quartz/bootstrap.min.css" rel="stylesheet">
     <style>
         /* Custom styles adapted for the Quartz theme */
@@ -76,10 +75,17 @@
             color: #333;
         }
 
+        /* --- MODIFIED: Betting Layout Structure --- */
         .betting-layout {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
+            display: flex;
+            flex-direction: column;
             gap: 0.5rem;
+        }
+
+        .place-bets-grid {
+             display: grid;
+             grid-template-columns: repeat(6, 1fr);
+             gap: 0.5rem;
         }
 
         .bet-area {
@@ -114,21 +120,22 @@
             pointer-events: none;
         }
 
+        /* --- MODIFIED: Removed grid-column spans --- */
         .bet-area.pass-line {
-            grid-column: 1 / 4; /* Span half width */
             background-color: rgba(24, 178, 178, 0.3);
-            margin-top: 0.5rem; /* Space from place bets */
         }
 
         .bet-area.dont-pass-line {
-            grid-column: 4 / -1; /* Span other half width */
             background-color: rgba(220, 53, 69, 0.3);
-            margin-top: 0.5rem;
+        }
+
+        .line-bets-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
         }
 
         .bet-area.field-bet {
-            grid-column: 1 / -1;
-            margin-top: 0.5rem;
             background-color: rgba(108, 117, 125, 0.3);
         }
 
@@ -202,6 +209,11 @@
             .actions-panel, .betting-panel, .info-panel { padding: 0.75rem; }
             .bet-area { font-size: 1rem; padding: 0.25rem; }
             .die { width: 45px; height: 45px; font-size: 1.5rem; }
+
+            /* --- ADDED: Responsive grid for place bets --- */
+            .place-bets-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
     </style>
 </head>
@@ -216,25 +228,29 @@
                 <div id="die2" class="die">?</div>
             </div>
             <div class="betting-layout">
-                <div class="bet-area" data-bet-type="place" data-number="4">4 <span class="bet-amount" id="placeBetAmount4"></span></div>
-                <div class="bet-area" data-bet-type="place" data-number="5">5 <span class="bet-amount" id="placeBetAmount5"></span></div>
-                <div class="bet-area" data-bet-type="place" data-number="6">6 <span class="bet-amount" id="placeBetAmount6"></span></div>
-                <div class="bet-area" data-bet-type="place" data-number="8">8 <span class="bet-amount" id="placeBetAmount8"></span></div>
-                <div class="bet-area" data-bet-type="place" data-number="9">9 <span class="bet-amount" id="placeBetAmount9"></span></div>
-                <div class="bet-area" data-bet-type="place" data-number="10">10 <span class="bet-amount" id="placeBetAmount10"></span></div>
+                 <div class="place-bets-grid">
+                     <div class="bet-area" data-bet-type="place" data-number="4">4 <span class="bet-amount" id="placeBetAmount4"></span></div>
+                     <div class="bet-area" data-bet-type="place" data-number="5">5 <span class="bet-amount" id="placeBetAmount5"></span></div>
+                     <div class="bet-area" data-bet-type="place" data-number="6">6 <span class="bet-amount" id="placeBetAmount6"></span></div>
+                     <div class="bet-area" data-bet-type="place" data-number="8">8 <span class="bet-amount" id="placeBetAmount8"></span></div>
+                     <div class="bet-area" data-bet-type="place" data-number="9">9 <span class="bet-amount" id="placeBetAmount9"></span></div>
+                     <div class="bet-area" data-bet-type="place" data-number="10">10 <span class="bet-amount" id="placeBetAmount10"></span></div>
+                 </div>
 
                 <div id="fieldBetArea" class="bet-area field-bet" data-bet-type="field">
                     FIELD <small>(2,3,4,9,10,11,12)</small>
                     <span id="fieldBetAmount" class="bet-amount"></span>
                 </div>
 
-                <div id="passLineBetArea" class="bet-area pass-line" data-bet-type="pass">
-                    PASS LINE
-                    <span id="passLineBetAmount" class="bet-amount"></span>
-                </div>
-                 <div id="dontPassLineBetArea" class="bet-area dont-pass-line" data-bet-type="dontpass">
-                    DON'T PASS
-                    <span id="dontPassBetAmount" class="bet-amount"></span>
+                <div class="line-bets-container">
+                    <div id="passLineBetArea" class="bet-area pass-line" data-bet-type="pass">
+                        PASS LINE
+                        <span id="passLineBetAmount" class="bet-amount"></span>
+                    </div>
+                     <div id="dontPassLineBetArea" class="bet-area dont-pass-line" data-bet-type="dontpass">
+                        DON'T PASS
+                        <span id="dontPassBetAmount" class="bet-amount"></span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -249,10 +265,10 @@
 
         <div class="betting-panel mt-3">
              <div class="row g-2">
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="100">$100</button></div>
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="1000">$1000</button></div>
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="5000">$5000</button></div>
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="max">MAX</button></div>
+                 <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="100">$100</button></div>
+                 <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="1000">$1000</button></div>
+                 <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="5000">$5000</button></div>
+                 <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="max">MAX</button></div>
             </div>
              <div class="row g-2 mt-2">
                 <div class="col-12">
@@ -326,9 +342,9 @@
 
         function updateActiveBetButton(selectedBet) {
              betButtons.forEach(btn => {
-                if(btn.dataset.bet === 'max' && selectedBet === wallet) btn.classList.add('active');
-                else if (parseInt(btn.dataset.bet) === selectedBet) btn.classList.add('active');
-                else btn.classList.remove('active');
+                 if(btn.dataset.bet === 'max' && selectedBet === wallet) btn.classList.add('active');
+                 else if (parseInt(btn.dataset.bet) === selectedBet) btn.classList.add('active');
+                 else btn.classList.remove('active');
              });
         }
 
@@ -483,7 +499,7 @@
                 }
             }
 
-            showStatusMessage(messages.length > 0 ? messages.join('<br>') : `Rolled ${roll}.`, 4000);
+            showStatusMessage(messages.length > 0 ? messages.join('<br>') : `Rolled ${roll}.`, 1000);
             walletAmountEl.textContent = wallet;
             renderAllBets();
             if(point !== 0) updateButtonState('readyToRoll');
