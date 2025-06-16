@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Baccarat - Quartz</title>
+    <title>Baccarat / Shinobi Casino </title>
     <!-- Bootswatch Quartz Theme -->
     <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/quartz/bootstrap.min.css" rel="stylesheet">
     <!-- Google Fonts for a retro feel -->
@@ -86,7 +86,6 @@
         }
 
         .hand-label {
-            font-family: 'Press Start 2P', cursive;
             font-size: 1rem;
             color: var(--quartz-light);
             text-transform: uppercase;
@@ -166,7 +165,6 @@
             background-color: rgba(0, 0, 0, 0.9);
             color: var(--quartz-secondary);
             font-size: 2rem;
-            font-family: 'Press Start 2P', cursive;
             padding: 1.5rem;
             border-radius: 15px;
             border: 4px solid var(--quartz-secondary);
@@ -231,7 +229,7 @@
                 <div class="col-4"><button id="btnBetBanker" class="btn btn-danger bet-type-button action-button">Banker</button></div>
                 <div class="col-4"><button id="btnBetTie" class="btn btn-warning bet-type-button action-button">Tie</button></div>
                 <div class="col-12 mt-2">
-                    <button id="btnDeal" class="btn btn-secondary action-button">Deal</button>
+                    <button id="btnDeal" class="btn btn-info action-button">Deal</button>
                 </div>
             </div>
         </div>
@@ -317,7 +315,7 @@
             bankerScoreEl.textContent = getHandScore(bankerHand);
         }
 
-        function showStatusMessage(message, duration = 2000) {
+        function showStatusMessage(message, duration = 1000) {
             statusMessageEl.innerHTML = message;
             statusMessageEl.style.display = 'block';
             setTimeout(() => statusMessageEl.style.display = 'none', duration);
@@ -358,7 +356,7 @@
                 wallet -= currentBet;
             }
 
-            showStatusMessage(msg, 3000);
+            showStatusMessage(msg, 1000);
             walletAmountEl.textContent = wallet;
             playerBetType = null;
             betTypeButtons.forEach(b => b.classList.remove('active'));

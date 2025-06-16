@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blackjack - Quartz</title>
+    <title>Blackjack / Shinobi Casino</title>
     <!-- Bootswatch Quartz Theme -->
     <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/quartz/bootstrap.min.css" rel="stylesheet">
     <!-- Google Fonts for a retro feel -->
@@ -80,7 +80,6 @@
         }
 
         .hand-label {
-            font-family: 'Press Start 2P', cursive;
             font-size: 1rem;
             color: var(--quartz-light);
             text-transform: uppercase;
@@ -112,12 +111,12 @@
             box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
             position: relative;
         }
-        
+
         .card.hidden {
             background: #212529;
             border: 2px solid var(--quartz-secondary);
         }
-        
+
         .card.hidden::before {
             content: '?';
             font-size: 3rem;
@@ -126,7 +125,7 @@
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
         }
-        
+
         .card .suit { font-size: 1.5rem; line-height: 1; }
         .card.red { color: #e95420; }
         .card.black { color: #212121; }
@@ -143,7 +142,7 @@
         }
         .betting-panel, .info-panel {
             border-top: 2px solid #212529;
-         }
+           }
 
         .action-button, .bet-button {
             font-family: 'Orbitron', sans-serif;
@@ -165,7 +164,6 @@
             background-color: rgba(0, 0, 0, 0.9);
             color: var(--quartz-secondary);
             font-size: 2rem;
-            font-family: 'Press Start 2P', cursive;
             padding: 1.5rem;
             border-radius: 15px;
             border: 4px solid var(--quartz-secondary);
@@ -174,7 +172,7 @@
             display: none;
             width: 90%;
         }
-        
+
         .info-display {
             font-size: 1.2rem;
             font-weight: 700;
@@ -217,7 +215,7 @@
                 </div>
                 <div id="dealerHand" class="hand-area"></div>
             </div>
-            
+
             <!-- Player's Hand -->
             <div class="hand-container mt-3">
                  <div class="hand-header">
@@ -230,18 +228,18 @@
 
         <div class="actions-panel mt-3">
             <div class="row g-2">
-                <div class="col-4"><button id="btnHit" class="btn btn-secondary action-button">Hit</button></div>
-                <div class="col-4"><button id="btnStand" class="btn btn-secondary action-button">Stand</button></div>
-                <div class="col-4"><button id="btnDouble" class="btn btn-secondary action-button">Double</button></div>
+                <div class="col-4"><button id="btnHit" class="btn btn-secondary action-button" disabled>Hit</button></div>
+                <div class="col-4"><button id="btnStand" class="btn btn-secondary action-button" disabled>Stand</button></div>
+                <div class="col-4"><button id="btnDouble" class="btn btn-secondary action-button" disabled>Double</button></div>
                 <div class="col-12 mt-2">
-                    <button id="btnDeal" class="btn btn-secondary action-button">Deal</button>
+                    <button id="btnDeal" class="btn btn-info action-button">Deal</button>
                 </div>
             </div>
         </div>
-        
+
         <div class="betting-panel mt-3">
              <div class="row g-2">
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="100">$100</button></div>
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button active" data-bet="100">$100</button></div>
                 <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="500">$500</button></div>
                 <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="1000">$1000</button></div>
                 <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="max">MAX</button></div>
@@ -274,7 +272,9 @@
 
         // --- Game State Variables ---
         let deck = [], playerHand = [], dealerHand = [];
-        let wallet = 10000, currentBet = 100;
+        let wallet = 10000;
+        let currentBet = 100; // The player's selected bet amount for the next hand
+        let handBet = 0; // The actual amount wagered on the current hand, including doubles
         let gameInProgress = false;
 
         // --- Game Logic ---
@@ -291,7 +291,7 @@
                 [deck[i], deck[j]] = [deck[j], deck[i]];
             }
         }
-        
+
         function getScore(hand) {
             let score = 0, aceCount = 0;
             for (let card of hand) {
@@ -306,7 +306,7 @@
         function createCardElement(card, isHidden = false) {
             const cardEl = document.createElement('div');
             cardEl.className = 'card';
-            if (isHidden) { cardEl.classList.add('hidden'); } 
+            if (isHidden) { cardEl.classList.add('hidden'); }
             else {
                 cardEl.classList.add((card.suit === '♥' || card.suit === '♦') ? 'red' : 'black');
                 cardEl.innerHTML = `<div class="card-top"><span>${card.value}</span><span class="suit">${card.suit}</span></div><div class="card-bottom"><span>${card.value}</span><span class="suit">${card.suit}</span></div>`;
@@ -323,7 +323,7 @@
             dealerScoreEl.textContent = gameInProgress ? getScore([dealerHand[1]]) : getScore(dealerHand);
         }
 
-        function showStatusMessage(message, duration = 2000) {
+        function showStatusMessage(message, duration = 1000) {
             statusMessageEl.innerHTML = message;
             statusMessageEl.style.display = 'block';
             setTimeout(() => statusMessageEl.style.display = 'none', duration);
@@ -334,10 +334,11 @@
             btnDeal.disabled = !isBetting;
             btnHit.disabled = !isPlaying;
             btnStand.disabled = !isPlaying;
+            // Can double if it's the start of the hand and player can afford to match their initial bet
             btnDouble.disabled = !(isPlaying && playerHand.length === 2 && wallet >= currentBet);
             betButtons.forEach(btn => btn.disabled = !isBetting);
         }
-        
+
         function updateActiveBetButton(selectedBet) {
              betButtons.forEach(btn => {
                 if(btn.dataset.bet === 'max' && selectedBet === wallet) btn.classList.add('active');
@@ -350,24 +351,38 @@
             gameInProgress = false;
             updateButtonState('bet');
             dealerScoreEl.textContent = getScore(dealerHand);
-            
+
             const pScore = getScore(playerHand), dScore = getScore(dealerHand);
             let msg = '';
 
-            if (pScore > 21) { msg = 'Player Busts!'; wallet -= currentBet; }
-            else if (dScore > 21 || pScore > dScore) { msg = 'Player Wins!'; wallet += currentBet; }
-            else if (pScore < dScore) { msg = 'Dealer Wins!'; wallet -= currentBet; }
-            else { msg = 'Push!'; }
-            
-            showStatusMessage(msg, 3000);
+            if (pScore > 21) {
+                msg = 'Player Busts!';
+                // Bet was already taken from wallet, so no action needed.
+            } else if (dScore > 21 || pScore > dScore) {
+                msg = 'Player Wins!';
+                wallet += handBet * 2; // Return stake and add winnings
+            } else if (pScore < dScore) {
+                msg = 'Dealer Wins!';
+                // Bet was already taken from wallet, so no action needed.
+            } else {
+                msg = 'Push!';
+                wallet += handBet; // Return stake
+            }
+
+            showStatusMessage(msg, 2000);
+
             walletAmountEl.textContent = wallet;
-            
-            if (wallet <= 0) showStatusMessage("Game Over!", 5000);
+            betAmountEl.textContent = currentBet; // Reset bet display for next hand
+
+            if (wallet <= 0 && currentBet > 0) {
+                 showStatusMessage("Game Over!", 5000);
+                 btnDeal.disabled = true;
+            }
         }
 
         function dealerTurn() {
             gameInProgress = false;
-            renderHands();
+            renderHands(); // Reveal dealer's hidden card
             const dealerInterval = setInterval(() => {
                 if (getScore(dealerHand) < 17) {
                     dealerHand.push(deck.pop());
@@ -380,62 +395,110 @@
         }
 
         function dealNewHand() {
-            if (currentBet === 0 || wallet < currentBet) {
+            if (currentBet <= 0 || wallet < currentBet) {
                 showStatusMessage("Invalid Bet!");
                 return;
             }
             gameInProgress = true;
+
+            handBet = currentBet;
+            wallet -= handBet;
+            walletAmountEl.textContent = wallet;
+            betAmountEl.textContent = handBet;
+
             createDeck();
             shuffleDeck();
             playerHand = [deck.pop(), deck.pop()];
-            dealerHand = [deck.pop(), deck.pop()];
+            dealerHand = [deck.pop(), deck.pop()]; // Deal both dealer cards immediately
             renderHands();
             updateButtonState('play');
+
+            // Check for player Blackjack first.
             if (getScore(playerHand) === 21) {
                 gameInProgress = false;
-                renderHands();
-                showStatusMessage('Blackjack!', 3000);
-                wallet += Math.floor(currentBet * 1.5);
+                renderHands(); // Show both player cards
+                const dealerScore = getScore(dealerHand);
+                if (dealerScore === 21) {
+                    showStatusMessage('Push! Both have Blackjack.', 1000);
+                    wallet += handBet; // Return player's stake
+                } else {
+                    showStatusMessage('Blackjack!', 2000);
+                    wallet += handBet + Math.floor(handBet * 1.5); // Payout 3:2
+                }
                 walletAmountEl.textContent = wallet;
-                setTimeout(() => updateButtonState('bet'), 3000);
+                setTimeout(() => {
+                    updateButtonState('bet');
+                    betAmountEl.textContent = currentBet;
+                }, 2000);
+                return; // End the hand here
             }
+
+            // If player doesn't have BJ, check for dealer BJ if applicable
+            const dealerUpCard = dealerHand[1];
+            if (['10', 'J', 'Q', 'K', 'A'].includes(dealerUpCard.value)) {
+                if (getScore(dealerHand) === 21) {
+                    gameInProgress = false;
+                    renderHands(); // Reveal dealer's hand
+                    showStatusMessage('Dealer has Blackjack!', 1000);
+                    // Player loses their bet, which was already subtracted.
+                    setTimeout(() => {
+                        updateButtonState('bet');
+                        betAmountEl.textContent = currentBet;
+                        if (wallet <= 0) {
+                            showStatusMessage("Game Over!", 5000);
+                            btnDeal.disabled = true;
+                        }
+                    }, 2000);
+                    return; // End the hand here
+                }
+            }
+            // If neither has blackjack, the game continues with player's turn.
         }
 
         btnDeal.addEventListener('click', dealNewHand);
-        
+
         btnHit.addEventListener('click', () => {
             if (!gameInProgress) return;
             playerHand.push(deck.pop());
             renderHands();
-            updateButtonState('play'); // Re-evaluate double button
-            if (getScore(playerHand) > 21) endGame();
+            btnDouble.disabled = true; // Can't double after hitting
+            if (getScore(playerHand) > 21) {
+                endGame();
+            }
         });
 
         btnStand.addEventListener('click', () => { if (gameInProgress) dealerTurn(); });
 
         btnDouble.addEventListener('click', () => {
             if (!gameInProgress || playerHand.length !== 2 || wallet < currentBet) return;
+
             wallet -= currentBet;
-            currentBet *= 2;
-            betAmountEl.textContent = currentBet;
+            handBet += currentBet;
+
+            betAmountEl.textContent = handBet;
             walletAmountEl.textContent = wallet;
 
             playerHand.push(deck.pop());
             renderHands();
-            if (getScore(playerHand) > 21) endGame();
-            else dealerTurn();
+
+            if (getScore(playerHand) > 21) {
+                endGame();
+            } else {
+                dealerTurn();
+            }
         });
-        
+
         betButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const betValue = button.dataset.bet;
                 currentBet = (betValue === 'max') ? wallet : parseInt(betValue);
                 if (currentBet > wallet) currentBet = wallet;
+
                 betAmountEl.textContent = currentBet;
                 updateActiveBetButton(currentBet);
             });
         });
-        
+
         window.onload = () => {
             updateButtonState('bet');
             updateActiveBetButton(currentBet);
@@ -443,5 +506,6 @@
             dealerHandEl.innerHTML = '';
         };
     </script>
+
 </body>
 </html>
