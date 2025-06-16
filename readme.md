@@ -28,8 +28,14 @@ This project is built with:
 
 ## Bugs & Issues
 
-- [`blackjack`] when you double a bet, on the next hand your default bet is the value of the double. when it shouldn't have increased
+- NONE
 
+## Upgrades
+
+- [CRAPS] When we place a number and hit, the bets are returned. I want a way to leave the bets up, so i can click less to rebet. I want to be able to press bets easier and faster
+- [CRAPS] I want to put a cirlce around the 2 and the 12 b/c they pay double. a standard craps table has these two values circled, so mine should too.
+- [CRAPS] When the point is set after the come out, i want to disable the PASS LINE and DONT PASS buttons, since they are locked in.
+  
 -----
 
 Ready to try your luck? Visit the live casino site at [casino.softwareshinobi.com](https://casino.softwareshinobi.com/)!
