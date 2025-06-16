@@ -26,16 +26,41 @@ This project is built with:
   * **jQuery**
   * **Gemini Pro 2.5**
 
+No problem. Here's your README section, formatted with markdown headings:
+
+---
+
 ## Bugs & Issues
 
-- NONE
+None.
+
+---
 
 ## Upgrades
 
-- [CRAPS] When we place a number and hit, the bets are returned. I want a way to leave the bets up, so i can click less to rebet. I want to be able to press bets easier and faster
-- [CRAPS] I want to put a cirlce around the 2 and the 12 b/c they pay double. a standard craps table has these two values circled, so mine should too.
-- [CRAPS] When the point is set after the come out, i want to disable the PASS LINE and DONT PASS buttons, since they are locked in.
-  
+### Core System
+
+* ### API Backend (Spring)
+    Develop a Spring-based API for robust data management.
+* ### User Management
+    Centralize user profiles.
+* ### Betting History
+    Track all user bets with timestamps.
+* ### Favorite Game Tracking
+    Identify and log frequently played games.
+* ### Win/Loss Calculation
+    Automate win/loss ratio calculation per game, per user.
+
+### Craps
+
+* ### Streamlined Re-betting
+    Allow players to keep their bets on the table after a win, reducing clicks and speeding up gameplay.
+* ### Visual Cues for Payouts
+    Add circles around the 2 and 12 on the craps table to highlight their double payout, aligning with standard table design.
+* ### Disabled Pass/Don't Pass Buttons
+    Lock out Pass Line and Don't Pass buttons once a point is established, as per game rules.
+
+---
 -----
 
 Ready to try your luck? Visit the live casino site at [casino.softwareshinobi.com](https://casino.softwareshinobi.com/)!
