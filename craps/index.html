@@ -312,7 +312,7 @@
         let canRoll = false;
 
         // --- Game Functions ---
-        function showStatusMessage(message, duration = 3000) {
+        function showStatusMessage(message, duration = 1000) {
             statusMessageEl.innerHTML = message;
             statusMessageEl.style.display = 'block';
             setTimeout(() => statusMessageEl.style.display = 'none', duration);
@@ -385,7 +385,7 @@
             updatePointIndicator();
             updateButtonState('betting');
             walletAmountEl.textContent = wallet;
-            if(wallet <= 0) showStatusMessage("Game Over", 5000);
+            if(wallet <= 0) showStatusMessage("Game Over", 2000);
         }
 
         function clearActiveBets() {
