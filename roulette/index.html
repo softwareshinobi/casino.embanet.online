@@ -46,7 +46,8 @@
             box-shadow: 0 0 30px rgba(24, 178, 178, 0.5), inset 0 0 20px rgba(0, 0, 0, 0.5);
             padding: 1rem;
             width: 100%;
-            max-width: 1000px; /* Kept at 1000px for consistency with prior update */
+            /* Increased max-width by ~20% (1000px -> 1200px) */
+            max-width: 1200px;
             position: relative;
             display: flex;
             flex-direction: column;
@@ -58,12 +59,15 @@
         .playing-surface {
             background-color: var(--roulette-felt);
             border-radius: 15px;
-            padding: 1.5rem;
+            /* Increased padding */
+            padding: 1.8rem; /* Scaled from 1.5rem by approx 20% */
             border: 3px solid #495057;
             box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
             display: grid;
-            grid-template-columns: 1.5fr 2.5fr;
-            gap: 1.5rem;
+            /* Adjusted grid-template-columns for better balance within wider layout */
+            grid-template-columns: 1.2fr 2.8fr; /* Adjusted for larger wheel area, can be fine-tuned */
+            /* Increased gap */
+            gap: 1.8rem; /* Scaled from 1.5rem by approx 20% */
         }
 
         .wheel-container {
@@ -73,19 +77,17 @@
             justify-content: center;
             background: #212529;
             border-radius: 10px;
-            padding: 1rem;
-            min-height: 200px;
+            /* Increased padding */
+            padding: 1.2rem; /* Scaled from 1rem by approx 20% */
+            min-height: 240px; /* Scaled from 200px */
         }
 
         .winning-number-display {
-            padding: 1rem;
-            border-radius: 10px;
-            color: #fff;
-            font-size: 4rem;
-            text-align: center;
+            /* Increased font size for desktop */
+            font-size: 4.8rem; /* Scaled from 4rem */
             width: 100%;
             height: auto;
-            min-height: 120px;
+            min-height: 144px; /* Scaled from 120px */
             line-height: 1.2;
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             font-weight: 700;
@@ -99,42 +101,51 @@
         .betting-layout-container {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            /* Increased gap */
+            gap: 10px; /* Scaled from 8px */
         }
         .main-betting-grid {
             display: grid;
             grid-template-columns: auto 1fr;
-            gap: 8px;
+            /* Increased gap */
+            gap: 10px; /* Scaled from 8px */
         }
         .zeros-area {
             display: grid;
-            gap: 4px;
+            /* Increased gap */
+            gap: 5px; /* Scaled from 4px */
         }
         .numbers-and-cols-container {
             display: grid;
             grid-template-columns: 1fr auto;
-            gap: 8px;
+            /* Increased gap */
+            gap: 10px; /* Scaled from 8px */
         }
         .numbers-area {
             display: grid;
             grid-template-columns: repeat(12, 1fr);
-            gap: 4px;
+            /* Increased gap */
+            gap: 5px; /* Scaled from 4px */
         }
         .cols-area {
             display: grid;
             grid-template-rows: repeat(3, 1fr);
-            gap: 4px;
+            /* Increased gap */
+            gap: 5px; /* Scaled from 4px */
         }
         .outside-bets-container {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
-            gap: 4px;
+            /* Increased gap */
+            gap: 5px; /* Scaled from 4px */
         }
 
         .bet-area {
-            padding: 0.5rem;
+            /* Increased padding for larger clickable area and better look */
+            padding: 0.6rem; /* Scaled from 0.5rem */
             text-align: center;
-            font-size: 1.1rem;
+            /* Significantly increased font size for desktop readability */
+            font-size: 1.3rem; /* Scaled from 1.1rem */
             font-weight: bold;
             border: 1px solid #fff;
             cursor: pointer;
@@ -144,7 +155,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 35px;
+            /* Added min-height to ensure cells have sufficient height */
+            min-height: 42px; /* Scaled from 35px */
         }
 
         .bet-area:hover { background-color: rgba(255,255,255,0.2); }
@@ -154,10 +166,16 @@
 
         .bet-area .chip {
             position: absolute;
-            bottom: 4px; right: 4px;
+            /* Adjusted position due to increased padding */
+            bottom: 5px; right: 5px; /* Scaled from 4px */
             background: #ffc107; color: #000;
-            border-radius: 50%; padding: 0 5px; font-size: 0.8rem;
-            line-height: 1.2; min-width: 22px; text-align: center;
+            border-radius: 50%;
+            /* Increased padding/min-width for chip text */
+            padding: 0 6px; /* Scaled from 0 5px */
+            font-size: 0.9rem; /* Scaled from 0.8rem */
+            line-height: 1.2;
+            min-width: 26px; /* Scaled from 22px */
+            text-align: center;
             box-shadow: 0 0 5px rgba(0,0,0,0.5);
         }
 
@@ -168,59 +186,72 @@
         .betting-panel, .info-panel { border-top: 2px solid #212529; }
         .action-button, .bet-button {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            font-weight: 700; text-transform: uppercase; padding: 0.75rem 0; width: 100%;
+            font-weight: 700; text-transform: uppercase;
+            /* Increased padding */
+            padding: 0.9rem 0; /* Scaled from 0.75rem */
+            width: 100%;
         }
-        .action-button { font-size: 1.2rem; }
-        .bet-button { font-size: 1rem; }
+        .action-button {
+            /* Increased font size */
+            font-size: 1.4rem; /* Scaled from 1.2rem */
+        }
+        .bet-button {
+            /* Increased font size */
+            font-size: 1.2rem; /* Scaled from 1rem */
+        }
 
         /* --- Custom Bet Button Styles (Matching the image) --- */
         .betting-panel .bet-button {
-            background-color: var(--custom-pink-button); /* Solid pink background */
-            border-color: var(--custom-pink-button); /* Match border color */
-            color: var(--quartz-light); /* Light text color */
-            box-shadow: none; /* Remove default shadow if any */
-            font-weight: 700; /* Ensure bold font as per other buttons */
+            background-color: var(--custom-pink-button);
+            border-color: var(--custom-pink-button);
+            color: var(--quartz-light);
+            box-shadow: none;
+            font-weight: 700;
         }
 
         .betting-panel .bet-button:hover {
-            background-color: var(--custom-pink-button-active); /* Slightly brighter pink on hover */
+            background-color: var(--custom-pink-button-active);
             border-color: var(--custom-pink-button-active);
         }
 
         .betting-panel .bet-button.active {
-            background-color: var(--custom-pink-button-active); /* Brighter pink when active */
-            border-color: var(--quartz-secondary); /* Use secondary color for active border */
-            box-shadow: 0 0 15px rgba(24, 178, 178, 0.7); /* Stronger glow for active */
-            color: var(--quartz-light); /* Maintain light text color */
+            background-color: var(--custom-pink-button-active);
+            border-color: var(--quartz-secondary);
+            box-shadow: 0 0 15px rgba(24, 178, 178, 0.7);
+            color: var(--quartz-light);
         }
         /* --- End Custom Bet Button Styles --- */
 
 
         /* --- Custom Info Panel Styles (Matching the image) --- */
         .info-panel {
-            background-color: var(--quartz-dark); /* Darker background for info panel */
-            border: 2px solid var(--quartz-secondary); /* Secondary border for info panel */
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.5); /* Inner shadow for depth */
-            padding: 1rem 1.5rem; /* Adjust padding if needed */
+            background-color: var(--quartz-dark);
+            border: 2px solid var(--quartz-secondary);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+            /* Increased padding */
+            padding: 1.2rem 1.8rem; /* Scaled from 1rem 1.5rem */
         }
 
         .info-display {
-            font-size: 1.5rem; /* Larger font size for readability */
+            /* Increased font size for readability */
+            font-size: 1.8rem; /* Scaled from 1.5rem */
             font-weight: 700;
-            color: var(--quartz-light); /* Main text color */
+            color: var(--quartz-light);
             text-align: center;
         }
 
         .info-display span {
-            color: var(--quartz-secondary); /* Highlighted values */
+            color: var(--quartz-secondary);
         }
         /* --- End Custom Info Panel Styles --- */
 
-
         .status-message {
             position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%);
-            background-color: rgba(0, 0, 0, 0.9); color: var(--quartz-secondary); font-size: 1.5rem;
-             padding: 1.5rem; border-radius: 15px;
+            background-color: rgba(0, 0, 0, 0.9); color: var(--quartz-secondary);
+            /* Increased font size */
+            font-size: 1.8rem; /* Scaled from 1.5rem */
+             padding: 1.8rem; /* Scaled from 1.5rem */
+            border-radius: 15px;
             border: 4px solid var(--quartz-secondary); z-index: 100; text-align: center;
             display: none; width: 90%;
         }
@@ -228,11 +259,13 @@
         @media (max-width: 768px) {
             .game-console { padding: 0.5rem; margin-top: 1rem; }
             .playing-surface {
-                grid-template-columns: 1fr;
-                padding: 1rem;
+                grid-template-columns: 1fr; /* Stack on mobile */
+                padding: 1rem; /* Revert to mobile padding */
+                gap: 1rem; /* Revert to mobile gap */
             }
-            .wheel-container { height: auto; min-height: initial; }
+            .wheel-container { height: auto; min-height: initial; padding: 1rem; } /* Revert mobile padding */
             .winning-number-display { height: 100px; line-height: 70px; font-size: 3rem; min-height: initial; min-width: initial; }
+            /* Revert mobile specific sizes for betting mat elements */
             .betting-layout-container { gap: 3px; }
             .main-betting-grid { gap: 3px; }
             .zeros-area { gap: 1px; }
@@ -242,18 +275,15 @@
             .outside-bets-container { grid-template-columns: repeat(3, 1fr); gap: 1px; }
             .bet-area { font-size: 0.6rem; padding: 0.1rem; min-height: 25px; }
             .bet-area .chip { bottom: 1px; right: 1px; padding: 0 3px; font-size: 0.6rem; min-width: 16px; }
-            .action-button { font-size: 1rem; } .bet-button { font-size: 0.8rem; }
-            .info-display { font-size: 1rem; } /* Ensure info-display font size is smaller on mobile */
+            .action-button { font-size: 1rem; padding: 0.75rem 0; }
+            .bet-button { font-size: 0.8rem; padding: 0.75rem 0; }
+            .info-panel { padding: 0.75rem; }
+            .info-display { font-size: 1rem; }
+            .status-message { font-size: 1.5rem; padding: 1.5rem; } /* Revert status message font size on mobile */
 
-            /* Mobile adjustments for custom buttons/panels if necessary */
+            /* Ensure custom button styles adjust for mobile too */
             .betting-panel .bet-button {
-                font-size: 0.8rem; /* Smaller font on mobile for these buttons */
-            }
-            .info-panel {
-                padding: 0.75rem; /* Smaller padding on mobile */
-            }
-            .info-display {
-                font-size: 1rem; /* Smaller font for info display on mobile */
+                font-size: 0.8rem; /* Keep original smaller font for mobile */
             }
         }
     </style>
