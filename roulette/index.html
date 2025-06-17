@@ -18,26 +18,25 @@
             --roulette-felt: #343f56; /* Changed to match theme */
             --bet-red: #B71C1C;
             --bet-black: #212121;
+            --custom-pink-button: #e91e63; /* A specific pink for bet buttons */
+            --custom-pink-button-active: #ff4081; /* A brighter pink for active */
         }
 
         html, body {
             height: 100%;
             margin: 0;
-            /* Allow vertical scrolling on all screen sizes */
             overflow-y: auto;
         }
 
         body {
-            /* Use a consistent system font stack */
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             display: flex;
             justify-content: center;
-            /* Align items to the top to respect padding-top */
             align-items: flex-start;
-            padding: 0.5rem; /* Padding for small screens (sides) */
+            padding: 0.5rem;
             background-color: var(--bs-body-bg);
-            box-sizing: border-box; /* Include padding in element's total width and height */
-            overflow-x: hidden; /* Prevent horizontal scrolling */
+            box-sizing: border-box;
+            overflow-x: hidden;
         }
 
         .game-console {
@@ -47,25 +46,24 @@
             box-shadow: 0 0 30px rgba(24, 178, 178, 0.5), inset 0 0 20px rgba(0, 0, 0, 0.5);
             padding: 1rem;
             width: 100%;
-            max-width: 900px;
+            max-width: 1000px; /* Kept at 1000px for consistency with prior update */
             position: relative;
             display: flex;
             flex-direction: column;
-            z-index: 1; /* Ensure it's above the background if any */
-            /* Add a top margin for consistent spacing below the fixed navbar */
+            z-index: 1;
             margin-top: 1rem;
-            margin-bottom: 20px; /* Add some space at the bottom */
+            margin-bottom: 20px;
         }
 
         .playing-surface {
             background-color: var(--roulette-felt);
             border-radius: 15px;
-            padding: 1rem;
+            padding: 1.5rem;
             border: 3px solid #495057;
             box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
             display: grid;
-            grid-template-columns: 1fr 2.5fr; /* Give more space to betting mat */
-            gap: 1rem;
+            grid-template-columns: 1.5fr 2.5fr;
+            gap: 1.5rem;
         }
 
         .wheel-container {
@@ -76,6 +74,7 @@
             background: #212529;
             border-radius: 10px;
             padding: 1rem;
+            min-height: 200px;
         }
 
         .winning-number-display {
@@ -85,54 +84,57 @@
             font-size: 4rem;
             text-align: center;
             width: 100%;
-            height: 150px;
-            line-height: 120px;
-            /* Using system font for consistency */
+            height: auto;
+            min-height: 120px;
+            line-height: 1.2;
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             font-weight: 700;
             border: 4px solid #495057;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         /* New structured betting layout */
         .betting-layout-container {
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 8px;
         }
         .main-betting-grid {
             display: grid;
             grid-template-columns: auto 1fr;
-            gap: 5px;
+            gap: 8px;
         }
         .zeros-area {
             display: grid;
-            gap: 2px;
+            gap: 4px;
         }
         .numbers-and-cols-container {
             display: grid;
             grid-template-columns: 1fr auto;
-            gap: 5px;
+            gap: 8px;
         }
         .numbers-area {
             display: grid;
             grid-template-columns: repeat(12, 1fr);
-            gap: 2px;
+            gap: 4px;
         }
         .cols-area {
             display: grid;
             grid-template-rows: repeat(3, 1fr);
-            gap: 2px;
+            gap: 4px;
         }
         .outside-bets-container {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
-            gap: 2px;
+            gap: 4px;
         }
 
         .bet-area {
-            padding: 0.2rem;
+            padding: 0.5rem;
             text-align: center;
-            font-size: 0.8rem;
+            font-size: 1.1rem;
             font-weight: bold;
             border: 1px solid #fff;
             cursor: pointer;
@@ -142,6 +144,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            min-height: 35px;
         }
 
         .bet-area:hover { background-color: rgba(255,255,255,0.2); }
@@ -151,9 +154,11 @@
 
         .bet-area .chip {
             position: absolute;
-            bottom: 2px; right: 2px; background: #ffc107; color: #000;
-            border-radius: 50%; padding: 0 4px; font-size: 0.7rem;
-            line-height: 1.2; min-width: 20px; text-align: center;
+            bottom: 4px; right: 4px;
+            background: #ffc107; color: #000;
+            border-radius: 50%; padding: 0 5px; font-size: 0.8rem;
+            line-height: 1.2; min-width: 22px; text-align: center;
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
         }
 
         .actions-panel, .betting-panel, .info-panel {
@@ -162,12 +167,55 @@
         .actions-panel{ border-top: 3px solid var(--quartz-secondary); }
         .betting-panel, .info-panel { border-top: 2px solid #212529; }
         .action-button, .bet-button {
-            /* Using system font for consistency */
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             font-weight: 700; text-transform: uppercase; padding: 0.75rem 0; width: 100%;
         }
         .action-button { font-size: 1.2rem; }
         .bet-button { font-size: 1rem; }
+
+        /* --- Custom Bet Button Styles (Matching the image) --- */
+        .betting-panel .bet-button {
+            background-color: var(--custom-pink-button); /* Solid pink background */
+            border-color: var(--custom-pink-button); /* Match border color */
+            color: var(--quartz-light); /* Light text color */
+            box-shadow: none; /* Remove default shadow if any */
+            font-weight: 700; /* Ensure bold font as per other buttons */
+        }
+
+        .betting-panel .bet-button:hover {
+            background-color: var(--custom-pink-button-active); /* Slightly brighter pink on hover */
+            border-color: var(--custom-pink-button-active);
+        }
+
+        .betting-panel .bet-button.active {
+            background-color: var(--custom-pink-button-active); /* Brighter pink when active */
+            border-color: var(--quartz-secondary); /* Use secondary color for active border */
+            box-shadow: 0 0 15px rgba(24, 178, 178, 0.7); /* Stronger glow for active */
+            color: var(--quartz-light); /* Maintain light text color */
+        }
+        /* --- End Custom Bet Button Styles --- */
+
+
+        /* --- Custom Info Panel Styles (Matching the image) --- */
+        .info-panel {
+            background-color: var(--quartz-dark); /* Darker background for info panel */
+            border: 2px solid var(--quartz-secondary); /* Secondary border for info panel */
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5); /* Inner shadow for depth */
+            padding: 1rem 1.5rem; /* Adjust padding if needed */
+        }
+
+        .info-display {
+            font-size: 1.5rem; /* Larger font size for readability */
+            font-weight: 700;
+            color: var(--quartz-light); /* Main text color */
+            text-align: center;
+        }
+
+        .info-display span {
+            color: var(--quartz-secondary); /* Highlighted values */
+        }
+        /* --- End Custom Info Panel Styles --- */
+
 
         .status-message {
             position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%);
@@ -177,23 +225,42 @@
             display: none; width: 90%;
         }
 
-        .info-display { font-size: 1.2rem; font-weight: 700; color: var(--quartz-light); text-align: center; }
-        .info-display span { color: var(--quartz-secondary); }
-
         @media (max-width: 768px) {
             .game-console { padding: 0.5rem; margin-top: 1rem; }
-            .playing-surface { grid-template-columns: 1fr; }
-            .winning-number-display { height: 100px; line-height: 70px; font-size: 3rem; }
-            .bet-area { font-size: 0.6rem; padding: 0.1rem; }
-            .outside-bets-container { grid-template-columns: repeat(3, 1fr); }
+            .playing-surface {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+            .wheel-container { height: auto; min-height: initial; }
+            .winning-number-display { height: 100px; line-height: 70px; font-size: 3rem; min-height: initial; min-width: initial; }
+            .betting-layout-container { gap: 3px; }
+            .main-betting-grid { gap: 3px; }
+            .zeros-area { gap: 1px; }
+            .numbers-and-cols-container { gap: 3px; }
+            .numbers-area { gap: 1px; }
+            .cols-area { gap: 1px; }
+            .outside-bets-container { grid-template-columns: repeat(3, 1fr); gap: 1px; }
+            .bet-area { font-size: 0.6rem; padding: 0.1rem; min-height: 25px; }
+            .bet-area .chip { bottom: 1px; right: 1px; padding: 0 3px; font-size: 0.6rem; min-width: 16px; }
             .action-button { font-size: 1rem; } .bet-button { font-size: 0.8rem; }
-            .info-display { font-size: 1rem; }
+            .info-display { font-size: 1rem; } /* Ensure info-display font size is smaller on mobile */
+
+            /* Mobile adjustments for custom buttons/panels if necessary */
+            .betting-panel .bet-button {
+                font-size: 0.8rem; /* Smaller font on mobile for these buttons */
+            }
+            .info-panel {
+                padding: 0.75rem; /* Smaller padding on mobile */
+            }
+            .info-display {
+                font-size: 1rem; /* Smaller font for info display on mobile */
+            }
         }
     </style>
 </head>
 <body style="padding-top: 72px;">
 
-<!-- html / sidebar / desktop / begin -->   <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">Shinobi Casino</a> <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -231,7 +298,6 @@
             </div>
         </div>
     </nav>
-<!-- html / sidebar / desktop / end -->
 <div class="game-console">
         <div id="statusMessage" class="status-message"></div>
 
