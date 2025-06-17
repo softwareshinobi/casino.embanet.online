@@ -594,11 +594,13 @@
                 wallet += payout; // Add winnings
                 if (!keepWinningBets) {
                     wallet += bet; // Return original bet if not keeping
+                    fieldBet = 0; // Clear field bet if not keeping
                 }
+                // If keepWinningBets is true, fieldBet remains on the table.
             } else {
                 messages.push(`Field bet loses.`);
+                fieldBet = 0; // Field bet is always lost and removed
             }
-            fieldBet = 0; // Field bet is always resolved and removed after one roll
         }
 
         // --- POINT IS ON (After Come-Out Roll) ---
