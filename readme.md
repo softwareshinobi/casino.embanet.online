@@ -31,31 +31,11 @@ The Shinobi Casino is built using a modern and robust stack to ensure a smooth a
 
 -----
 
-## Demo
-
-Ready to try your luck and experience The Shinobi Casino for yourself?
-
-Visit our live casino site: [casino.softwareshinobi.com](https://casino.softwareshinobi.com/)\!
-
------
-
 ## Bugs, Issues, & Upgrades
 
 We're constantly working to improve your gaming experience. For an overview of known **bugs**, **current issues**, and **planned upgrades**, please visit our dedicated page:
 
-  * [**Bugs, Issues, & Upgrades**](https://www.google.com/search?q=bugs-issues-upgrades.md) - Stay updated on known issues and upcoming features.
-
-## Technologies Used
-
-The Shinobi Casino is built using a modern and robust stack to ensure a smooth and responsive gaming environment. Here's a breakdown of the core technologies that power our platform:
-
-| Technology         | Purpose                                                                             |
-| :----------------- | :---------------------------------------------------------------------------------- |
-| **HTML** | Provides the fundamental structure and content of all web pages.                    |
-| **Bootstrap** | A powerful front-end framework used for responsive design and consistent UI components. |
-| **Bootswatch** | Offers free themes for Bootstrap, enhancing the visual appeal and styling of the casino interface. |
-| **jQuery** | A fast, small, and feature-rich JavaScript library that simplifies client-side scripting and DOM manipulation. |
-| **Gemini Pro 2.5** | Utilized for advanced AI capabilities, potentially enhancing game logic or user interactions. |
+  * [**Bugs, Issues, & Upgrades**](issues.md) - Stay updated on known issues and upcoming features.
 
 -----
 
@@ -64,11 +44,3 @@ The Shinobi Casino is built using a modern and robust stack to ensure a smooth a
 Ready to try your luck and experience The Shinobi Casino for yourself?
 
 Visit our live casino site: [casino.softwareshinobi.com](https://casino.softwareshinobi.com/)
-
------
-
-## Bugs, Issues, & Upgrades
-
-We're constantly working to improve your gaming experience. For an overview of known **bugs**, **current issues**, and **planned upgrades**, please visit our dedicated page:
-
-  * [**Bugs, Issues, & Upgrades**](issues.md) - Stay updated on known issues and upcoming features.
