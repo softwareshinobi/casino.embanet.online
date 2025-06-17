@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blackjack / Shinobi Casino</title>
-    <!-- Bootswatch Quartz Theme -->
     <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/quartz/bootstrap.min.css" rel="stylesheet">
-    <!-- Google Fonts for a retro feel -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet">
@@ -17,21 +15,27 @@
             --quartz-secondary: #18b2b2;
             --quartz-dark: #343f56;
             --quartz-light: #f8f9fa;
+            --navbar-height: 0px; /* CSS variable for navbar height, updated by JS */
         }
 
         html, body {
-            height: 100%;
+            height: 100%; /* Ensure html and body take full height of the viewport */
             margin: 0;
-            overflow: hidden; /* Prevent scrolling on desktop */
+            overflow-x: hidden; /* Prevent horizontal scrolling always */
+            overflow-y: hidden; /* Prevent scrolling on desktop by default */
         }
 
         body {
-            font-family: 'Orbitron', sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 0.5rem; /* Padding for small screens */
+            justify-content: center; /* Center horizontally */
+            align-items: center;   /* Center vertically for the main game content */
+            flex-direction: column; /* Allows navbar and game-console to stack for layout */
             background-color: var(--bs-body-bg);
+            box-sizing: border-box;
+            min-height: 100vh; /* Ensure body takes full viewport height */
+            padding: 0.5rem; /* Overall side padding for the body */
+            padding-top: var(--navbar-height); /* Set by JS to push content below navbar */
         }
 
         .game-console {
@@ -41,10 +45,17 @@
             box-shadow: 0 0 30px rgba(24, 178, 178, 0.5), inset 0 0 20px rgba(0, 0, 0, 0.5);
             padding: 1.5rem;
             width: 100%;
-            max-width: 900px;
+            max-width: 900px; /* Consistent max-width */
             position: relative;
             display: flex;
             flex-direction: column;
+            z-index: 1;
+
+            margin-top: auto; /* Auto margins for vertical centering within flex container */
+            margin-bottom: auto;
+            flex-grow: 1; /* Allow it to grow to fill available vertical space */
+            /* Calculate max-height to ensure it fits, accounting for body padding and its own margins */
+            max-height: calc(100vh - var(--navbar-height) - 1rem - 40px); /* 1rem for body top/bottom padding, 40px for .game-console's inferred vertical margin (padding + margins + buffer) */
         }
 
         .playing-surface {
@@ -53,6 +64,10 @@
             padding: 1rem;
             border: 3px solid #495057;
             box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: space-around;
         }
 
         .hand-container {
@@ -60,6 +75,8 @@
             flex-direction: column;
             align-items: center;
             gap: 0.5rem;
+            flex-grow: 1;
+            justify-content: center;
         }
 
         .hand-header {
@@ -71,16 +88,17 @@
         }
 
         .hand-area {
-            min-height: 125px; /* Adjust height */
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
             flex-wrap: wrap;
+            flex-grow: 1;
+            min-height: 90px;
         }
 
         .hand-label {
-            font-size: 1rem;
+            font-size: 1.0rem;
             color: var(--quartz-light);
             text-transform: uppercase;
         }
@@ -96,18 +114,18 @@
         }
 
         .card {
-            width: 80px;
-            height: 120px;
+            width: 65px;
+            height: 97.5px;
             background-color: white;
             border-radius: 8px;
             border: 1px solid #333;
             color: black;
-            font-size: 2rem;
+            font-size: 1.7rem;
             font-weight: bold;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 5px;
+            padding: 4px;
             box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
             position: relative;
         }
@@ -119,14 +137,14 @@
 
         .card.hidden::before {
             content: '?';
-            font-size: 3rem;
+            font-size: 2.5rem;
             color: var(--quartz-secondary);
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
         }
 
-        .card .suit { font-size: 1.5rem; line-height: 1; }
+        .card .suit { font-size: 1.2rem; line-height: 1; }
         .card.red { color: #e95420; }
         .card.black { color: #212121; }
         .card-top { align-self: flex-start; }
@@ -134,27 +152,37 @@
 
         .actions-panel, .betting-panel, .info-panel {
             background-color: rgba(0, 0, 0, 0.2);
-            padding: 1rem 1.5rem;
+            padding: 0.8rem 1.5rem;
             border-radius: 15px;
+            margin-top: 0.8rem;
         }
         .actions-panel{
-             border-top: 3px solid var(--quartz-secondary);
+            border-top: 3px solid var(--quartz-secondary);
         }
         .betting-panel, .info-panel {
             border-top: 2px solid #212529;
-           }
+        }
 
         .action-button, .bet-button {
-            font-family: 'Orbitron', sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             font-weight: 700;
             text-transform: uppercase;
             transition: all 0.1s ease-in-out;
-            padding: 0.75rem 0;
+            padding: 0.6rem 0;
+            font-size: 1.1rem;
             width: 100%;
         }
 
-        .action-button { font-size: 1.2rem; }
-        .bet-button { font-size: 1rem; }
+        /* Adjustments for better fit with reduced paddings */
+        .actions-panel .row.g-2 {
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .betting-panel .row.g-2 {
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
 
         .status-message {
             position: absolute;
@@ -173,6 +201,7 @@
             width: 90%;
         }
 
+        /* Using the exact info-display styles and structure from Craps */
         .info-display {
             font-size: 1.2rem;
             font-weight: 700;
@@ -185,29 +214,75 @@
 
         /* --- Mobile Responsiveness --- */
         @media (max-width: 768px) {
-            body {
-                overflow: auto;
-                align-items: flex-start;
+            html, body {
+                overflow-y: auto; /* Allow scrolling on mobile */
+                height: auto; /* Allow height to adjust to content */
             }
-            .game-console { padding: 1rem; margin-top: 1rem; }
+            body {
+                align-items: flex-start; /* On mobile, align items to the top to respect padding-top */
+                padding: 0.5rem;
+            }
+            .game-console {
+                padding: 1rem;
+                margin-top: 1rem; /* Consistent margin for mobile too */
+                margin-bottom: 10px; /* Adjust bottom margin for mobile */
+                flex-shrink: 0;
+                max-height: initial;
+            }
             .hand-area { min-height: 105px; gap: 5px; }
             .card { width: 60px; height: 90px; font-size: 1.5rem; }
             .card .suit { font-size: 1rem; }
             .card.hidden::before { font-size: 2.5rem; }
-            .action-button { font-size: 1rem; }
-            .bet-button { font-size: 0.8rem; }
-            .info-display { font-size: 1rem; }
-            .actions-panel, .betting-panel, .info-panel { padding: 0.75rem; }
+            .action-button { font-size: 1rem; padding: 0.75rem 0; }
+            .bet-button { font-size: 0.8rem; padding: 0.75rem 0; }
+            .info-display { font-size: 1rem; } /* Ensure smaller font for info display on mobile */
+            .actions-panel, .betting-panel, .info-panel { padding: 0.75rem; margin-top: 0.5rem; }
         }
     </style>
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Shinobi Casino</a> <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
 
-    <div class="game-console">
+<ul class="navbar-nav ms-auto">
+
+<li class="nav-item">
+    <a class="nav-link" href="/blackjack/index.html">Blackjack</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/casinowar/index.html">Casino War</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/roulette/index.html">Roulette</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/slots/index.html">Slots</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/baccarat/index.html">Baccarat</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/craps/index.html">Craps</a>
+</li>
+
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+<div class="game-console">
         <div id="statusMessage" class="status-message"></div>
 
         <div class="playing-surface">
-            <!-- Dealer's Hand -->
             <div class="hand-container">
                 <div class="hand-header">
                     <span class="hand-label">Dealer</span>
@@ -216,9 +291,8 @@
                 <div id="dealerHand" class="hand-area"></div>
             </div>
 
-            <!-- Player's Hand -->
             <div class="hand-container mt-3">
-                 <div class="hand-header">
+                       <div class="hand-header">
                     <span class="hand-label">Player</span>
                     <span id="playerScore" class="score-display">0</span>
                 </div>
@@ -238,23 +312,61 @@
         </div>
 
         <div class="betting-panel mt-3">
-             <div class="row g-2">
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button active" data-bet="100">$100</button></div>
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="500">$500</button></div>
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="1000">$1000</button></div>
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="max">MAX</button></div>
+              <div class="row g-2">
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button active" data-bet="100">$100</button></div>
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="500">$500</button></div>
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="1000">$1000</button></div>
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="max">MAX</button></div>
             </div>
         </div>
 
         <div class="info-panel mt-3">
             <div class="row">
-                <div class="col-6 info-display">Bet: $<span id="betAmount">100</span></div>
-                <div class="col-6 info-display">Wallet: $<span id="walletAmount">10000</span></div>
+                <div class="col-12 col-sm-6 info-display mb-2 mb-sm-0">Bet: $<span id="betAmount">100</span></div>
+                <div class="col-12 col-sm-6 info-display">Wallet: $<span id="walletAmount">10000</span></div>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const navbar = document.querySelector('.navbar.fixed-top');
+        const bodyElement = document.body;
+
+        if (navbar) {
+            const updateLayout = () => {
+                const navbarHeight = navbar.offsetHeight;
+                // Set CSS variable for navbar height
+                bodyElement.style.setProperty('--navbar-height', navbarHeight + 'px');
+
+                // Apply padding to body based on navbar height
+                bodyElement.style.paddingTop = navbarHeight + 'px';
+
+                // For desktop (min-width: 769px assumed, or whatever Bootstrap's lg breakpoint is)
+                if (window.innerWidth > 768) {
+                    bodyElement.style.alignItems = 'center'; /* Center game-console vertically */
+                    bodyElement.style.overflowY = 'hidden'; /* No scroll on desktop */
+                    // The game-console itself has `margin-top: auto; margin-bottom: auto;`
+                    // which allows it to center within the flex container.
+                } else { /* For mobile (max-width: 768px) */
+                    bodyElement.style.alignItems = 'flex-start'; /* Align to top */
+                    bodyElement.style.overflowY = 'auto'; /* Allow scroll on mobile */
+                    // Revert game-console's auto margins for mobile to its fixed margins
+                    const gameConsole = document.querySelector('.game-console');
+                    if (gameConsole) {
+                         gameConsole.style.marginTop = '1rem';
+                         gameConsole.style.marginBottom = '10px'; // Consistent with Craps mobile bottom margin
+                    }
+                }
+            };
+
+            // Initial call and on resize
+            updateLayout();
+            window.addEventListener('resize', updateLayout);
+        }
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // --- DOM Elements ---
         const dealerHandEl = document.getElementById('dealerHand');
@@ -375,8 +487,8 @@
             betAmountEl.textContent = currentBet; // Reset bet display for next hand
 
             if (wallet <= 0 && currentBet > 0) {
-                 showStatusMessage("Game Over!", 5000);
-                 btnDeal.disabled = true;
+                showStatusMessage("Game Over!", 5000);
+                btnDeal.disabled = true;
             }
         }
 

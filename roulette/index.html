@@ -4,12 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Roulette / Shinobi Casino</title>
-    <!-- Bootswatch Quartz Theme -->
     <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/quartz/bootstrap.min.css" rel="stylesheet">
-    <!-- Google Fonts for a retro feel -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&amp;family=Roboto+Condensed:wght@700&amp;display=swap" rel="stylesheet">
     <style>
         /* Custom styles adapted for the Quartz theme */
         :root {
@@ -20,21 +18,27 @@
             --roulette-felt: #343f56; /* Changed to match theme */
             --bet-red: #B71C1C;
             --bet-black: #212121;
+            /* Defined custom colors for the new button style */
+            --custom-pink-button: #e91e63; /* A specific pink for bet buttons */
+            --custom-pink-button-hover: #ff4081; /* A brighter pink for hover */
+            --custom-pink-button-active: #ff4081; /* A brighter pink for active, same as hover for strong effect */
         }
 
         html, body {
             height: 100%;
             margin: 0;
-            overflow: hidden;
+            overflow-y: auto; /* Keep auto overflow for flexibility */
+            overflow-x: hidden;
         }
 
         body {
-            font-family: 'Orbitron', sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start; /* Align content to the top below the fixed navbar */
             padding: 0.5rem;
             background-color: var(--bs-body-bg);
+            box-sizing: border-box;
         }
 
         .game-console {
@@ -44,23 +48,26 @@
             box-shadow: 0 0 30px rgba(24, 178, 178, 0.5), inset 0 0 20px rgba(0, 0, 0, 0.5);
             padding: 1rem;
             width: 100%;
-            max-width: 900px;
+            max-width: 1200px; /* Maintained the larger max-width */
             position: relative;
             display: flex;
             flex-direction: column;
+            z-index: 1;
+            margin-top: 1rem; /* Consistent spacing from navbar */
+            margin-bottom: 20px; /* Consistent bottom spacing */
         }
 
         .playing-surface {
             background-color: var(--roulette-felt);
             border-radius: 15px;
-            padding: 1rem;
+            padding: 1.8rem; /* Scaled padding */
             border: 3px solid #495057;
             box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
             display: grid;
-            grid-template-columns: 1fr 2.5fr; /* Give more space to betting mat */
-            gap: 1rem;
+            grid-template-columns: 1.2fr 2.8fr; /* Adjusted for larger wheel area */
+            gap: 1.8rem; /* Scaled gap */
         }
-        
+
         .wheel-container {
             display: flex;
             flex-direction: column;
@@ -68,63 +75,38 @@
             justify-content: center;
             background: #212529;
             border-radius: 10px;
-            padding: 1rem;
-        }
-        
-        .winning-number-display {
-            padding: 1rem;
-            border-radius: 10px;
-            color: #fff;
-            font-size: 4rem;
-            text-align: center;
-            width: 100%;
-            height: 150px;
-            line-height: 120px;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            border: 4px solid #495057;
-        }
-        
-        /* New structured betting layout */
-        .betting-layout-container {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-        .main-betting-grid {
-            display: grid;
-            grid-template-columns: auto 1fr;
-            gap: 5px;
-        }
-        .zeros-area {
-            display: grid;
-            gap: 2px;
-        }
-        .numbers-and-cols-container {
-            display: grid;
-            grid-template-columns: 1fr auto;
-            gap: 5px;
-        }
-        .numbers-area {
-            display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            gap: 2px;
-        }
-        .cols-area {
-            display: grid;
-            grid-template-rows: repeat(3, 1fr);
-            gap: 2px;
-        }
-        .outside-bets-container {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 2px;
+            padding: 1.2rem; /* Scaled padding */
+            min-height: 240px; /* Scaled min-height */
         }
 
+        .winning-number-display {
+            font-size: 4.8rem; /* Scaled font size */
+            width: 100%;
+            height: auto;
+            min-height: 144px; /* Scaled min-height */
+            line-height: 1.2;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-weight: 700;
+            border: 4px solid #495057;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff; /* Ensure text color is white */
+            border-radius: 10px; /* Make sure it's rounded */
+        }
+
+        /* Betting Mat Layout (internal structure, scaled) */
+        .betting-layout-container { display: flex; flex-direction: column; gap: 10px; }
+        .main-betting-grid { display: grid; grid-template-columns: auto 1fr; gap: 10px; }
+        .zeros-area { display: grid; gap: 5px; }
+        .numbers-and-cols-container { display: grid; grid-template-columns: 1fr auto; gap: 10px; }
+        .numbers-area { display: grid; grid-template-columns: repeat(12, 1fr); gap: 5px; }
+        .cols-area { display: grid; grid-template-rows: repeat(3, 1fr); gap: 5px; }
+        .outside-bets-container { display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; }
+
         .bet-area {
-            padding: 0.2rem;
-            text-align: center;
-            font-size: 0.8rem;
+            padding: 0.6rem; /* Scaled padding */
+            font-size: 1.3rem; /* Scaled font size */
             font-weight: bold;
             border: 1px solid #fff;
             cursor: pointer;
@@ -134,8 +116,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            min-height: 42px; /* Scaled min-height */
+            text-align: center;
         }
-        
+
         .bet-area:hover { background-color: rgba(255,255,255,0.2); }
         .bet-area.red { background-color: var(--bet-red); }
         .bet-area.black { background-color: var(--bet-black); }
@@ -143,55 +127,178 @@
 
         .bet-area .chip {
             position: absolute;
-            bottom: 2px; right: 2px; background: #ffc107; color: #000;
-            border-radius: 50%; padding: 0 4px; font-size: 0.7rem;
-            line-height: 1.2; min-width: 20px; text-align: center;
+            bottom: 5px; right: 5px; /* Adjusted position */
+            background: #ffc107; color: #000;
+            border-radius: 50%;
+            padding: 0 6px; /* Scaled padding */
+            font-size: 0.9rem; /* Scaled font size */
+            line-height: 1.2;
+            min-width: 26px; /* Scaled min-width */
+            text-align: center;
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
         }
-        
+
+        /* Action and Bet Panels - General Styling */
         .actions-panel, .betting-panel, .info-panel {
-            background-color: rgba(0, 0, 0, 0.2); padding: 1rem; border-radius: 15px;
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 1rem;
+            border-radius: 15px;
         }
         .actions-panel{ border-top: 3px solid var(--quartz-secondary); }
         .betting-panel, .info-panel { border-top: 2px solid #212529; }
-        .action-button, .bet-button { font-family: 'Orbitron'; font-weight: 700; text-transform: uppercase; padding: 0.75rem 0; width: 100%; }
-        .action-button { font-size: 1.2rem; }
-        .bet-button { font-size: 1rem; }
-        
+
+        /* Action and Bet Buttons - General Styling */
+        .action-button, .bet-button {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 0.9rem 0; /* Scaled padding */
+            width: 100%;
+        }
+        .action-button { font-size: 1.4rem; } /* Scaled font size */
+        .bet-button { font-size: 1.2rem; } /* Scaled font size */
+
+        /* --- Specific Bet Button Styles (to match image) --- */
+        .betting-panel .bet-button {
+            background-color: var(--custom-pink-button); /* Solid pink background */
+            border: none; /* Remove default border */
+            color: var(--quartz-light); /* Light text color */
+            box-shadow: none; /* Remove any default box-shadow */
+            border-radius: 0.375rem; /* Bootstrap default border-radius for consistency */
+        }
+
+        .betting-panel .bet-button:hover {
+            background-color: var(--custom-pink-button-hover); /* Brighter pink on hover */
+            border-color: var(--custom-pink-button-hover); /* Match border color on hover */
+            box-shadow: 0 0 10px rgba(var(--bs-primary-rgb),.5); /* Example light shadow on hover */
+        }
+
+        .betting-panel .bet-button.active {
+            background-color: var(--custom-pink-button-active); /* Brighter pink when active */
+            border: 2px solid var(--quartz-secondary); /* Use secondary color for active border */
+            box-shadow: 0 0 15px rgba(24, 178, 178, 0.7); /* Stronger glow for active state */
+            color: var(--quartz-light); /* Maintain light text color */
+        }
+        /* --- End Specific Bet Button Styles --- */
+
+
+        /* --- Specific Info Panel Styles (to match image) --- */
+        .info-panel {
+            background-color: var(--quartz-dark); /* Darker background for info panel */
+            border: 2px solid var(--quartz-secondary); /* Secondary border for info panel */
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5); /* Inner shadow for depth */
+            padding: 1.2rem 1.8rem; /* Scaled padding */
+        }
+
+        .info-display {
+            font-size: 1.8rem; /* Scaled font size for readability */
+            font-weight: 700;
+            color: var(--quartz-light); /* Main text color */
+            text-align: center;
+        }
+
+        .info-display span {
+            color: var(--quartz-secondary); /* Highlighted values */
+        }
+        /* --- End Specific Info Panel Styles --- */
+
+
         .status-message {
             position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%);
-            background-color: rgba(0, 0, 0, 0.9); color: var(--quartz-secondary); font-size: 1.5rem;
-             padding: 1.5rem; border-radius: 15px;
+            background-color: rgba(0, 0, 0, 0.9); color: var(--quartz-secondary);
+            font-size: 1.8rem; /* Scaled font size */
+            padding: 1.8rem; /* Scaled padding */
+            border-radius: 15px;
             border: 4px solid var(--quartz-secondary); z-index: 100; text-align: center;
             display: none; width: 90%;
         }
-        
-        .info-display { font-size: 1.2rem; font-weight: 700; color: var(--quartz-light); text-align: center; }
-        .info-display span { color: var(--quartz-secondary); }
 
         @media (max-width: 768px) {
-            body { overflow: auto; align-items: flex-start; }
             .game-console { padding: 0.5rem; margin-top: 1rem; }
-            .playing-surface { grid-template-columns: 1fr; }
-            .winning-number-display { height: 100px; line-height: 70px; font-size: 3rem; }
-            .bet-area { font-size: 0.6rem; padding: 0.1rem; }
-            .outside-bets-container { grid-template-columns: repeat(3, 1fr); }
-            .action-button { font-size: 1rem; } .bet-button { font-size: 0.8rem; }
+            .playing-surface {
+                grid-template-columns: 1fr; /* Stack on mobile */
+                padding: 1rem; /* Revert to mobile padding */
+                gap: 1rem; /* Revert to mobile gap */
+            }
+            .wheel-container { height: auto; min-height: initial; padding: 1rem; } /* Revert mobile padding */
+            .winning-number-display { height: 100px; line-height: 70px; font-size: 3rem; min-height: initial; min-width: initial; }
+            /* Revert mobile specific sizes for betting mat elements */
+            .betting-layout-container { gap: 3px; }
+            .main-betting-grid { gap: 3px; }
+            .zeros-area { gap: 1px; }
+            .numbers-and-cols-container { gap: 3px; }
+            .numbers-area { gap: 1px; }
+            .cols-area { gap: 1px; }
+            .outside-bets-container { grid-template-columns: repeat(3, 1fr); gap: 1px; }
+            .bet-area { font-size: 0.6rem; padding: 0.1rem; min-height: 25px; }
+            .bet-area .chip { bottom: 1px; right: 1px; padding: 0 3px; font-size: 0.6rem; min-width: 16px; }
+            .action-button { font-size: 1rem; padding: 0.75rem 0; }
+            .bet-button { font-size: 0.8rem; padding: 0.75rem 0; }
+            .info-panel { padding: 0.75rem; }
             .info-display { font-size: 1rem; }
+            .status-message { font-size: 1.5rem; padding: 1.5rem; }
+
+            /* Ensure custom button styles adjust for mobile too */
+            .betting-panel .bet-button {
+                font-size: 0.8rem; /* Keep original smaller font for mobile */
+                border: none; /* Mobile buttons also shouldn't have default border */
+                box-shadow: none;
+            }
+            .betting-panel .bet-button.active {
+                border: 1px solid var(--quartz-secondary); /* Thinner border for active on mobile */
+                box-shadow: 0 0 10px rgba(24, 178, 178, 0.5); /* Less intense glow on mobile */
+            }
         }
     </style>
 </head>
-<body>
+<body style="padding-top: 72px;">
 
-    <div class="game-console">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Shinobi Casino</a> <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+
+<ul class="navbar-nav ms-auto">
+
+<li class="nav-item">
+    <a class="nav-link" href="/blackjack/index.html">Blackjack</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/casinowar/index.html">Casino War</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/roulette/index.html">Roulette</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/slots/index.html">Slots</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/baccarat/index.html">Baccarat</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/craps/index.html">Craps</a>
+</li>
+
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+<div class="game-console">
         <div id="statusMessage" class="status-message"></div>
 
         <div class="playing-surface">
             <div class="wheel-container">
                 <div id="winningNumberDisplay" class="winning-number-display">SPIN!</div>
             </div>
-            <div class="betting-layout-container" id="bettingMat">
-                <!-- JS will generate this -->
-            </div>
+            <div class="betting-layout-container" id="bettingMat"><div class="main-betting-grid"><div class="zeros-area"><div class="bet-area zero" data-bet-type="0">0</div><div class="bet-area zero" data-bet-type="00">00</div></div><div class="numbers-and-cols-container"><div class="numbers-area"><div class="bet-area number red" data-bet-type="3">3</div><div class="bet-area number black" data-bet-type="6">6</div><div class="bet-area number red" data-bet-type="9">9</div><div class="bet-area number red" data-bet-type="12">12</div><div class="bet-area number black" data-bet-type="15">15</div><div class="bet-area number red" data-bet-type="18">18</div><div class="bet-area number red" data-bet-type="21">21</div><div class="bet-area number black" data-bet-type="24">24</div><div class="bet-area number red" data-bet-type="27">27</div><div class="bet-area number red" data-bet-type="30">30</div><div class="bet-area number black" data-bet-type="33">33</div><div class="bet-area number red" data-bet-type="36">36</div><div class="bet-area number black" data-bet-type="2">2</div><div class="bet-area number red" data-bet-type="5">5</div><div class="bet-area number black" data-bet-type="8">8</div><div class="bet-area number black" data-bet-type="11">11</div><div class="bet-area number red" data-bet-type="14">14</div><div class="bet-area number black" data-bet-type="17">17</div><div class="bet-area number black" data-bet-type="20">20</div><div class="bet-area number red" data-bet-type="23">23</div><div class="bet-area number black" data-bet-type="26">26</div><div class="bet-area number black" data-bet-type="29">29</div><div class="bet-area number red" data-bet-type="32">32</div><div class="bet-area number black" data-bet-type="35">35</div><div class="bet-area number red" data-bet-type="1">1</div><div class="bet-area number black" data-bet-type="4">4</div><div class="bet-area number red" data-bet-type="7">7</div><div class="bet-area number black" data-bet-type="10">10</div><div class="bet-area number black" data-bet-type="13">13</div><div class="bet-area number red" data-bet-type="16">16</div><div class="bet-area number red" data-bet-type="19">19</div><div class="bet-area number black" data-bet-type="22">22</div><div class="bet-area number red" data-bet-type="25">25</div><div class="bet-area number black" data-bet-type="28">28</div><div class="bet-area number black" data-bet-type="31">31</div><div class="bet-area number red" data-bet-type="34">34</div></div><div class="cols-area"><div class="bet-area col-bet" data-bet-type="col1">2-1</div><div class="bet-area col-bet" data-bet-type="col2">2-1</div><div class="bet-area col-bet" data-bet-type="col3">2-1</div></div></div></div><div class="outside-bets-container"><div class="bet-area outside-bet " data-bet-type="dozen1">1st 12</div><div class="bet-area outside-bet " data-bet-type="dozen2">2nd 12</div><div class="bet-area outside-bet " data-bet-type="dozen3">3rd 12</div><div class="bet-area outside-bet " data-bet-type="low">1-18</div><div class="bet-area outside-bet " data-bet-type="even">EVEN</div><div class="bet-area outside-bet red" data-bet-type="red">RED</div><div class="bet-area outside-bet black" data-bet-type="black">BLACK</div><div class="bet-area outside-bet " data-bet-type="odd">ODD</div><div class="bet-area outside-bet " data-bet-type="high">19-36</div></div></div>
         </div>
 
         <div class="actions-panel mt-3">
@@ -200,25 +307,50 @@
                 <div class="col-6"><button id="btnClear" class="btn btn-danger action-button">Clear</button></div>
             </div>
         </div>
-        
+
         <div class="betting-panel mt-3">
-             <div class="row g-2">
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="100">$100</button></div>
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="500">$500</button></div>
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="1000">$1000</button></div>
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="max">MAX</button></div>
+              <div class="row g-2">
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button active" data-bet="100">$100</button></div>
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="500">$500</button></div>
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="1000">$1000</button></div>
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="max">MAX</button></div>
             </div>
         </div>
 
         <div class="info-panel mt-3">
             <div class="row">
-                <div class="col-6 info-display">Bet: $<span id="totalBetAmount">0</span></div>
-                <div class="col-6 info-display">Wallet: $<span id="walletAmount">10000</span></div>
+                <div class="col-12 col-sm-6 info-display mb-2 mb-sm-0">Bet: $<span id="totalBetAmount">0</span></div>
+                <div class="col-12 col-sm-6 info-display">Wallet: $<span id="walletAmount">10000</span></div>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+        const navbar = document.querySelector('.navbar.fixed-top');
+
+        if (navbar) {
+
+            const navbarHeight = navbar.offsetHeight;
+
+            document.body.style.paddingTop = navbarHeight + 'px';
+
+            window.addEventListener('resize', () => {
+
+                const newNavbarHeight = navbar.offsetHeight;
+
+                document.body.style.paddingTop = newNavbarHeight + 'px';
+
+            });
+
+        }
+
+    });
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         const bettingMatContainer = document.getElementById('bettingMat');
         const walletAmountEl = document.getElementById('walletAmount');
@@ -233,12 +365,12 @@
         let currentBetAmount = 100;
         let bets = {};
         let isSpinning = false;
-        
+
         const wheelNumbers = [
             '0', '28', '9', '26', '30', '11', '7', '20', '32', '17', '5', '22', '34', '15', '3', '24', '36', '13', '1',
             '00', '27', '10', '25', '29', '12', '8', '19', '31', '18', '6', '21', '33', '16', '4', '23', '35', '14', '2'
         ];
-        
+
         const numberProperties = {
             '0': { color: 'green' }, '00': { color: 'green' },
             '1': { color: 'red', col: 1, dozen: 1 }, '2': { color: 'black', col: 2, dozen: 1 }, '3': { color: 'red', col: 3, dozen: 1 }, '4': { color: 'black', col: 1, dozen: 1 }, '5': { color: 'red', col: 2, dozen: 1 }, '6': { color: 'black', col: 3, dozen: 1 }, '7': { color: 'red', col: 1, dozen: 1 }, '8': { color: 'black', col: 2, dozen: 1 }, '9': { color: 'red', col: 3, dozen: 1 }, '10': { color: 'black', col: 1, dozen: 1 }, '11': { color: 'black', col: 2, dozen: 1 }, '12': { color: 'red', col: 3, dozen: 1 }, '13': { color: 'black', col: 1, dozen: 2 }, '14': { color: 'red', col: 2, dozen: 2 }, '15': { color: 'black', col: 3, dozen: 2 }, '16': { color: 'red', col: 1, dozen: 2 }, '17': { color: 'black', col: 2, dozen: 2 }, '18': { color: 'red', col: 3, dozen: 2 }, '19': { color: 'red', col: 1, dozen: 2 }, '20': { color: 'black', col: 2, dozen: 2 }, '21': { color: 'red', col: 3, dozen: 2 }, '22': { color: 'black', col: 1, dozen: 3 }, '23': { color: 'red', col: 2, dozen: 3 }, '24': { color: 'black', col: 3, dozen: 3 }, '25': { color: 'red', col: 1, dozen: 3 }, '26': { color: 'black', col: 2, dozen: 3 }, '27': { color: 'red', col: 3, dozen: 3 }, '28': { color: 'black', col: 1, dozen: 3 }, '29': { color: 'black', col: 2, dozen: 3 }, '30': { color: 'red', col: 3, dozen: 3 }, '31': { color: 'black', col: 1, dozen: 3 }, '32': { color: 'red', col: 2, dozen: 3 }, '33': { color: 'black', col: 3, dozen: 3 }, '34': { color: 'red', col: 1, dozen: 3 }, '35': { color: 'black', col: 2, dozen: 3 }, '36': { color: 'red', col: 3, dozen: 3 }
@@ -283,13 +415,13 @@
                 { text: '1-18', type: 'low' }, { text: 'EVEN', type: 'even' }, { text: 'RED', type: 'red', cls: 'red' },
                 { text: 'BLACK', type: 'black', cls: 'black' }, { text: 'ODD', type: 'odd' }, { text: '19-36', type: 'high' }
             ];
-            
+
             outsideBetsConfig.forEach(cfg => {
                 const el = createBetArea(cfg.text, `outside-bet ${cfg.cls || ''}`);
                 el.dataset.betType = cfg.type;
                 outsideBetsContainer.appendChild(el);
             });
-            
+
             numbersAndColsContainer.appendChild(numbersArea);
             numbersAndColsContainer.appendChild(colsArea);
             mainGrid.appendChild(zerosArea);
@@ -313,7 +445,7 @@
             bets[betType] = (bets[betType] || 0) + currentBetAmount;
             updateUI();
         }
-        
+
         function updateUI() {
             walletAmountEl.textContent = wallet;
             let totalBet = Object.values(bets).reduce((a, b) => a + b, 0);
@@ -333,7 +465,7 @@
                 }
             }
         }
-        
+
         function updateActiveBetButton(selectedBet) {
              betButtons.forEach(btn => {
                 btn.classList.remove('active');
@@ -344,7 +476,7 @@
                 }
             });
         }
-        
+
         function showStatusMessage(message, duration = 1000) {
             statusMessageEl.innerHTML = message;
             statusMessageEl.style.display = 'block';
@@ -369,7 +501,7 @@
             isSpinning = true;
             btnSpin.disabled = true;
             btnClear.disabled = true;
-            
+
             let spinCount = 0;
             const spinInterval = setInterval(() => {
                 const randomIndex = Math.floor(Math.random() * wheelNumbers.length);
@@ -385,7 +517,7 @@
                     const finalProp = numberProperties[winningNumber];
                     winningNumberDisplay.textContent = winningNumber;
                     winningNumberDisplay.style.backgroundColor = finalProp.color === 'red' ? '#B71C1C' : finalProp.color === 'black' ? '#212121' : '#006847';
-                    
+
                     calculateWinnings(winningNumber);
                     isSpinning = false;
                     btnSpin.disabled = false;
@@ -393,16 +525,16 @@
                 }
             }, 100);
         }
-        
+
         function calculateWinnings(winningNumber) {
             let totalWinnings = 0;
             const prop = numberProperties[winningNumber];
-            
+
             for(const betType in bets) {
                 const betAmount = bets[betType];
                 let win = false;
                 let payoutRatio = 0;
-                
+
                 if (betType === winningNumber) { win = true; payoutRatio = 35; }
                 else if (betType === 'red' && prop.color === 'red') { win = true; payoutRatio = 1; }
                 else if (betType === 'black' && prop.color === 'black') { win = true; payoutRatio = 1; }
@@ -422,7 +554,7 @@
                     totalWinnings += winnings;
                 }
             }
-            
+
             if (totalWinnings > 0) {
                 wallet += totalWinnings;
                 showStatusMessage(`WIN! +$${totalWinnings}`);
@@ -433,12 +565,12 @@
             updateUI();
              if(wallet <= 0) showStatusMessage("Game Over!", 5000)
         }
-        
+
         window.onload = () => {
             createBettingMat();
             walletAmountEl.textContent = wallet;
             updateActiveBetButton(currentBetAmount);
-            
+
             betButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     const betValue = button.dataset.bet;
@@ -447,11 +579,11 @@
                     updateActiveBetButton(currentBetAmount);
                 });
             });
-            
+
             btnSpin.addEventListener('click', handleSpin);
             btnClear.addEventListener('click', clearBets);
         };
     </script>
-</body>
-</html>
 
+
+</body></html>

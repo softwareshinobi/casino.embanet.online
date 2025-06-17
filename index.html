@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal / Shinobi Casino</title>
-    <!-- Bootswatch Quartz Theme -->
     <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/quartz/bootstrap.min.css" rel="stylesheet">
-    <!-- Google Fonts for a retro feel -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet">
@@ -17,21 +15,27 @@
             --quartz-secondary: #18b2b2;
             --quartz-dark: #343f56;
             --quartz-light: #f8f9fa;
+            --navbar-height: 0px; /* CSS variable for navbar height, updated by JS */
         }
 
         html, body {
-            height: 100%;
+            height: 100%; /* Ensure html and body take full height of the viewport */
             margin: 0;
-            overflow: hidden; /* Prevent scrolling on desktop */
+            overflow-x: hidden; /* Prevent horizontal scrolling always */
+            overflow-y: hidden; /* Prevent scrolling on desktop by default */
         }
 
         body {
-            font-family: 'Orbitron', sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 0.5rem; /* Padding for small screens */
+            justify-content: center; /* Center horizontally */
+            align-items: center;   /* Center vertically */
+            flex-direction: column; /* Allows navbar and game-console to stack for layout */
             background-color: var(--bs-body-bg);
+            box-sizing: border-box;
+            min-height: 100vh; /* Ensure body takes full viewport height */
+            padding: 0.5rem; /* Overall side padding for the body */
+            padding-top: var(--navbar-height); /* Set by JS to push content below navbar */
         }
 
         .game-console {
@@ -41,10 +45,20 @@
             box-shadow: 0 0 30px rgba(24, 178, 178, 0.5), inset 0 0 20px rgba(0, 0, 0, 0.5);
             padding: 2rem;
             width: 100%;
-            max-width: 900px;
+            max-width: 900px; /* Consistent max-width */
             position: relative;
             display: flex;
             flex-direction: column;
+            z-index: 1;
+
+            /* Remove fixed margins here. Centering is handled by body flex properties. */
+            /* If extra vertical space exists, auto margins can help ensure it's centered */
+            margin-top: auto;
+            margin-bottom: auto;
+
+            /* Ensure it doesn't shrink or grow unexpectedly to distort layout */
+            flex-shrink: 0;
+            flex-grow: 0;
         }
 
         .portal-header {
@@ -72,6 +86,7 @@
             font-weight: bold;
             transition: all 0.2s ease-in-out;
             box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
         .game-links .btn:hover {
@@ -82,8 +97,24 @@
 
         /* --- Mobile Responsiveness --- */
         @media (max-width: 768px) {
-            body { overflow: auto; align-items: flex-start; }
-            .game-console { padding: 1rem; margin-top: 1rem; }
+            html, body {
+                overflow-y: auto; /* Allow scrolling on mobile */
+                height: auto; /* Allow height to adjust to content */
+            }
+            body {
+                align-items: flex-start; /* On mobile, align items to the top (below navbar) */
+                padding: 0.5rem; /* Standard mobile padding */
+                padding-top: var(--navbar-height); /* Keep padding-top for fixed navbar */
+            }
+            .game-console {
+                padding: 1rem; /* Smaller padding for mobile */
+                /* Re-introduce specific margins for mobile when body is flex-start */
+                margin-top: 1rem;
+                margin-bottom: 10px;
+                /* Allow flex to shrink/grow as needed on mobile, but don't force height */
+                flex-shrink: 1;
+                flex-grow: 1;
+            }
             .portal-header h1 { font-size: 1.8rem; }
             .portal-header p { font-size: 1rem; }
             .game-links .btn { font-size: 1rem; padding: 0.75rem; }
@@ -92,8 +123,48 @@
 </head>
 <body>
 
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Shinobi Casino</a> <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+
+<ul class="navbar-nav ms-auto">
+
+<li class="nav-item">
+    <a class="nav-link" href="/blackjack/index.html">Blackjack</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/casinowar/index.html">Casino War</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/roulette/index.html">Roulette</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/slots/index.html">Slots</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/baccarat/index.html">Baccarat</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/craps/index.html">Craps</a>
+</li>
+
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
     <div class="game-console">
-        
+
         <div class="portal-header">
             <h1 class="display-4">Casino Portal</h1>
             <p class="lead">
@@ -125,7 +196,33 @@
 
     </div>
 
-    <!-- Bootstrap JS is not strictly necessary for this static page but included for consistency -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+        const navbar = document.querySelector('.navbar.fixed-top');
+
+        if (navbar) {
+
+            const navbarHeight = navbar.offsetHeight;
+
+            // Set padding-top on the body to account for the fixed navbar
+            // This is crucial for all pages with a fixed-top navbar.
+            document.body.style.paddingTop = navbarHeight + 'px';
+
+            window.addEventListener('resize', () => {
+
+                const newNavbarHeight = navbar.offsetHeight;
+
+                document.body.style.paddingTop = newNavbarHeight + 'px';
+
+            });
+
+        }
+
+    });
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

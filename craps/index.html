@@ -18,7 +18,8 @@
         html, body {
             height: 100%;
             margin: 0;
-            overflow: hidden; /* Prevent scrolling on desktop */
+            /* Allow vertical scrolling on all screen sizes */
+            overflow-y: auto;
         }
 
         body {
@@ -26,9 +27,12 @@
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             display: flex;
             justify-content: center;
-            align-items: center;
-            padding: 0.5rem; /* Padding for small screens */
+            /* Align items to the top to respect padding-top */
+            align-items: flex-start;
+            padding: 0.5rem; /* Padding for small screens (sides) */
             background-color: var(--bs-body-bg);
+            box-sizing: border-box; /* Include padding in element's total width and height */
+            overflow-x: hidden; /* Prevent horizontal scrolling */
         }
 
         .game-console {
@@ -42,6 +46,9 @@
             position: relative;
             display: flex;
             flex-direction: column;
+            /* Add a top margin for consistent spacing below the fixed navbar */
+            margin-top: 1rem;
+            margin-bottom: 20px; /* Add some space at the bottom */
         }
 
         .playing-surface {
@@ -116,14 +123,16 @@
             opacity: 0.4;
             cursor: not-allowed;
             pointer-events: none;
+            /* Removed display: none; from here as it was causing some elements to disappear
+               even when they just needed to be disabled. The original issue was likely not this line. */
         }
 
         .bet-area.pass-line {
-            background-color: rgba(24, 178, 178, 0.3);
+        /* background-color: rgba(24, 178, 178, 0.3);*/
         }
 
         .bet-area.dont-pass-line {
-            background-color: rgba(220, 53, 69, 0.3);
+            /*background-color: rgba(220, 53, 69, 0.3);*/
         }
 
         .line-bets-container {
@@ -133,7 +142,7 @@
         }
 
         .bet-area.field-bet {
-            background-color: rgba(108, 117, 125, 0.3);
+        /* background-color: rgba(108, 117, 125, 0.3);*/
         }
 
         .bet-area .bet-amount {
@@ -154,9 +163,11 @@
         }
         .betting-panel, .info-panel {
             border-top: 2px solid #212529;
-       }
+        }
 
         .action-button, .bet-button {
+            /* Use consistent system font */
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             font-weight: 700;
             text-transform: uppercase;
             transition: all 0.1s ease-in-out;
@@ -167,14 +178,41 @@
         .action-button { font-size: 1.5rem; }
         .bet-button { font-size: 1rem; }
 
-        /* Style for the new checkbox option */
-        .form-check-label {
-             color: var(--quartz-light);
-             font-weight: bold;
+        /* Styles for the new "Keep Bets" button */
+        .trash{
+            border-radius: 0.375rem; /* Bootstrap's default button border-radius */
+            border: 2px solid var(--quartz-light);
+            padding: 0.5rem 1rem;
         }
-        .form-check-input:checked {
-            background-color: var(--quartz-secondary);
-            border-color: var(--quartz-secondary);
+
+        #btnKeepBetsTRASH {
+            background-color: transparent;
+            color: var(--quartz-light);
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        #btnKeepBets {
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        #btnKee33pBets { /* This ID seems like a typo, consider removing if not used */
+            border: 2px solid var(--quartz-light);
+            background-color: transparent;
+            color: var(--quartz-light);
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem; /* Bootstrap's default button border-radius */
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        #btnKeepBets.active-toggle-button {
+            background-color: green;
+        }
+
+        #btnKeepBets:hover:not(.active-toggle-button) {
+            background-color: rgba(255, 255, 255, 0.1);
         }
 
         .status-message {
@@ -206,14 +244,16 @@
 
         /* --- Mobile Responsiveness --- */
         @media (max-width: 768px) {
-            body { overflow: auto; align-items: flex-start; }
-            .game-console { padding: 1rem; margin-top: 1rem; }
+            .game-console {
+                padding: 1rem;
+                margin-top: 1rem; /* Keep consistent margin for mobile too */
+            }
             .action-button { font-size: 1.2rem; }
             .bet-button { font-size: 0.8rem; }
             .info-display { font-size: 1rem; }
             .actions-panel, .betting-panel, .info-panel { padding: 0.75rem; }
             .bet-area { font-size: 1rem; padding: 0.25rem; }
-            .di3e { width: 45px; height: 45px; font-size: 1.5rem; }
+            .die { /* Removed unused/commented out rules here */ }
 
             .place-bets-grid {
                  grid-template-columns: repeat(3, 1fr);
@@ -221,9 +261,47 @@
         }
     </style>
 </head>
-<body>
+<body style="padding-top: 72px;">
 
-    <div class="game-console">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Shinobi Casino</a> <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+
+<ul class="navbar-nav ms-auto">
+
+<li class="nav-item">
+    <a class="nav-link" href="/blackjack/index.html">Blackjack</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/casinowar/index.html">Casino War</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/roulette/index.html">Roulette</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/slots/index.html">Slots</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/baccarat/index.html">Baccarat</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/craps/index.html">Craps</a>
+</li>
+
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+<div class="game-console">
         <div id="statusMessage" class="status-message"></div>
 
         <div class="playing-surface">
@@ -233,16 +311,16 @@
             </div>
             <div class="betting-layout">
                  <div class="place-bets-grid">
-                     <div class="bet-area" data-bet-type="place" data-number="4">4 <span class="bet-amount" id="placeBetAmount4"></span></div>
-                     <div class="bet-area" data-bet-type="place" data-number="5">5 <span class="bet-amount" id="placeBetAmount5"></span></div>
-                     <div class="bet-area" data-bet-type="place" data-number="6">6 <span class="bet-amount" id="placeBetAmount6"></span></div>
-                     <div class="bet-area" data-bet-type="place" data-number="8">8 <span class="bet-amount" id="placeBetAmount8"></span></div>
-                     <div class="bet-area" data-bet-type="place" data-number="9">9 <span class="bet-amount" id="placeBetAmount9"></span></div>
-                     <div class="bet-area" data-bet-type="place" data-number="10">10 <span class="bet-amount" id="placeBetAmount10"></span></div>
+                     <div class="bet-area disabled" data-bet-type="place" data-number="4">4 <span class="bet-amount" id="placeBetAmount4"></span></div>
+                     <div class="bet-area disabled" data-bet-type="place" data-number="5">5 <span class="bet-amount" id="placeBetAmount5"></span></div>
+                     <div class="bet-area disabled" data-bet-type="place" data-number="6">6 <span class="bet-amount" id="placeBetAmount6"></span></div>
+                     <div class="bet-area disabled" data-bet-type="place" data-number="8">8 <span class="bet-amount" id="placeBetAmount8"></span></div>
+                     <div class="bet-area disabled" data-bet-type="place" data-number="9">9 <span class="bet-amount" id="placeBetAmount9"></span></div>
+                     <div class="bet-area disabled" data-bet-type="place" data-number="10">10 <span class="bet-amount" id="placeBetAmount10"></span></div>
                  </div>
 
                 <div id="fieldBetArea" class="bet-area field-bet" data-bet-type="field">
-                    FIELD <small>(2)&centerdot;3&centerdot;4&centerdot;9&centerdot;10&centerdot;11&centerdot;(12)</small>
+                    FIELD <small>(2)·3·4·9·10·11·(12)</small>
                     <span id="fieldBetAmount" class="bet-amount"></span>
                 </div>
 
@@ -252,7 +330,7 @@
                         <span id="passLineBetAmount" class="bet-amount"></span>
                     </div>
                      <div id="dontPassLineBetArea" class="bet-area dont-pass-line" data-bet-type="dontpass">
-                        DON'T PASS
+                        DONT PASS
                         <span id="dontPassBetAmount" class="bet-amount"></span>
                     </div>
                 </div>
@@ -261,41 +339,72 @@
 
         <div class="actions-panel mt-3">
             <div class="row g-2 justify-content-center">
-                <div class="col-8">
-                    <button id="btnRoll" class="btn btn-secondary action-button">Roll</button>
+                <div class="col-10">
+                    <button id="btnRoll" class="btn btn-success action-button" disabled="">Roll</button>
                 </div>
             </div>
         </div>
 
         <div class="betting-panel mt-3">
              <div class="row g-2">
-                 <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="100">$100</button></div>
-                 <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="1000">$1000</button></div>
-                 <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="5000">$5000</button></div>
-                 <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="max">MAX</button></div>
-            </div>
-             <div class="row g-2 mt-2 align-items-center">
-                <div class="col-10">
-                    <button id="btnClearBets" class="btn btn-danger w-100">Clear Bets</button>
-                </div>
-                <div class="col-2">
-                     <div class="form-check form-switch d-flex justify-content-center align-items-center">
-                        <input class="form-check-input" type="checkbox" role="switch" id="keepWinningsCheck" checked>
-                        <label class="form-check-label ms-2" for="keepWinningsCheck">Keep Bets Up</label>
-                    </div>
-                </div>
+                 <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button active" data-bet="100">$100</button></div>
+                 <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="1000">$1000</button></div>
+                 <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="5000">$5000</button></div>
+                 <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="max">MAX</button></div>
              </div>
+
+
+       <div class="row g-2 mt-2 align-items-center">
+
+            <div class="col-9 col-sm-9">
+                     <button id="btnClearBets" class="bet-button btn btn-secondary w-100" disabled="">Clear</button>
+                 </div>
+
+           <div class="col-3 col-sm-3">
+                     <button id="btnKeepBets" class="bet-button btn btn-secondary w-100 active-toggle-button">Keep</button>
+                 </div>
+
+       </div>
+
         </div>
+
+
+
 
         <div class="info-panel mt-3">
             <div class="row">
-                <div class="col-6 info-display">Bet: $<span id="betAmount">100</span></div>
-                <div class="col-6 info-display">Wallet: $<span id="walletAmount">10000</span></div>
+                <div class="col-12 col-sm-6 info-display mb-2 mb-sm-0">Bet: $<span id="betAmount">100</span></div>
+                <div class="col-12 col-sm-6 info-display">Wallet: $<span id="walletAmount">10000</span></div>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+        const navbar = document.querySelector('.navbar.fixed-top');
+
+        if (navbar) {
+
+            const navbarHeight = navbar.offsetHeight;
+
+            document.body.style.paddingTop = navbarHeight + 'px';
+
+            window.addEventListener('resize', () => {
+
+                const newNavbarHeight = navbar.offsetHeight;
+
+                document.body.style.paddingTop = newNavbarHeight + 'px';
+
+            });
+
+        }
+
+    });
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // --- DOM Elements ---
         const die1El = document.getElementById('die1');
@@ -303,8 +412,8 @@
         const statusMessageEl = document.getElementById('statusMessage');
         const btnRoll = document.getElementById('btnRoll');
         const btnClearBets = document.getElementById('btnClearBets');
-        const keepWinningsCheck = document.getElementById('keepWinningsCheck'); // New element
-        const betButtons = document.querySelectorAll('.bet-button');
+        const btnKeepBets = document.getElementById('btnKeepBets'); // New: Reference to the Keep Bets button
+        const betButtons = document.querySelectorAll('.bet-value-button');
         const walletAmountEl = document.getElementById('walletAmount');
         const betAmountEl = document.getElementById('betAmount');
         const placeBetAreas = document.querySelectorAll('.bet-area[data-bet-type="place"]');
@@ -321,7 +430,7 @@
         let placeBets = { 4: 0, 5: 0, 6: 0, 8: 0, 9: 0, 10: 0 };
         let point = 0; // 0 means point is OFF
         let canRoll = false;
-        let keepWinningBets = true; // New state variable, true by default
+        let keepWinningBets = true; // true by default
 
         // --- Game Functions ---
         function showStatusMessage(message, duration = 1000) {
@@ -335,15 +444,12 @@
             canRoll = state === 'readyToRoll';
             btnRoll.disabled = !canRoll;
 
-            // Enable/disable the "Clear Bets" button
             let canClear = false;
             if (point === 0) {
-                // Before a point, can clear line and field bets
                 if (passLineBet > 0 || dontPassBet > 0 || fieldBet > 0) {
                     canClear = true;
                 }
             } else {
-                // After a point, can only clear place and field bets
                 const hasPlaceBets = Object.values(placeBets).some(bet => bet > 0);
                 if (fieldBet > 0 || hasPlaceBets) {
                     canClear = true;
@@ -354,29 +460,43 @@
 
         function updateActiveBetButton(selectedBet) {
              betButtons.forEach(btn => {
-                 if(btn.dataset.bet === 'max' && selectedBet === wallet) btn.classList.add('active');
-                 else if (parseInt(btn.dataset.bet) === selectedBet) btn.classList.add('active');
-                 else btn.classList.remove('active');
-             });
+                if(btn.dataset.bet === 'max' && selectedBet === wallet) btn.classList.add('active');
+                else if (parseInt(btn.dataset.bet) === selectedBet) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
         }
 
         function updatePointIndicator() {
+            // Update Place Bets areas
             placeBetAreas.forEach(area => {
                 const number = area.dataset.number;
-                // Always clear previous state
                 area.classList.remove('point-on', 'disabled');
 
                 if (point === 0) {
-                    // If point is off, disable place bets
-                    area.classList.add('disabled');
+                    // Only disable if there's no active bet on them (meaning they can be clicked to place)
+                    // We need to ensure that bets currently on the table for place numbers remain visible and active
+                    if (placeBets[number] === 0) {
+                         area.classList.add('disabled');
+                    }
                 } else {
-                    // If point is on, highlight the correct number
                     if (point.toString() === number) {
                         area.classList.add('point-on');
                     }
                 }
             });
+
+            // Update Pass/Don't Pass Line areas
+            if (point === 0) {
+                // Point is OFF, so enable line bets
+                passLineBetArea.classList.remove('disabled');
+                dontPassLineBetArea.classList.remove('disabled');
+            } else {
+                // Point is ON, so disable line bets (they are resolved on 7-out or point hit)
+                passLineBetArea.classList.add('disabled');
+                dontPassLineBetArea.classList.add('disabled');
+            }
         }
+
 
         function renderAllBets() {
             document.getElementById('passLineBetAmount').textContent = passLineBet > 0 ? `$${passLineBet}` : '';
@@ -390,7 +510,7 @@
         function clearBoardForNewRound() {
             passLineBet = 0;
             dontPassBet = 0;
-            fieldBet = 0; // Field bets are also cleared between rounds
+            fieldBet = 0;
             for(const num in placeBets) { placeBets[num] = 0; }
             point = 0;
             renderAllBets();
@@ -403,19 +523,20 @@
         function clearActiveBets() {
             let returnedAmount = 0;
 
-            if (point === 0) {
-                returnedAmount = passLineBet + dontPassBet + fieldBet;
+            // Bets that can always be cleared (Field, Place bets when point is on, line bets when point is off)
+            returnedAmount += fieldBet;
+            fieldBet = 0;
+
+            for (const num in placeBets) {
+                returnedAmount += placeBets[num];
+                placeBets[num] = 0;
+            }
+
+            if (point === 0) { // Only clear line bets if point is OFF (come out roll phase)
+                returnedAmount += passLineBet;
+                returnedAmount += dontPassBet;
                 passLineBet = 0;
                 dontPassBet = 0;
-                fieldBet = 0;
-            }
-            else {
-                returnedAmount += fieldBet;
-                fieldBet = 0;
-                for (const num in placeBets) {
-                    returnedAmount += placeBets[num];
-                    placeBets[num] = 0;
-                }
             }
 
             if (returnedAmount > 0) {
@@ -423,11 +544,12 @@
                 walletAmountEl.textContent = wallet;
                 renderAllBets();
                 showStatusMessage(`Bets cleared: +$${returnedAmount}`);
-                // Re-evaluate button states. If all bets are cleared, disable rolling.
                 const hasBets = passLineBet > 0 || dontPassBet > 0 || fieldBet > 0 || Object.values(placeBets).some(b => b > 0);
                 updateButtonState(hasBets ? 'readyToRoll' : 'betting');
             }
+            updatePointIndicator(); // Re-evaluate disabled state for place bets
         }
+
 
         function handleRollResult(roll) {
             let messages = [];
@@ -443,7 +565,7 @@
                     isWin = true;
                     messages.push(`Field bet wins <span style="color:#ffc107;">+$${payout}!</span>`);
                 } else if ([2, 12].includes(roll)) {
-                    payout = bet * 2; // 2:1 payout for 2, 3:1 for 12 is common but we'll do 2:1 for both
+                    payout = bet * 2; // 2:1 payout
                     isWin = true;
                     messages.push(`Field bet wins <span style="color:#ffc107;">+$${payout}</span> on ${roll}!`);
                 }
@@ -462,7 +584,7 @@
 
             // --- POINT IS ON ---
             if (point !== 0) {
-                // Check for winning place bets (if the roll isn't the point or 7)
+                // Resolve Place Bets
                 if (placeBets[roll]) {
                     const bet = placeBets[roll];
                     let payout = 0;
@@ -479,12 +601,12 @@
                     }
                 }
 
-                // Check for point hit or seven-out
                 if (roll === point) {
                     messages.push(`Point ${point} Hit! Pass Line Wins.`);
                     if(passLineBet > 0) wallet += passLineBet * 2;
                     if(dontPassBet > 0) messages.push("Don't Pass loses.");
 
+                    // All place bets returned (not paid, just returned) when point hits
                     let returnedPlaceBets = 0;
                     for (const num in placeBets) {
                         returnedPlaceBets += placeBets[num];
@@ -530,7 +652,7 @@
             walletAmountEl.textContent = wallet;
             renderAllBets();
 
-            const hasBets = passLineBet > 0 || dontPassBet > 0 || fieldBet > 0 || Object.values(placeBets).some(b => b > 0);
+            const hasBets = passLineBet > 0 || dontPassBet > 0 || fieldBet > 0 || (point !== 0 && Object.values(placeBets).some(b => b > 0));
             if (point !== 0) updateButtonState('readyToRoll');
             else if (hasBets) updateButtonState('readyToRoll');
             else updateButtonState('betting');
@@ -542,6 +664,12 @@
                 showStatusMessage("Place a Line bet to start!");
                 return;
             }
+
+
+            // Scroll to the top of the page
+            die1El.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+
             updateButtonState('inProgress');
             let rollCount = 0;
             const rollInterval = setInterval(() => {
@@ -558,43 +686,60 @@
                 }
             }, 100);
         }
-
         function handleBetPlacement(area) {
             const type = area.dataset.betType;
+            const number = parseInt(area.dataset.number); // For place bets
+
             if (currentBet <= 0 || wallet < currentBet) {
                 showStatusMessage("Invalid Bet!");
                 return;
             }
 
-            if (type === 'pass' || type === 'dontpass') {
-                if (point !== 0) { showStatusMessage("Line bets only on Come-Out."); return; }
-                if(type === 'pass') passLineBet += currentBet;
-                else dontPassBet += currentBet;
+            if (type === 'pass') {
+                if (point !== 0) { showStatusMessage("Pass Line bets only on Come-Out."); return; }
+                if (dontPassBet > 0) { showStatusMessage("Cannot bet Pass and Don't Pass at the same time."); return; }
+                passLineBet += currentBet;
+            } else if (type === 'dontpass') {
+                if (point !== 0) { showStatusMessage("Don't Pass bets only on Come-Out."); return; }
+                if (passLineBet > 0) { showStatusMessage("Cannot bet Pass and Don't Pass at the same time."); return; }
+                dontPassBet += currentBet;
             } else if (type === 'place') {
                 if (point === 0) { showStatusMessage("Set Point before Place bets."); return; }
-                const num = parseInt(area.dataset.number);
-                placeBets[num] += currentBet;
+                placeBets[number] = (placeBets[number] || 0) + currentBet;
             } else if (type === 'field') {
-                 fieldBet += currentBet;
+                fieldBet += currentBet;
             }
 
             wallet -= currentBet;
             walletAmountEl.textContent = wallet;
             renderAllBets();
             updateButtonState('readyToRoll');
+            updatePointIndicator(); // Crucial to re-evaluate disabled state after placing a bet
         }
 
+
         // --- Event Listeners ---
-        placeBetAreas.forEach(area => area.addEventListener('click', () => handleBetPlacement(area)));
-        passLineBetArea.addEventListener('click', () => handleBetPlacement(passLineBetArea));
-        dontPassLineBetArea.addEventListener('click', () => handleBetPlacement(dontPassLineBetArea));
-        fieldBetArea.addEventListener('click', () => handleBetPlacement(fieldBetArea));
+        // Changed to use event delegation on the betting mat for all bet areas
+        const bettingLayoutElements = document.querySelectorAll('.bet-area');
+        bettingLayoutElements.forEach(area => {
+            area.addEventListener('click', () => {
+                // Ensure the area is not disabled, except for place bets if point is OFF
+                if (area.classList.contains('disabled') && area.dataset.betType !== 'place') {
+                    // Allow clicking on place bets even if disabled, but the handleBetPlacement will block if point is off.
+                    // This is to prevent confusion.
+                    return;
+                }
+                handleBetPlacement(area);
+            });
+        });
+
         btnRoll.addEventListener('click', rollDice);
         btnClearBets.addEventListener('click', clearActiveBets);
 
-        // New listener for the checkbox
-        keepWinningsCheck.addEventListener('change', (e) => {
-            keepWinningBets = e.target.checked;
+        // New: Event listener for the Keep Bets button
+        btnKeepBets.addEventListener('click', () => {
+            keepWinningBets = !keepWinningBets; // Toggle the boolean
+            btnKeepBets.classList.toggle('active-toggle-button', keepWinningBets); // Toggle the class
             showStatusMessage(keepWinningBets ? "Winning bets will stay up." : "Winning bets will be returned.", 1000);
         });
 
@@ -613,7 +758,9 @@
             updateButtonState('betting');
             updateActiveBetButton(currentBet);
             renderAllBets();
-            updatePointIndicator(); // Set initial disabled state for place bets
+            updatePointIndicator(); // Initialize point indicators
+            // Set initial state of the Keep Bets button
+            btnKeepBets.classList.toggle('active-toggle-button', keepWinningBets);
         };
     </script>
 </body>

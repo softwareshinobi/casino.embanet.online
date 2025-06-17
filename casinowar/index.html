@@ -4,12 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Casino War / Shinobi Casino</title>
-    <!-- Bootswatch Quartz Theme -->
     <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/quartz/bootstrap.min.css" rel="stylesheet">
-    <!-- Google Fonts for a retro feel -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&amp;family=Roboto+Condensed:wght@700&amp;display=swap" rel="stylesheet">
     <style>
         /* Custom styles adapted for the Quartz theme */
         :root {
@@ -23,16 +21,22 @@
         html, body {
             height: 100%;
             margin: 0;
-            overflow: hidden; /* Prevent scrolling on desktop */
+            /* Allow vertical scrolling on all screen sizes */
+            overflow-y: auto;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
         }
 
         body {
-            font-family: 'Orbitron', sans-serif;
+            /* Use a consistent system font stack */
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             display: flex;
             justify-content: center;
-            align-items: center;
-            padding: 0.5rem; /* Padding for small screens */
+            /* Align items to the top to respect padding-top */
+            align-items: flex-start;
+            padding: 0.5rem; /* Padding for small screens (sides) */
             background-color: var(--bs-body-bg);
+            box-sizing: border-box; /* Include padding in element's total width and height */
+            /* min-height and flex-direction for stacking already handled by flex properties */
         }
 
         .game-console {
@@ -46,6 +50,10 @@
             position: relative;
             display: flex;
             flex-direction: column;
+            z-index: 1; /* Ensure it's above the background if any */
+            /* Add a top margin for consistent spacing below the fixed navbar */
+            margin-top: 1rem;
+            margin-bottom: 20px; /* Add some space at the bottom */
         }
 
         .playing-surface {
@@ -98,7 +106,7 @@
             box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
             position: relative;
         }
-        
+
         .card .suit { font-size: 1.5rem; line-height: 1; }
         .card.red { color: #e95420; }
         .card.black { color: #212121; }
@@ -111,21 +119,22 @@
             border-radius: 15px;
         }
         .actions-panel{
-             border-top: 3px solid var(--quartz-secondary);
+            border-top: 3px solid var(--quartz-secondary);
         }
         .betting-panel, .info-panel {
             border-top: 2px solid #212529;
-         }
+           }
 
         .action-button, .bet-button {
-            font-family: 'Orbitron', sans-serif;
+            /* Use system font for consistency */
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             font-weight: 700;
             text-transform: uppercase;
             transition: all 0.1s ease-in-out;
             padding: 0.75rem 0;
             width: 100%;
         }
-        
+
         .btn-surrender {
             background-color: var(--surrender-red);
             border-color: var(--surrender-red);
@@ -150,7 +159,8 @@
             display: none;
             width: 90%;
         }
-        
+
+        /* Updated info-display styles to match Craps' for better mobile responsiveness */
         .info-display {
             font-size: 1.2rem;
             font-weight: 700;
@@ -163,68 +173,131 @@
 
         /* --- Mobile Responsiveness --- */
         @media (max-width: 768px) {
-            body {
-                overflow: auto;
-                align-items: flex-start;
+            /* Body overflow and alignment already handled globally */
+            .game-console {
+                padding: 1rem;
+                margin-top: 1rem; /* Keep consistent margin for mobile too */
+                margin-bottom: 10px; /* Adjust bottom margin for mobile */
             }
-            .game-console { padding: 1rem; margin-top: 1rem; }
             .hand-area { min-height: 105px; gap: 5px; }
             .card { width: 60px; height: 90px; font-size: 1.5rem; }
             .card .suit { font-size: 1rem; }
             .action-button { font-size: 1rem; }
             .bet-button { font-size: 0.8rem; }
-            .info-display { font-size: 1rem; }
+            .info-display { font-size: 1rem; } /* Override for smaller font on mobile */
             .actions-panel, .betting-panel, .info-panel { padding: 0.75rem; }
         }
     </style>
 </head>
 <body>
 
-    <div class="game-console">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Shinobi Casino</a> <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+
+<ul class="navbar-nav ms-auto">
+
+<li class="nav-item">
+    <a class="nav-link" href="/blackjack/index.html">Blackjack</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/casinowar/index.html">Casino War</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/roulette/index.html">Roulette</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/slots/index.html">Slots</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/baccarat/index.html">Baccarat</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/craps/index.html">Craps</a>
+</li>
+
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+<div class="game-console">
         <div id="statusMessage" class="status-message"></div>
 
         <div class="playing-surface">
-            <!-- Dealer's Hand -->
             <div class="hand-container">
                 <span class="hand-label">Dealer</span>
                 <div id="dealerHand" class="hand-area"></div>
             </div>
-            
-            <!-- Player's Hand -->
+
             <div class="hand-container">
-                 <span class="hand-label">Player</span>
+                       <span class="hand-label">Player</span>
                 <div id="playerHand" class="hand-area"></div>
             </div>
         </div>
 
         <div class="actions-panel mt-3">
             <div class="row g-2">
-                <div class="col-6"><button id="btnWar" class="btn btn-secondary action-button">War</button></div>
-                <div class="col-6"><button id="btnSurrender" class="btn btn-danger action-button btn-surrender">Surrender</button></div>
+                <div class="col-6"><button id="btnWar" class="btn btn-secondary action-button" disabled="">War</button></div>
+                <div class="col-6"><button id="btnSurrender" class="btn btn-danger action-button btn-surrender" disabled="">Surrender</button></div>
                 <div class="col-12 mt-2">
                     <button id="btnDeal" class="btn btn-info action-button">Deal</button>
                 </div>
             </div>
         </div>
-        
+
         <div class="betting-panel mt-3">
-             <div class="row g-2">
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="100">$100</button></div>
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="500">$500</button></div>
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="1000">$1000</button></div>
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="max">MAX</button></div>
+              <div class="row g-2">
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button active" data-bet="100">$100</button></div>
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="500">$500</button></div>
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="1000">$1000</button></div>
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="max">MAX</button></div>
             </div>
         </div>
 
         <div class="info-panel mt-3">
             <div class="row">
-                <div class="col-6 info-display">Bet: $<span id="betAmount">100</span></div>
-                <div class="col-6 info-display">Wallet: $<span id="walletAmount">10000</span></div>
+                <div class="col-12 col-sm-6 info-display mb-2 mb-sm-0">Bet: $<span id="betAmount">100</span></div>
+                <div class="col-12 col-sm-6 info-display">Wallet: $<span id="walletAmount">10000</span></div>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+        const navbar = document.querySelector('.navbar.fixed-top');
+
+        if (navbar) {
+
+            const navbarHeight = navbar.offsetHeight;
+
+            // This line correctly sets the padding-top of the body to account for the fixed navbar
+            document.body.style.paddingTop = navbarHeight + 'px';
+
+            window.addEventListener('resize', () => {
+
+                const newNavbarHeight = navbar.offsetHeight;
+
+                document.body.style.paddingTop = newNavbarHeight + 'px';
+
+            });
+
+        }
+
+    });
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // --- DOM Elements ---
         const dealerHandEl = document.getElementById('dealerHand');
@@ -256,7 +329,7 @@
                 [deck[i], deck[j]] = [deck[j], deck[i]];
             }
         }
-        
+
         function getCardValue(card) {
             const value = card.value;
             if (value === 'A') return 14;
@@ -294,7 +367,7 @@
             btnSurrender.disabled = state !== 'war';
             betButtons.forEach(btn => btn.disabled = state !== 'deal');
         }
-        
+
         function updateActiveBetButton(selectedBet) {
              betButtons.forEach(btn => {
                 if(btn.dataset.bet === 'max' && selectedBet === wallet) btn.classList.add('active');
@@ -302,13 +375,13 @@
                 else btn.classList.remove('active');
             });
         }
-        
+
         function endRound(outcome) {
             let message = '';
             if(outcome === 'win') { message = "You Win!"; wallet += currentBet + warBet; }
             else if(outcome === 'loss') { message = "You Lose!"; wallet -= (currentBet + warBet); }
             else if(outcome === 'surrender') { message = "Surrendered"; wallet -= Math.ceil(currentBet/2); }
-            
+
             showStatusMessage(message, 1000);
             walletAmountEl.textContent = wallet;
             warBet = 0;
@@ -330,7 +403,7 @@
                 }
              }
         }
-        
+
         function handleSurrender() {
             endRound('surrender');
         }
@@ -343,7 +416,7 @@
             updateButtonState('inprogress');
             wallet -= currentBet; // Player places an additional bet
             warBet = currentBet;
-            
+
             showStatusMessage("Burning cards...", 1500);
 
             setTimeout(() => {
@@ -353,7 +426,7 @@
                 const playerWarCard = deck.pop();
                 const dealerWarCard = deck.pop();
                 renderHands(playerWarCard, dealerWarCard);
-                
+
                 setTimeout(() => compareCards(playerWarCard, dealerWarCard, true), 1000);
 
             }, 1500);
@@ -376,7 +449,7 @@
         btnDeal.addEventListener('click', dealNewHand);
         btnWar.addEventListener('click', handleWar);
         btnSurrender.addEventListener('click', handleSurrender);
-        
+
         betButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const betValue = button.dataset.bet;
@@ -386,7 +459,7 @@
                 updateActiveBetButton(currentBet);
             });
         });
-        
+
         window.onload = () => {
             updateButtonState('deal');
             updateActiveBetButton(currentBet);
@@ -394,5 +467,6 @@
             dealerHandEl.innerHTML = '';
         };
     </script>
-</body>
-</html>
+
+
+</body></html>
