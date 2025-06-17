@@ -4,12 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Slots / Shinobi Casino</title>
-    <!-- Bootswatch Quartz Theme -->
     <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/quartz/bootstrap.min.css" rel="stylesheet">
-    <!-- Google Fonts for a retro feel -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&amp;family=Roboto+Condensed:wght@700&amp;display=swap" rel="stylesheet">
     <style>
         /* Custom styles adapted for the Quartz theme */
         :root {
@@ -22,16 +20,21 @@
         html, body {
             height: 100%;
             margin: 0;
-            overflow: hidden; /* Prevent scrolling on desktop */
+            /* Allow vertical scrolling on all screen sizes */
+            overflow-y: auto;
         }
 
         body {
-            font-family: 'Orbitron', sans-serif;
+            /* Use a consistent system font stack */
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             display: flex;
             justify-content: center;
-            align-items: center;
-            padding: 0.5rem; /* Padding for small screens */
+            /* Align items to the top to respect padding-top */
+            align-items: flex-start;
+            padding: 0.5rem; /* Padding for small screens (sides) */
             background-color: var(--bs-body-bg);
+            box-sizing: border-box; /* Include padding in element's total width and height */
+            overflow-x: hidden; /* Prevent horizontal scrolling */
         }
 
         .game-console {
@@ -45,6 +48,10 @@
             position: relative;
             display: flex;
             flex-direction: column;
+            z-index: 1; /* Ensure it's above the background if any */
+            /* Add a top margin for consistent spacing below the fixed navbar */
+            margin-top: 1rem;
+            margin-bottom: 20px; /* Add some space at the bottom */
         }
 
         .reels-surface {
@@ -75,14 +82,15 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-family: 'Roboto Condensed', sans-serif;
+            /* Using system font for consistency */
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             font-weight: 700;
             text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
             overflow: hidden;
             color: black;
             font-size: 3.5rem;
         }
-        
+
         .reel-symbol.chip { color: #0d6efd; } /* Blue poker chip */
         .reel-symbol.dice { color: #dc3545; } /* Red dice */
         .reel-symbol.bell { color: #ffc107; } /* Gold bell */
@@ -114,14 +122,15 @@
             border-radius: 15px;
         }
         .actions-panel{
-             border-top: 3px solid var(--quartz-secondary);
+            border-top: 3px solid var(--quartz-secondary);
         }
         .betting-panel, .info-panel {
             border-top: 2px solid #212529;
-         }
+           }
 
         .action-button, .bet-button {
-            font-family: 'Orbitron', sans-serif;
+            /* Use system font for consistency */
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             font-weight: 700;
             text-transform: uppercase;
             transition: all 0.1s ease-in-out;
@@ -148,7 +157,7 @@
             display: none;
             width: 90%;
         }
-        
+
         .info-display {
             font-size: 1.2rem;
             font-weight: 700;
@@ -161,14 +170,9 @@
 
         /* --- Mobile Responsiveness --- */
         @media (max-width: 768px) {
-            body {
-                overflow: auto; /* Allow scroll on mobile if needed */
-                align-items: flex-start; /* Align to top on mobile */
-            }
-
             .game-console {
                 padding: 1rem;
-                margin-top: 1rem;
+                margin-top: 1rem; /* Keep consistent margin for mobile too */
             }
 
             .reels-surface {
@@ -194,12 +198,50 @@
                 padding: 0.75rem;
             }
         }
-
     </style>
 </head>
-<body>
+<body style="padding-top: 72px;">
 
-    <div class="game-console">
+<!-- html / sidebar / desktop / begin -->   <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Shinobi Casino</a> <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+
+<ul class="navbar-nav ms-auto">
+
+<li class="nav-item">
+    <a class="nav-link" href="/blackjack/index.html">Blackjack</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/casinowar/index.html">Casino War</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/roulette/index.html">Roulette</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/slots/index.html">Slots</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/baccarat/index.html">Baccarat</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/craps/index.html">Craps</a>
+</li>
+
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+<!-- html / sidebar / desktop / end -->
+<div class="game-console">
         <div id="statusMessage" class="status-message"></div>
         <div class="reels-surface">
             <div class="payline"></div>
@@ -222,13 +264,13 @@
         <div class="actions-panel mt-3">
             <div class="row g-3 justify-content-center">
                 <div class="col-12 col-sm-8">
-                     <button id="btnSpin" class="btn btn-info action-button">Spin</button>
+                       <button id="btnSpin" class="btn btn-info action-button">Spin</button>
                 </div>
             </div>
         </div>
         <div class="betting-panel mt-3">
-             <div class="row g-2">
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="100">$100</button></div>
+              <div class="row g-2">
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button active" data-bet="100">$100</button></div>
                 <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="500">$500</button></div>
                 <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="1000">$1000</button></div>
                 <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="max">MAX</button></div>
@@ -242,7 +284,32 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+        const navbar = document.querySelector('.navbar.fixed-top');
+
+        if (navbar) {
+
+            const navbarHeight = navbar.offsetHeight;
+
+            document.body.style.paddingTop = navbarHeight + 'px';
+
+            window.addEventListener('resize', () => {
+
+                const newNavbarHeight = navbar.offsetHeight;
+
+                document.body.style.paddingTop = newNavbarHeight + 'px';
+
+            });
+
+        }
+
+    });
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // --- DOM Elements ---
         const reelColumns = [
@@ -301,7 +368,7 @@
             btnSpin.disabled = isSpinning;
             betButtons.forEach(btn => btn.disabled = isSpinning);
         }
-        
+
         function updateActiveBetButton(selectedBet) {
              betButtons.forEach(btn => {
                 if(btn.dataset.bet === 'max' && selectedBet === wallet) {
@@ -330,7 +397,7 @@
                     if (symbolId === 'WILD') continue; // Skip wild check here, it's done above
 
                     const count = lineIds.filter(id => id === symbolId || id === 'WILD').length;
-                    
+
                     if (count === 3) {
                         const currentMultiplier = payouts[symbolId][3];
                         // Ensure we take the highest possible win
@@ -349,7 +416,7 @@
                 showStatusMessage(`${winMessage}<br>+$${winnings}`, 1000);
             }
         }
-        
+
         function spinReels() {
             if (isSpinning) return;
             if (wallet < currentBet) {
@@ -386,7 +453,7 @@
                     finalResults[i].forEach(symbol => {
                         column.appendChild(createSymbolElement(symbol));
                     });
-                    
+
                     // If this is the last reel to stop
                     if (i === reelColumns.length - 1) {
                          checkWin(finalResults);
@@ -399,7 +466,7 @@
 
         // --- Event Listeners ---
         btnSpin.addEventListener('click', spinReels);
-        
+
         betButtons.forEach(button => {
             button.addEventListener('click', () => {
                 if(isSpinning) return;
@@ -421,5 +488,6 @@
             updateActiveBetButton(currentBet);
         };
     </script>
-</body>
-</html>
+
+
+</body></html>

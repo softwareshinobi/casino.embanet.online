@@ -92,6 +92,46 @@
 </head>
 <body>
 
+<!-- html / sidebar / desktop / begin -->   <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Shinobi Casino</a> <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+
+<ul class="navbar-nav ms-auto">
+
+<li class="nav-item">
+    <a class="nav-link" href="/blackjack/index.html">Blackjack</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/casinowar/index.html">Casino War</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/roulette/index.html">Roulette</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/slots/index.html">Slots</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/baccarat/index.html">Baccarat</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/craps/index.html">Craps</a>
+</li>
+
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+<!-- html / sidebar / desktop / end -->
+
     <div class="game-console">
         
         <div class="portal-header">
@@ -124,6 +164,34 @@
         </div>
 
     </div>
+
+<!-- html / including / scripting / begin -->
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+        const navbar = document.querySelector('.navbar.fixed-top');
+
+        if (navbar) {
+
+            const navbarHeight = navbar.offsetHeight;
+
+            document.body.style.paddingTop = navbarHeight + 'px';
+
+            window.addEventListener('resize', () => {
+
+                const newNavbarHeight = navbar.offsetHeight;
+
+                document.body.style.paddingTop = newNavbarHeight + 'px';
+
+            });
+
+        }
+
+    });
+
+</script>
+<!-- html / including / scripting / end -->
 
     <!-- Bootstrap JS is not strictly necessary for this static page but included for consistency -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

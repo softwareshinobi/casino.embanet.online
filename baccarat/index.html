@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Baccarat / Shinobi Casino </title>
-    <!-- Bootswatch Quartz Theme -->
     <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/quartz/bootstrap.min.css" rel="stylesheet">
-    <!-- Google Fonts for a retro feel -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet">
@@ -23,16 +21,21 @@
         html, body {
             height: 100%;
             margin: 0;
-            overflow: hidden; /* Prevent scrolling on desktop */
+            /* Allow vertical scrolling on all screen sizes */
+            overflow-y: auto;
         }
 
         body {
-            font-family: 'Orbitron', sans-serif;
+            /* Use a consistent system font stack */
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             display: flex;
             justify-content: center;
-            align-items: center;
-            padding: 0.5rem; /* Padding for small screens */
+            /* Align items to the top to respect padding-top */
+            align-items: flex-start;
+            padding: 0.5rem; /* Padding for small screens (sides) */
             background-color: var(--bs-body-bg);
+            box-sizing: border-box; /* Include padding in element's total width and height */
+            overflow-x: hidden; /* Prevent horizontal scrolling */
         }
 
         .game-console {
@@ -46,6 +49,10 @@
             position: relative;
             display: flex;
             flex-direction: column;
+            z-index: 1; /* Ensure it's above the background if any */
+            /* Add a top margin for consistent spacing below the fixed navbar */
+            margin-top: 1rem;
+            margin-bottom: 20px; /* Add some space at the bottom */
         }
 
         .playing-surface {
@@ -117,7 +124,7 @@
             box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
             position: relative;
         }
-        
+
         .card .suit { font-size: 1.5rem; line-height: 1; }
         .card.red { color: #e95420; }
         .card.black { color: #212121; }
@@ -130,14 +137,15 @@
             border-radius: 15px;
         }
         .actions-panel{
-             border-top: 3px solid var(--quartz-secondary);
+            border-top: 3px solid var(--quartz-secondary);
         }
         .betting-panel, .info-panel {
             border-top: 2px solid #212529;
-         }
+           }
 
         .action-button, .bet-button {
-            font-family: 'Orbitron', sans-serif;
+            /* Use system font for consistency */
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             font-weight: 700;
             text-transform: uppercase;
             transition: all 0.1s ease-in-out;
@@ -148,7 +156,7 @@
         .bet-type-button {
             border: 3px solid transparent;
         }
-        
+
         .bet-type-button.active {
             border-color: var(--tie-yellow);
             box-shadow: 0 0 10px var(--tie-yellow);
@@ -173,7 +181,7 @@
             display: none;
             width: 90%;
         }
-        
+
         .info-display {
             font-size: 1.2rem;
             font-weight: 700;
@@ -186,7 +194,6 @@
 
         /* --- Mobile Responsiveness --- */
         @media (max-width: 768px) {
-            body { overflow: auto; align-items: flex-start; }
             .game-console { padding: 1rem; margin-top: 1rem; }
             .hand-area { min-height: 105px; gap: 5px; }
             .card { width: 60px; height: 90px; font-size: 1.5rem; }
@@ -200,11 +207,48 @@
 </head>
 <body>
 
-    <div class="game-console">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Shinobi Casino</a> <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+
+<ul class="navbar-nav ms-auto">
+
+<li class="nav-item">
+    <a class="nav-link" href="/blackjack/index.html">Blackjack</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/casinowar/index.html">Casino War</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/roulette/index.html">Roulette</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/slots/index.html">Slots</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/baccarat/index.html">Baccarat</a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="/craps/index.html">Craps</a>
+</li>
+
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+<div class="game-console">
         <div id="statusMessage" class="status-message"></div>
 
         <div class="playing-surface">
-            <!-- Banker's Hand -->
             <div class="hand-container">
                 <div class="hand-header">
                     <span class="hand-label">Banker</span>
@@ -212,10 +256,9 @@
                 </div>
                 <div id="bankerHand" class="hand-area"></div>
             </div>
-            
-            <!-- Player's Hand -->
+
             <div class="hand-container">
-                 <div class="hand-header">
+                   <div class="hand-header">
                     <span class="hand-label">Player</span>
                     <span id="playerScore" class="score-display">0</span>
                 </div>
@@ -233,9 +276,9 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="betting-panel mt-3">
-             <div class="row g-2">
+              <div class="row g-2">
                 <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="100">$100</button></div>
                 <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="500">$500</button></div>
                 <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="1000">$1000</button></div>
@@ -251,7 +294,32 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+        const navbar = document.querySelector('.navbar.fixed-top');
+
+        if (navbar) {
+
+            const navbarHeight = navbar.offsetHeight;
+
+            document.body.style.paddingTop = navbarHeight + 'px';
+
+            window.addEventListener('resize', () => {
+
+                const newNavbarHeight = navbar.offsetHeight;
+
+                document.body.style.paddingTop = newNavbarHeight + 'px';
+
+            });
+
+        }
+
+    });
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // --- DOM Elements ---
         const bankerHandEl = document.getElementById('bankerHand');
@@ -286,7 +354,7 @@
                 [deck[i], deck[j]] = [deck[j], deck[i]];
             }
         }
-        
+
         function getCardValue(cardValue) {
             if (['K', 'Q', 'J', '10'].includes(cardValue)) return 0;
             if (cardValue === 'A') return 1;
@@ -328,7 +396,7 @@
             betTypeButtons.forEach(b => b.disabled = !isBetting);
             betButtons.forEach(b => b.disabled = !isBetting);
         }
-        
+
         function updateActiveBetButton(selectedBet) {
              betButtons.forEach(btn => {
                 if(btn.dataset.bet === 'max' && selectedBet === wallet) btn.classList.add('active');
@@ -336,7 +404,7 @@
                 else btn.classList.remove('active');
             });
         }
-        
+
         function determineWinner() {
             const pScore = getHandScore(playerHand);
             const bScore = getHandScore(bankerHand);
@@ -353,7 +421,7 @@
                 else if (outcome === 'tie') wallet += currentBet * 8; // 8:1 payout
             } else {
                 msg = `${outcome.charAt(0).toUpperCase() + outcome.slice(1)} Wins. You Lose.`;
-                wallet -= currentBet;
+                // Bet was already deducted, so no additional action for loss
             }
 
             showStatusMessage(msg, 1000);
@@ -401,7 +469,7 @@
                     else if (newBScore === 4 && [2,3,4,5,6,7].includes(playerThirdCardValue)) bankerDraws = true;
                     else if (newBScore === 5 && [4,5,6,7].includes(playerThirdCardValue)) bankerDraws = true;
                     else if (newBScore === 6 && [6,7].includes(playerThirdCardValue)) bankerDraws = true;
-                    
+
                     if (!playerDraws && newBScore <= 5) bankerDraws = true;
 
 
@@ -428,13 +496,13 @@
                 btnDeal.disabled = false;
             });
         });
-        
+
         btnDeal.addEventListener('click', () => {
              if (currentBet === 0 || wallet < currentBet) {
                 showStatusMessage("Invalid Bet!");
                 return;
             }
-            wallet -= currentBet;
+            wallet -= currentBet; // Deduct bet immediately upon dealing
             walletAmountEl.textContent = wallet;
             runGameSequence();
         });
@@ -448,11 +516,11 @@
                 updateActiveBetButton(currentBet);
             });
         });
-        
+
         window.onload = () => {
             updateButtonState('betting');
             updateActiveBetButton(currentBet);
-            renderHands();
+            renderHands(); // Render empty hands on load
         };
     </script>
 </body>
