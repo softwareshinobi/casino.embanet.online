@@ -20,29 +20,23 @@
         html, body {
             height: 100%; /* Ensure html and body take full height of the viewport */
             margin: 0;
-            overflow: hidden; /* Prevent scrolling on desktop */
+            overflow-x: hidden; /* Prevent horizontal scrolling always */
+            /* Default to auto overflow for vertical scrolling, like Craps */
+            overflow-y: auto;
         }
 
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             display: flex;
             justify-content: center; /* Center horizontally */
-            align-items: center;   /* Center vertically for the main game content */
-            padding: 0.5rem; /* Padding for overall body (sides only on desktop) */
+            flex-direction: column; /* Allows navbar and game-console to stack */
             background-color: var(--bs-body-bg);
             box-sizing: border-box;
-            overflow-x: hidden;
-            flex-direction: column; /* Allow direct children (like navbar and game-console) to stack */
             min-height: 100vh; /* Ensure body takes full viewport height */
+            padding: 0.5rem; /* Overall side padding */
+            /* Default align-items to flex-start, matching Craps */
+            align-items: flex-start;
         }
-
-        /* Adjust padding-top of body in JS to prevent fixed navbar overlap */
-        /* The .game-console can then manage its own vertical centering within the remaining space */
-        body.has-navbar {
-            padding-top: var(--navbar-height, 0px); /* Set by JS */
-            align-items: center; /* Re-center after padding-top is applied */
-        }
-
 
         .game-console {
             background: linear-gradient(to bottom, #212529, #343f56);
@@ -51,16 +45,19 @@
             box-shadow: 0 0 30px rgba(24, 178, 178, 0.5), inset 0 0 20px rgba(0, 0, 0, 0.5);
             padding: 1.5rem;
             width: 100%;
-            max-width: 900px; /* Keep consistent with other games */
+            max-width: 900px; /* Consistent max-width */
             position: relative;
             display: flex;
             flex-direction: column;
             z-index: 1;
 
-            /* Removed fixed margin-top/bottom here. Vertical centering handled by body. */
-            margin: auto; /* Auto margins will help center within flex container if there's extra space */
-            flex-grow: 1; /* Allow it to grow to fill available vertical space */
-            max-height: calc(100vh - var(--navbar-height, 0px) - 2rem); /* Dynamic max-height to fit screen - navbar - body padding */
+            /* Consistent margins as per working Craps example */
+            margin-top: 1rem;
+            margin-bottom: 20px;
+
+            /* Remove flex-grow and max-height that caused issues with centering */
+            flex-grow: 0;
+            max-height: initial;
         }
 
         .playing-surface {
@@ -71,8 +68,8 @@
             box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
             display: flex;
             flex-direction: column;
-            flex-grow: 1; /* Allow playing surface to take available vertical space */
-            justify-content: space-around; /* Distribute space between hands */
+            flex-grow: 1;
+            justify-content: space-around;
         }
 
         .hand-container {
@@ -80,8 +77,8 @@
             flex-direction: column;
             align-items: center;
             gap: 0.5rem;
-            flex-grow: 1; /* Allow each hand container to grow */
-            justify-content: center; /* Center content within hand container */
+            flex-grow: 1;
+            justify-content: center;
         }
 
         .hand-header {
@@ -98,8 +95,8 @@
             justify-content: center;
             gap: 10px;
             flex-wrap: wrap;
-            flex-grow: 1; /* Allow hand area to grow if cards fill it */
-            min-height: 90px; /* Adjusted slightly smaller for overall fit */
+            flex-grow: 1;
+            min-height: 90px;
         }
 
         .hand-label {
@@ -119,19 +116,18 @@
         }
 
         .card {
-            /* Keep card sizes compact for fit */
-            width: 65px; /* Slightly more aggressive reduction */
-            height: 97.5px; /* Proportional height */
+            width: 65px;
+            height: 97.5px;
             background-color: white;
             border-radius: 8px;
             border: 1px solid #333;
             color: black;
-            font-size: 1.7rem; /* Adjusted font size */
+            font-size: 1.7rem;
             font-weight: bold;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 4px; /* Slightly reduced padding */
+            padding: 4px;
             box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
             position: relative;
         }
@@ -143,7 +139,7 @@
 
         .card.hidden::before {
             content: '?';
-            font-size: 2.5rem; /* Adjusted font size */
+            font-size: 2.5rem;
             color: var(--quartz-secondary);
             position: absolute;
             top: 50%; left: 50%;
@@ -158,9 +154,9 @@
 
         .actions-panel, .betting-panel, .info-panel {
             background-color: rgba(0, 0, 0, 0.2);
-            padding: 0.8rem 1.5rem; /* Reduced vertical padding */
+            padding: 0.8rem 1.5rem;
             border-radius: 15px;
-            margin-top: 0.8rem; /* Reduced top margin between panels */
+            margin-top: 0.8rem;
         }
         .actions-panel{
             border-top: 3px solid var(--quartz-secondary);
@@ -174,21 +170,10 @@
             font-weight: 700;
             text-transform: uppercase;
             transition: all 0.1s ease-in-out;
-            padding: 0.6rem 0; /* Reduced vertical padding for buttons */
-            font-size: 1.1rem; /* Slightly reduced font size for buttons */
+            padding: 0.6rem 0;
+            font-size: 1.1rem;
             width: 100%;
         }
-
-        /* Adjustments for better fit with reduced paddings */
-        .actions-panel .row.g-2 {
-            margin-top: 0.5rem; /* Adjust if needed */
-            margin-bottom: 0.5rem; /* Adjust if needed */
-        }
-        .betting-panel .row.g-2 {
-            margin-top: 0.5rem; /* Adjust if needed */
-            margin-bottom: 0.5rem; /* Adjust if needed */
-        }
-
 
         .status-message {
             position: absolute;
@@ -208,7 +193,7 @@
         }
 
         .info-display {
-            font-size: 1.1rem; /* Slightly reduced font size for info display */
+            font-size: 1.1rem;
             font-weight: 700;
             color: var(--quartz-light);
             text-align: center;
@@ -231,8 +216,8 @@
                 padding: 1rem;
                 margin-top: 1rem; /* Consistent margin for mobile too */
                 margin-bottom: 10px; /* Adjust bottom margin for mobile */
-                flex-shrink: 0; /* Don't shrink on mobile if it's already tight */
-                max-height: initial; /* Reset max-height on mobile */
+                flex-shrink: 0;
+                max-height: initial;
             }
             .hand-area { min-height: 105px; gap: 5px; }
             .card { width: 60px; height: 90px; font-size: 1.5rem; }
@@ -336,14 +321,25 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const navbar = document.querySelector('.navbar.fixed-top');
-        const bodyElement = document.body; // Reference to the body element
-        const gameConsole = document.querySelector('.game-console'); // Reference to game-console
+        const bodyElement = document.body;
 
         if (navbar) {
             const updateLayout = () => {
                 const navbarHeight = navbar.offsetHeight;
-                bodyElement.style.setProperty('--navbar-height', navbarHeight + 'px'); // Set CSS variable
-                bodyElement.classList.add('has-navbar'); // Add class to body for specific styling
+                // Set CSS variable for navbar height
+                bodyElement.style.setProperty('--navbar-height', navbarHeight + 'px');
+
+                // Apply padding to body
+                bodyElement.style.paddingTop = navbarHeight + 'px';
+
+                // For desktop (min-width: 769px assumed, or whatever Bootstrap's lg breakpoint is)
+                if (window.innerWidth > 768) {
+                    bodyElement.style.alignItems = 'center'; /* Center game-console vertically */
+                    bodyElement.style.overflowY = 'hidden'; /* No scroll on desktop */
+                } else { /* For mobile (max-width: 768px) */
+                    bodyElement.style.alignItems = 'flex-start'; /* Align to top */
+                    bodyElement.style.overflowY = 'auto'; /* Allow scroll on mobile */
+                }
             };
 
             // Initial call and on resize
