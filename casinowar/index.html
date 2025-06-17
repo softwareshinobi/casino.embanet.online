@@ -23,6 +23,7 @@
             margin: 0;
             /* Allow vertical scrolling on all screen sizes */
             overflow-y: auto;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
         }
 
         body {
@@ -35,7 +36,7 @@
             padding: 0.5rem; /* Padding for small screens (sides) */
             background-color: var(--bs-body-bg);
             box-sizing: border-box; /* Include padding in element's total width and height */
-            overflow-x: hidden; /* Prevent horizontal scrolling */
+            /* min-height and flex-direction for stacking already handled by flex properties */
         }
 
         .game-console {
@@ -159,6 +160,7 @@
             width: 90%;
         }
 
+        /* Updated info-display styles to match Craps' for better mobile responsiveness */
         .info-display {
             font-size: 1.2rem;
             font-weight: 700;
@@ -171,23 +173,25 @@
 
         /* --- Mobile Responsiveness --- */
         @media (max-width: 768px) {
+            /* Body overflow and alignment already handled globally */
             .game-console {
                 padding: 1rem;
                 margin-top: 1rem; /* Keep consistent margin for mobile too */
+                margin-bottom: 10px; /* Adjust bottom margin for mobile */
             }
             .hand-area { min-height: 105px; gap: 5px; }
             .card { width: 60px; height: 90px; font-size: 1.5rem; }
             .card .suit { font-size: 1rem; }
             .action-button { font-size: 1rem; }
             .bet-button { font-size: 0.8rem; }
-            .info-display { font-size: 1rem; }
+            .info-display { font-size: 1rem; } /* Override for smaller font on mobile */
             .actions-panel, .betting-panel, .info-panel { padding: 0.75rem; }
         }
     </style>
 </head>
-<body style="padding-top: 72px;">
+<body>
 
-<!-- html / sidebar / desktop / begin -->   <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">Shinobi Casino</a> <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -225,8 +229,6 @@
             </div>
         </div>
     </nav>
-<!-- html / sidebar / desktop / end -->
-
 <div class="game-console">
         <div id="statusMessage" class="status-message"></div>
 
@@ -237,7 +239,7 @@
             </div>
 
             <div class="hand-container">
-                   <span class="hand-label">Player</span>
+                       <span class="hand-label">Player</span>
                 <div id="playerHand" class="hand-area"></div>
             </div>
         </div>
@@ -254,17 +256,17 @@
 
         <div class="betting-panel mt-3">
               <div class="row g-2">
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button active" data-bet="100">$100</button></div>
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="500">$500</button></div>
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="1000">$1000</button></div>
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="max">MAX</button></div>
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button active" data-bet="100">$100</button></div>
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="500">$500</button></div>
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="1000">$1000</button></div>
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="max">MAX</button></div>
             </div>
         </div>
 
         <div class="info-panel mt-3">
             <div class="row">
-                <div class="col-6 info-display">Bet: $<span id="betAmount">100</span></div>
-                <div class="col-6 info-display">Wallet: $<span id="walletAmount">10000</span></div>
+                <div class="col-12 col-sm-6 info-display mb-2 mb-sm-0">Bet: $<span id="betAmount">100</span></div>
+                <div class="col-12 col-sm-6 info-display">Wallet: $<span id="walletAmount">10000</span></div>
             </div>
         </div>
     </div>

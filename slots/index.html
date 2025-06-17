@@ -15,26 +15,27 @@
             --quartz-secondary: #18b2b2;
             --quartz-dark: #343f56;
             --quartz-light: #f8f9fa;
+            /* Defined custom colors for the new button style */
+            --custom-pink-button: #e91e63; /* A specific pink for bet buttons */
+            --custom-pink-button-hover: #ff4081; /* A brighter pink for hover */
+            --custom-pink-button-active: #ff4081; /* A brighter pink for active, same as hover for strong effect */
         }
 
         html, body {
             height: 100%;
             margin: 0;
-            /* Allow vertical scrolling on all screen sizes */
-            overflow-y: auto;
+            overflow-y: auto; /* Allow vertical scrolling on all screen sizes */
+            overflow-x: hidden;
         }
 
         body {
-            /* Use a consistent system font stack */
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             display: flex;
             justify-content: center;
-            /* Align items to the top to respect padding-top */
-            align-items: flex-start;
-            padding: 0.5rem; /* Padding for small screens (sides) */
+            align-items: flex-start; /* Align content to the top below the fixed navbar */
+            padding: 0.5rem;
             background-color: var(--bs-body-bg);
-            box-sizing: border-box; /* Include padding in element's total width and height */
-            overflow-x: hidden; /* Prevent horizontal scrolling */
+            box-sizing: border-box;
         }
 
         .game-console {
@@ -44,14 +45,13 @@
             box-shadow: 0 0 30px rgba(24, 178, 178, 0.5), inset 0 0 20px rgba(0, 0, 0, 0.5);
             padding: 1.5rem;
             width: 100%;
-            max-width: 900px;
+            max-width: 900px; /* Max width for consistency across games */
             position: relative;
             display: flex;
             flex-direction: column;
-            z-index: 1; /* Ensure it's above the background if any */
-            /* Add a top margin for consistent spacing below the fixed navbar */
-            margin-top: 1rem;
-            margin-bottom: 20px; /* Add some space at the bottom */
+            z-index: 1;
+            margin-top: 1rem; /* Consistent spacing from navbar */
+            margin-bottom: 20px; /* Consistent bottom spacing */
         }
 
         .reels-surface {
@@ -82,7 +82,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            /* Using system font for consistency */
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             font-weight: 700;
             text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
@@ -91,16 +90,15 @@
             font-size: 3.5rem;
         }
 
-        .reel-symbol.chip { color: #0d6efd; } /* Blue poker chip */
-        .reel-symbol.dice { color: #dc3545; } /* Red dice */
-        .reel-symbol.bell { color: #ffc107; } /* Gold bell */
+        .reel-symbol.chip { color: #0d6efd; }
+        .reel-symbol.dice { color: #dc3545; }
+        .reel-symbol.bell { color: #ffc107; }
         .reel-symbol.crown { color: #ffc107; }
         .reel-symbol.wild {
             background: linear-gradient(45deg, #6a0dad, #ee82ee, #1e90ff, #00ced1);
             color: white;
             font-size: 2.5rem;
         }
-
 
         .payline {
             position: absolute;
@@ -116,20 +114,17 @@
             z-index: 10;
         }
 
+        /* Action and Bet Panels - General Styling */
         .actions-panel, .betting-panel, .info-panel {
             background-color: rgba(0, 0, 0, 0.2);
             padding: 1rem 1.5rem;
             border-radius: 15px;
         }
-        .actions-panel{
-            border-top: 3px solid var(--quartz-secondary);
-        }
-        .betting-panel, .info-panel {
-            border-top: 2px solid #212529;
-           }
+        .actions-panel{ border-top: 3px solid var(--quartz-secondary); }
+        .betting-panel, .info-panel { border-top: 2px solid #212529; }
 
+        /* Action and Bet Buttons - General Styling */
         .action-button, .bet-button {
-            /* Use system font for consistency */
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             font-weight: 700;
             text-transform: uppercase;
@@ -137,9 +132,52 @@
             padding: 0.75rem 0;
             width: 100%;
         }
-
         .action-button { font-size: 1.5rem; }
         .bet-button { font-size: 1rem; }
+
+        /* --- Specific Bet Button Styles (from Roulette/Craps based on image) --- */
+        .betting-panel .bet-button {
+            background-color: var(--custom-pink-button); /* Solid pink background */
+            border: none; /* Remove default border */
+            color: var(--quartz-light); /* Light text color */
+            box-shadow: none; /* Remove any default box-shadow */
+            border-radius: 0.375rem; /* Bootstrap default border-radius for consistency */
+        }
+
+        .betting-panel .bet-button:hover {
+            background-color: var(--custom-pink-button-hover); /* Brighter pink on hover */
+            border-color: var(--custom-pink-button-hover); /* Match border color on hover */
+            box-shadow: 0 0 10px rgba(var(--bs-primary-rgb),.5); /* Example light shadow on hover */
+        }
+
+        .betting-panel .bet-button.active {
+            background-color: var(--custom-pink-button-active); /* Brighter pink when active */
+            border: 2px solid var(--quartz-secondary); /* Use secondary color for active border */
+            box-shadow: 0 0 15px rgba(24, 178, 178, 0.7); /* Stronger glow for active state */
+            color: var(--quartz-light); /* Maintain light text color */
+        }
+        /* --- End Specific Bet Button Styles --- */
+
+        /* --- Specific Info Panel Styles (from Roulette/Craps based on image) --- */
+        .info-panel {
+            background-color: var(--quartz-dark); /* Darker background for info panel */
+            border: 2px solid var(--quartz-secondary); /* Secondary border for info panel */
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5); /* Inner shadow for depth */
+            padding: 1.2rem 1.5rem; /* Slightly reduced padding for Slots compared to larger Roulette */
+        }
+
+        .info-display {
+            font-size: 1.5rem; /* Larger font size for readability */
+            font-weight: 700;
+            color: var(--quartz-light); /* Main text color */
+            text-align: center;
+        }
+
+        .info-display span {
+            color: var(--quartz-secondary); /* Highlighted values */
+        }
+        /* --- End Specific Info Panel Styles --- */
+
 
         .status-message {
             position: absolute;
@@ -158,21 +196,12 @@
             width: 90%;
         }
 
-        .info-display {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--quartz-light);
-            text-align: center;
-        }
-        .info-display span {
-            color: var(--quartz-secondary);
-        }
-
         /* --- Mobile Responsiveness --- */
         @media (max-width: 768px) {
             .game-console {
                 padding: 1rem;
                 margin-top: 1rem; /* Keep consistent margin for mobile too */
+                margin-bottom: 10px; /* Adjust bottom margin for mobile */
             }
 
             .reels-surface {
@@ -192,17 +221,35 @@
 
             .action-button { font-size: 1.2rem; }
             .bet-button { font-size: 0.8rem; }
-            .info-display { font-size: 1rem; }
+            /* info-display font size will be overridden below for mobile */
 
             .actions-panel, .betting-panel, .info-panel {
                 padding: 0.75rem;
+            }
+
+            /* Mobile adjustments for custom buttons/panels */
+            .betting-panel .bet-button {
+                font-size: 0.8rem; /* Smaller font on mobile for these buttons */
+                border: none; /* Mobile buttons also shouldn't have default border */
+                box-shadow: none;
+            }
+            .betting-panel .bet-button.active {
+                border: 1px solid var(--quartz-secondary); /* Thinner border for active on mobile */
+                box-shadow: 0 0 10px rgba(24, 178, 178, 0.5); /* Less intense glow on mobile */
+            }
+
+            .info-panel {
+                padding: 0.75rem; /* Smaller padding on mobile */
+            }
+            .info-display {
+                font-size: 1rem; /* Smaller font for info display on mobile */
             }
         }
     </style>
 </head>
 <body style="padding-top: 72px;">
 
-<!-- html / sidebar / desktop / begin -->   <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">Shinobi Casino</a> <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -240,7 +287,6 @@
             </div>
         </div>
     </nav>
-<!-- html / sidebar / desktop / end -->
 <div class="game-console">
         <div id="statusMessage" class="status-message"></div>
         <div class="reels-surface">
@@ -270,16 +316,16 @@
         </div>
         <div class="betting-panel mt-3">
               <div class="row g-2">
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button active" data-bet="100">$100</button></div>
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="500">$500</button></div>
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="1000">$1000</button></div>
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="max">MAX</button></div>
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button active" data-bet="100">$100</button></div>
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="500">$500</button></div>
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="1000">$1000</button></div>
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="max">MAX</button></div>
             </div>
         </div>
         <div class="info-panel mt-3">
             <div class="row">
-                <div class="col-6 info-display">Bet: $<span id="betAmount">100</span></div>
-                <div class="col-6 info-display">Wallet: $<span id="walletAmount">10000</span></div>
+                <div class="col-12 col-sm-6 info-display mb-2 mb-sm-0">Bet: $<span id="betAmount">100</span></div>
+                <div class="col-12 col-sm-6 info-display">Wallet: $<span id="walletAmount">10000</span></div>
             </div>
         </div>
     </div>

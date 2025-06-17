@@ -18,25 +18,27 @@
             --roulette-felt: #343f56; /* Changed to match theme */
             --bet-red: #B71C1C;
             --bet-black: #212121;
+            /* Defined custom colors for the new button style */
             --custom-pink-button: #e91e63; /* A specific pink for bet buttons */
-            --custom-pink-button-active: #ff4081; /* A brighter pink for active */
+            --custom-pink-button-hover: #ff4081; /* A brighter pink for hover */
+            --custom-pink-button-active: #ff4081; /* A brighter pink for active, same as hover for strong effect */
         }
 
         html, body {
             height: 100%;
             margin: 0;
-            overflow-y: auto;
+            overflow-y: auto; /* Keep auto overflow for flexibility */
+            overflow-x: hidden;
         }
 
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             display: flex;
             justify-content: center;
-            align-items: flex-start;
+            align-items: flex-start; /* Align content to the top below the fixed navbar */
             padding: 0.5rem;
             background-color: var(--bs-body-bg);
             box-sizing: border-box;
-            overflow-x: hidden;
         }
 
         .game-console {
@@ -46,28 +48,24 @@
             box-shadow: 0 0 30px rgba(24, 178, 178, 0.5), inset 0 0 20px rgba(0, 0, 0, 0.5);
             padding: 1rem;
             width: 100%;
-            /* Increased max-width by ~20% (1000px -> 1200px) */
-            max-width: 1200px;
+            max-width: 1200px; /* Maintained the larger max-width */
             position: relative;
             display: flex;
             flex-direction: column;
             z-index: 1;
-            margin-top: 1rem;
-            margin-bottom: 20px;
+            margin-top: 1rem; /* Consistent spacing from navbar */
+            margin-bottom: 20px; /* Consistent bottom spacing */
         }
 
         .playing-surface {
             background-color: var(--roulette-felt);
             border-radius: 15px;
-            /* Increased padding */
-            padding: 1.8rem; /* Scaled from 1.5rem by approx 20% */
+            padding: 1.8rem; /* Scaled padding */
             border: 3px solid #495057;
             box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
             display: grid;
-            /* Adjusted grid-template-columns for better balance within wider layout */
-            grid-template-columns: 1.2fr 2.8fr; /* Adjusted for larger wheel area, can be fine-tuned */
-            /* Increased gap */
-            gap: 1.8rem; /* Scaled from 1.5rem by approx 20% */
+            grid-template-columns: 1.2fr 2.8fr; /* Adjusted for larger wheel area */
+            gap: 1.8rem; /* Scaled gap */
         }
 
         .wheel-container {
@@ -77,17 +75,15 @@
             justify-content: center;
             background: #212529;
             border-radius: 10px;
-            /* Increased padding */
-            padding: 1.2rem; /* Scaled from 1rem by approx 20% */
-            min-height: 240px; /* Scaled from 200px */
+            padding: 1.2rem; /* Scaled padding */
+            min-height: 240px; /* Scaled min-height */
         }
 
         .winning-number-display {
-            /* Increased font size for desktop */
-            font-size: 4.8rem; /* Scaled from 4rem */
+            font-size: 4.8rem; /* Scaled font size */
             width: 100%;
             height: auto;
-            min-height: 144px; /* Scaled from 120px */
+            min-height: 144px; /* Scaled min-height */
             line-height: 1.2;
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             font-weight: 700;
@@ -95,57 +91,22 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            color: #fff; /* Ensure text color is white */
+            border-radius: 10px; /* Make sure it's rounded */
         }
 
-        /* New structured betting layout */
-        .betting-layout-container {
-            display: flex;
-            flex-direction: column;
-            /* Increased gap */
-            gap: 10px; /* Scaled from 8px */
-        }
-        .main-betting-grid {
-            display: grid;
-            grid-template-columns: auto 1fr;
-            /* Increased gap */
-            gap: 10px; /* Scaled from 8px */
-        }
-        .zeros-area {
-            display: grid;
-            /* Increased gap */
-            gap: 5px; /* Scaled from 4px */
-        }
-        .numbers-and-cols-container {
-            display: grid;
-            grid-template-columns: 1fr auto;
-            /* Increased gap */
-            gap: 10px; /* Scaled from 8px */
-        }
-        .numbers-area {
-            display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            /* Increased gap */
-            gap: 5px; /* Scaled from 4px */
-        }
-        .cols-area {
-            display: grid;
-            grid-template-rows: repeat(3, 1fr);
-            /* Increased gap */
-            gap: 5px; /* Scaled from 4px */
-        }
-        .outside-bets-container {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            /* Increased gap */
-            gap: 5px; /* Scaled from 4px */
-        }
+        /* Betting Mat Layout (internal structure, scaled) */
+        .betting-layout-container { display: flex; flex-direction: column; gap: 10px; }
+        .main-betting-grid { display: grid; grid-template-columns: auto 1fr; gap: 10px; }
+        .zeros-area { display: grid; gap: 5px; }
+        .numbers-and-cols-container { display: grid; grid-template-columns: 1fr auto; gap: 10px; }
+        .numbers-area { display: grid; grid-template-columns: repeat(12, 1fr); gap: 5px; }
+        .cols-area { display: grid; grid-template-rows: repeat(3, 1fr); gap: 5px; }
+        .outside-bets-container { display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; }
 
         .bet-area {
-            /* Increased padding for larger clickable area and better look */
-            padding: 0.6rem; /* Scaled from 0.5rem */
-            text-align: center;
-            /* Significantly increased font size for desktop readability */
-            font-size: 1.3rem; /* Scaled from 1.1rem */
+            padding: 0.6rem; /* Scaled padding */
+            font-size: 1.3rem; /* Scaled font size */
             font-weight: bold;
             border: 1px solid #fff;
             cursor: pointer;
@@ -155,8 +116,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            /* Added min-height to ensure cells have sufficient height */
-            min-height: 42px; /* Scaled from 35px */
+            min-height: 42px; /* Scaled min-height */
+            text-align: center;
         }
 
         .bet-area:hover { background-color: rgba(255,255,255,0.2); }
@@ -166,91 +127,87 @@
 
         .bet-area .chip {
             position: absolute;
-            /* Adjusted position due to increased padding */
-            bottom: 5px; right: 5px; /* Scaled from 4px */
+            bottom: 5px; right: 5px; /* Adjusted position */
             background: #ffc107; color: #000;
             border-radius: 50%;
-            /* Increased padding/min-width for chip text */
-            padding: 0 6px; /* Scaled from 0 5px */
-            font-size: 0.9rem; /* Scaled from 0.8rem */
+            padding: 0 6px; /* Scaled padding */
+            font-size: 0.9rem; /* Scaled font size */
             line-height: 1.2;
-            min-width: 26px; /* Scaled from 22px */
+            min-width: 26px; /* Scaled min-width */
             text-align: center;
             box-shadow: 0 0 5px rgba(0,0,0,0.5);
         }
 
+        /* Action and Bet Panels - General Styling */
         .actions-panel, .betting-panel, .info-panel {
-            background-color: rgba(0, 0, 0, 0.2); padding: 1rem; border-radius: 15px;
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 1rem;
+            border-radius: 15px;
         }
         .actions-panel{ border-top: 3px solid var(--quartz-secondary); }
         .betting-panel, .info-panel { border-top: 2px solid #212529; }
+
+        /* Action and Bet Buttons - General Styling */
         .action-button, .bet-button {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            font-weight: 700; text-transform: uppercase;
-            /* Increased padding */
-            padding: 0.9rem 0; /* Scaled from 0.75rem */
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 0.9rem 0; /* Scaled padding */
             width: 100%;
         }
-        .action-button {
-            /* Increased font size */
-            font-size: 1.4rem; /* Scaled from 1.2rem */
-        }
-        .bet-button {
-            /* Increased font size */
-            font-size: 1.2rem; /* Scaled from 1rem */
-        }
+        .action-button { font-size: 1.4rem; } /* Scaled font size */
+        .bet-button { font-size: 1.2rem; } /* Scaled font size */
 
-        /* --- Custom Bet Button Styles (Matching the image) --- */
+        /* --- Specific Bet Button Styles (to match image) --- */
         .betting-panel .bet-button {
-            background-color: var(--custom-pink-button);
-            border-color: var(--custom-pink-button);
-            color: var(--quartz-light);
-            box-shadow: none;
-            font-weight: 700;
+            background-color: var(--custom-pink-button); /* Solid pink background */
+            border: none; /* Remove default border */
+            color: var(--quartz-light); /* Light text color */
+            box-shadow: none; /* Remove any default box-shadow */
+            border-radius: 0.375rem; /* Bootstrap default border-radius for consistency */
         }
 
         .betting-panel .bet-button:hover {
-            background-color: var(--custom-pink-button-active);
-            border-color: var(--custom-pink-button-active);
+            background-color: var(--custom-pink-button-hover); /* Brighter pink on hover */
+            border-color: var(--custom-pink-button-hover); /* Match border color on hover */
+            box-shadow: 0 0 10px rgba(var(--bs-primary-rgb),.5); /* Example light shadow on hover */
         }
 
         .betting-panel .bet-button.active {
-            background-color: var(--custom-pink-button-active);
-            border-color: var(--quartz-secondary);
-            box-shadow: 0 0 15px rgba(24, 178, 178, 0.7);
-            color: var(--quartz-light);
+            background-color: var(--custom-pink-button-active); /* Brighter pink when active */
+            border: 2px solid var(--quartz-secondary); /* Use secondary color for active border */
+            box-shadow: 0 0 15px rgba(24, 178, 178, 0.7); /* Stronger glow for active state */
+            color: var(--quartz-light); /* Maintain light text color */
         }
-        /* --- End Custom Bet Button Styles --- */
+        /* --- End Specific Bet Button Styles --- */
 
 
-        /* --- Custom Info Panel Styles (Matching the image) --- */
+        /* --- Specific Info Panel Styles (to match image) --- */
         .info-panel {
-            background-color: var(--quartz-dark);
-            border: 2px solid var(--quartz-secondary);
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
-            /* Increased padding */
-            padding: 1.2rem 1.8rem; /* Scaled from 1rem 1.5rem */
+            background-color: var(--quartz-dark); /* Darker background for info panel */
+            border: 2px solid var(--quartz-secondary); /* Secondary border for info panel */
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5); /* Inner shadow for depth */
+            padding: 1.2rem 1.8rem; /* Scaled padding */
         }
 
         .info-display {
-            /* Increased font size for readability */
-            font-size: 1.8rem; /* Scaled from 1.5rem */
+            font-size: 1.8rem; /* Scaled font size for readability */
             font-weight: 700;
-            color: var(--quartz-light);
+            color: var(--quartz-light); /* Main text color */
             text-align: center;
         }
 
         .info-display span {
-            color: var(--quartz-secondary);
+            color: var(--quartz-secondary); /* Highlighted values */
         }
-        /* --- End Custom Info Panel Styles --- */
+        /* --- End Specific Info Panel Styles --- */
+
 
         .status-message {
             position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%);
             background-color: rgba(0, 0, 0, 0.9); color: var(--quartz-secondary);
-            /* Increased font size */
-            font-size: 1.8rem; /* Scaled from 1.5rem */
-             padding: 1.8rem; /* Scaled from 1.5rem */
+            font-size: 1.8rem; /* Scaled font size */
+            padding: 1.8rem; /* Scaled padding */
             border-radius: 15px;
             border: 4px solid var(--quartz-secondary); z-index: 100; text-align: center;
             display: none; width: 90%;
@@ -279,11 +236,17 @@
             .bet-button { font-size: 0.8rem; padding: 0.75rem 0; }
             .info-panel { padding: 0.75rem; }
             .info-display { font-size: 1rem; }
-            .status-message { font-size: 1.5rem; padding: 1.5rem; } /* Revert status message font size on mobile */
+            .status-message { font-size: 1.5rem; padding: 1.5rem; }
 
             /* Ensure custom button styles adjust for mobile too */
             .betting-panel .bet-button {
                 font-size: 0.8rem; /* Keep original smaller font for mobile */
+                border: none; /* Mobile buttons also shouldn't have default border */
+                box-shadow: none;
+            }
+            .betting-panel .bet-button.active {
+                border: 1px solid var(--quartz-secondary); /* Thinner border for active on mobile */
+                box-shadow: 0 0 10px rgba(24, 178, 178, 0.5); /* Less intense glow on mobile */
             }
         }
     </style>
@@ -347,17 +310,17 @@
 
         <div class="betting-panel mt-3">
               <div class="row g-2">
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button active" data-bet="100">$100</button></div>
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="500">$500</button></div>
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="1000">$1000</button></div>
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="max">MAX</button></div>
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button active" data-bet="100">$100</button></div>
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="500">$500</button></div>
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="1000">$1000</button></div>
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="max">MAX</button></div>
             </div>
         </div>
 
         <div class="info-panel mt-3">
             <div class="row">
-                <div class="col-6 info-display">Bet: $<span id="totalBetAmount">0</span></div>
-                <div class="col-6 info-display">Wallet: $<span id="walletAmount">10000</span></div>
+                <div class="col-12 col-sm-6 info-display mb-2 mb-sm-0">Bet: $<span id="totalBetAmount">0</span></div>
+                <div class="col-12 col-sm-6 info-display">Wallet: $<span id="walletAmount">10000</span></div>
             </div>
         </div>
     </div>

@@ -15,27 +15,27 @@
             --quartz-secondary: #18b2b2;
             --quartz-dark: #343f56;
             --quartz-light: #f8f9fa;
+            --navbar-height: 0px; /* CSS variable for navbar height, updated by JS */
         }
 
         html, body {
             height: 100%; /* Ensure html and body take full height of the viewport */
             margin: 0;
             overflow-x: hidden; /* Prevent horizontal scrolling always */
-            /* Default to auto overflow for vertical scrolling, like Craps */
-            overflow-y: auto;
+            overflow-y: hidden; /* Prevent scrolling on desktop by default */
         }
 
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             display: flex;
             justify-content: center; /* Center horizontally */
-            flex-direction: column; /* Allows navbar and game-console to stack */
+            align-items: center;   /* Center vertically for the main game content */
+            flex-direction: column; /* Allows navbar and game-console to stack for layout */
             background-color: var(--bs-body-bg);
             box-sizing: border-box;
             min-height: 100vh; /* Ensure body takes full viewport height */
-            padding: 0.5rem; /* Overall side padding */
-            /* Default align-items to flex-start, matching Craps */
-            align-items: flex-start;
+            padding: 0.5rem; /* Overall side padding for the body */
+            padding-top: var(--navbar-height); /* Set by JS to push content below navbar */
         }
 
         .game-console {
@@ -51,13 +51,11 @@
             flex-direction: column;
             z-index: 1;
 
-            /* Consistent margins as per working Craps example */
-            margin-top: 1rem;
-            margin-bottom: 20px;
-
-            /* Remove flex-grow and max-height that caused issues with centering */
-            flex-grow: 0;
-            max-height: initial;
+            margin-top: auto; /* Auto margins for vertical centering within flex container */
+            margin-bottom: auto;
+            flex-grow: 1; /* Allow it to grow to fill available vertical space */
+            /* Calculate max-height to ensure it fits, accounting for body padding and its own margins */
+            max-height: calc(100vh - var(--navbar-height) - 1rem - 40px); /* 1rem for body top/bottom padding, 40px for .game-console's inferred vertical margin (padding + margins + buffer) */
         }
 
         .playing-surface {
@@ -175,6 +173,17 @@
             width: 100%;
         }
 
+        /* Adjustments for better fit with reduced paddings */
+        .actions-panel .row.g-2 {
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .betting-panel .row.g-2 {
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+
         .status-message {
             position: absolute;
             top: 40%;
@@ -192,8 +201,9 @@
             width: 90%;
         }
 
+        /* Using the exact info-display styles and structure from Craps */
         .info-display {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: 700;
             color: var(--quartz-light);
             text-align: center;
@@ -225,7 +235,7 @@
             .card.hidden::before { font-size: 2.5rem; }
             .action-button { font-size: 1rem; padding: 0.75rem 0; }
             .bet-button { font-size: 0.8rem; padding: 0.75rem 0; }
-            .info-display { font-size: 1rem; }
+            .info-display { font-size: 1rem; } /* Ensure smaller font for info display on mobile */
             .actions-panel, .betting-panel, .info-panel { padding: 0.75rem; margin-top: 0.5rem; }
         }
     </style>
@@ -303,17 +313,17 @@
 
         <div class="betting-panel mt-3">
               <div class="row g-2">
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button active" data-bet="100">$100</button></div>
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="500">$500</button></div>
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="1000">$1000</button></div>
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button" data-bet="max">MAX</button></div>
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button active" data-bet="100">$100</button></div>
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="500">$500</button></div>
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="1000">$1000</button></div>
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="max">MAX</button></div>
             </div>
         </div>
 
         <div class="info-panel mt-3">
             <div class="row">
-                <div class="col-6 info-display">Bet: $<span id="betAmount">100</span></div>
-                <div class="col-6 info-display">Wallet: $<span id="walletAmount">10000</span></div>
+                <div class="col-12 col-sm-6 info-display mb-2 mb-sm-0">Bet: $<span id="betAmount">100</span></div>
+                <div class="col-12 col-sm-6 info-display">Wallet: $<span id="walletAmount">10000</span></div>
             </div>
         </div>
     </div>
@@ -329,16 +339,24 @@
                 // Set CSS variable for navbar height
                 bodyElement.style.setProperty('--navbar-height', navbarHeight + 'px');
 
-                // Apply padding to body
+                // Apply padding to body based on navbar height
                 bodyElement.style.paddingTop = navbarHeight + 'px';
 
                 // For desktop (min-width: 769px assumed, or whatever Bootstrap's lg breakpoint is)
                 if (window.innerWidth > 768) {
                     bodyElement.style.alignItems = 'center'; /* Center game-console vertically */
                     bodyElement.style.overflowY = 'hidden'; /* No scroll on desktop */
+                    // The game-console itself has `margin-top: auto; margin-bottom: auto;`
+                    // which allows it to center within the flex container.
                 } else { /* For mobile (max-width: 768px) */
                     bodyElement.style.alignItems = 'flex-start'; /* Align to top */
                     bodyElement.style.overflowY = 'auto'; /* Allow scroll on mobile */
+                    // Revert game-console's auto margins for mobile to its fixed margins
+                    const gameConsole = document.querySelector('.game-console');
+                    if (gameConsole) {
+                         gameConsole.style.marginTop = '1rem';
+                         gameConsole.style.marginBottom = '10px'; // Consistent with Craps mobile bottom margin
+                    }
                 }
             };
 
