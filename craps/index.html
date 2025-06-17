@@ -193,8 +193,11 @@
             width: 100%;
         }
 
+        /* Updated: Style for active "Keep Bets" button to match "point-on" visual */
         #btnKeepBets.active-toggle-button {
-            background-color: green;
+            background-color: green; /* Still keep the green background as per original design */
+            border-color: var(--quartz-secondary); /* Added: Border color */
+            box-shadow: 0 0 12px var(--quartz-secondary), inset 0 0 8px rgba(24, 178, 178, 0.5); /* Added: Box shadow */
         }
 
         #btnKeepBets:hover:not(.active-toggle-button) {
