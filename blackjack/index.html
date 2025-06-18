@@ -481,13 +481,13 @@
                 wallet += handBet; // Return stake
             }
 
-            showStatusMessage(msg, 2000);
+            showStatusMessage(msg, 1000);
 
             walletAmountEl.textContent = wallet;
             betAmountEl.textContent = currentBet; // Reset bet display for next hand
 
             if (wallet <= 0 && currentBet > 0) {
-                showStatusMessage("Game Over!", 5000);
+                showStatusMessage("Game Over!", 2000);
                 btnDeal.disabled = true;
             }
         }
@@ -534,14 +534,14 @@
                     showStatusMessage('Push! Both have Blackjack.', 1000);
                     wallet += handBet; // Return player's stake
                 } else {
-                    showStatusMessage('Blackjack!', 2000);
+                    showStatusMessage('Blackjack!', 1000);
                     wallet += handBet + Math.floor(handBet * 1.5); // Payout 3:2
                 }
                 walletAmountEl.textContent = wallet;
                 setTimeout(() => {
                     updateButtonState('bet');
                     betAmountEl.textContent = currentBet;
-                }, 2000);
+                }, 1000);
                 return; // End the hand here
             }
 
@@ -557,10 +557,10 @@
                         updateButtonState('bet');
                         betAmountEl.textContent = currentBet;
                         if (wallet <= 0) {
-                            showStatusMessage("Game Over!", 5000);
+                            showStatusMessage("Game Over!", 2000);
                             btnDeal.disabled = true;
                         }
-                    }, 2000);
+                    }, 1000);
                     return; // End the hand here
                 }
             }
