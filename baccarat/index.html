@@ -296,6 +296,15 @@
         <div id="statusMessage" class="status-message"></div>
 
         <div class="playing-surface">
+
+                    <div class="hand-container">
+                       <div class="hand-header">
+                    <span class="hand-label">Player</span>
+                    <span id="playerScore" class="score-display">0</span>
+                </div>
+                <div id="playerHand" class="hand-area"></div>
+            </div>
+
             <div class="hand-container">
                 <div class="hand-header">
                     <span class="hand-label">Banker</span>
@@ -304,23 +313,24 @@
                 <div id="bankerHand" class="hand-area"></div>
             </div>
 
-            <div class="hand-container">
-                       <div class="hand-header">
-                    <span class="hand-label">Player</span>
-                    <span id="playerScore" class="score-display">0</span>
-                </div>
-                <div id="playerHand" class="hand-area"></div>
-            </div>
+
         </div>
 
         <div class="actions-panel mt-3">
             <div class="row g-2">
+
                 <div class="col-4"><button id="btnBetPlayer" class="btn btn-primary bet-type-button action-button">Player</button></div>
+
+
                 <div class="col-4"><button id="btnBetBanker" class="btn btn-danger bet-type-button action-button">Banker</button></div>
+
+
                 <div class="col-4"><button id="btnBetTie" class="btn btn-warning bet-type-button action-button">Tie</button></div>
+
                 <div class="col-12 mt-2">
                     <button id="btnDeal" class="btn btn-info action-button">Deal</button>
                 </div>
+
             </div>
         </div>
 
@@ -476,9 +486,9 @@
             playerBetType = null;
             betTypeButtons.forEach(b => b.classList.remove('active'));
             setTimeout(() => {
-                if(wallet <= 0) showStatusMessage("Game Over!", 5000)
+                if(wallet <= 0) showStatusMessage("Game Over!", 2000)
                 else updateButtonState('betting');
-            }, 3000);
+            }, 1000);
         }
 
         function runGameSequence() {
