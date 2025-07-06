@@ -37,6 +37,13 @@ We're constantly working to improve your gaming experience. For an overview of k
 
   * [**Bugs, Issues, & Upgrades**](issues.md) - Stay updated on known issues and upcoming features.
 
+### The Big opportunities
+
+[] blacjack especially and craps too, suffer from a double click issue. Maybe it's my mouse, but it's an issue.
+[] half of the games have an shared wallet balance
+[] slots needs to allow for multiple lines
+[] craps bonus system is heavily broken
+
 -----
 
 ## Demo

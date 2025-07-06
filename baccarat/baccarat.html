@@ -341,16 +341,11 @@
                 <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="1000">$1000</button></div>
                 <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="max">MAX</button></div>
             </div>
-            <div class="row g-2 mt-2">
-                <div class="col-12">
-                    <button id="btnClearBet" class="btn btn-secondary bet-button w-100">Clear Bet</button>
-                </div>
-            </div>
         </div>
 
         <div class="info-panel mt-3">
             <div class="row">
-                <div class="col-12 col-sm-6 info-display mb-2 mb-sm-0">Bet: $<span id="betAmount">0</span></div>
+                <div class="col-12 col-sm-6 info-display mb-2 mb-sm-0">Bet: $<span id="betAmount">100</span></div>
                 <div class="col-12 col-sm-6 info-display">Wallet: $<span id="walletAmount">10000</span></div>
             </div>
         </div>
@@ -383,28 +378,6 @@
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // --- Cookie Functions ---
-        function setCookie(name, value, days) {
-            let expires = "";
-            if (days) {
-                let date = new Date();
-                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                expires = "; expires=" + date.toUTCString();
-            }
-            document.cookie = name + "=" + (value || "") + expires + "; path=/";
-        }
-
-        function getCookie(name) {
-            let nameEQ = name + "=";
-            let ca = document.cookie.split(';');
-            for(let i=0; i < ca.length; i++) {
-                let c = ca[i];
-                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
-            }
-            return null;
-        }
-
         // --- DOM Elements ---
         const bankerHandEl = document.getElementById('bankerHand');
         const playerHandEl = document.getElementById('playerHand');
@@ -415,16 +388,14 @@
         const btnBetBanker = document.getElementById('btnBetBanker');
         const btnBetTie = document.getElementById('btnBetTie');
         const btnDeal = document.getElementById('btnDeal');
-        const btnClearBet = document.getElementById('btnClearBet');
         const betTypeButtons = [btnBetPlayer, btnBetBanker, btnBetTie];
-        const betButtons = document.querySelectorAll('.bet-value-button');
+        const betButtons = document.querySelectorAll('.bet-button');
         const walletAmountEl = document.getElementById('walletAmount');
         const betAmountEl = document.getElementById('betAmount');
 
         // --- Game State Variables ---
         let deck = [], playerHand = [], bankerHand = [];
-        let wallet;
-        let currentBet = 0;
+        let wallet = 10000, currentBet = 100;
         let playerBetType = null; // 'player', 'banker', or 'tie'
 
         // --- Baccarat Logic ---
@@ -469,7 +440,7 @@
             bankerScoreEl.textContent = getHandScore(bankerHand);
         }
 
-        function showStatusMessage(message, duration = 2000) {
+        function showStatusMessage(message, duration = 1000) {
             statusMessageEl.innerHTML = message;
             statusMessageEl.style.display = 'block';
             setTimeout(() => statusMessageEl.style.display = 'none', duration);
@@ -478,10 +449,17 @@
         function updateButtonState(state) {
             // States: 'betting', 'inprogress'
             const isBetting = state === 'betting';
-            btnDeal.disabled = !playerBetType || !isBetting || currentBet === 0;
+            btnDeal.disabled = !playerBetType || !isBetting;
             betTypeButtons.forEach(b => b.disabled = !isBetting);
             betButtons.forEach(b => b.disabled = !isBetting);
-            btnClearBet.disabled = !isBetting;
+        }
+
+        function updateActiveBetButton(selectedBet) {
+             betButtons.forEach(btn => {
+                if(btn.dataset.bet === 'max' && selectedBet === wallet) btn.classList.add('active');
+                else if (parseInt(btn.dataset.bet) === selectedBet) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
         }
 
         function determineWinner() {
@@ -494,48 +472,23 @@
             else outcome = 'tie';
 
             if (outcome === playerBetType) {
-                msg = `${outcome.charAt(0).toUpperCase() + outcome.slice(1)} Wins! You win!`;
-                let winnings = 0;
-                if (outcome === 'player') {
-                    winnings = currentBet; // 1:1 payout
-                    wallet += currentBet + winnings; // Return bet + winnings
-                } else if (outcome === 'banker') {
-                    winnings = Math.floor(currentBet * 0.95); // Winnings are 95% of bet
-                    wallet += currentBet + winnings; // Return bet + winnings
-                } else if (outcome === 'tie') {
-                    winnings = currentBet * 8; // 8:1 payout
-                    wallet += currentBet + winnings; // Return bet + winnings
-                }
-            } else if (outcome === 'tie') {
-                // This handles a PUSH when the user bet on Player or Banker.
-                msg = "Push! It's a Tie. Your bet is returned.";
-                wallet += currentBet; // Return the original bet.
-            }
-            else {
-                // This handles a definitive loss.
+                msg = `${outcome.charAt(0).toUpperCase() + outcome.slice(1)} Wins!`;
+                if (outcome === 'player') wallet += currentBet;
+                else if (outcome === 'banker') wallet += Math.floor(currentBet * 0.95); // 5% commission
+                else if (outcome === 'tie') wallet += currentBet * 8; // 8:1 payout
+            } else {
                 msg = `${outcome.charAt(0).toUpperCase() + outcome.slice(1)} Wins. You Lose.`;
-                // No wallet action needed for loss, bet was already deducted.
+                // Bet was already deducted, so no additional action for loss
             }
 
-            showStatusMessage(msg, 2500);
+            showStatusMessage(msg, 1000);
             walletAmountEl.textContent = wallet;
-            setCookie('casinoWallet', wallet, 365); // Save wallet to cookie
-
-            // Reset for next round
             playerBetType = null;
-            currentBet = 0;
-            betAmountEl.textContent = currentBet;
             betTypeButtons.forEach(b => b.classList.remove('active'));
-
             setTimeout(() => {
-                if (wallet <= 0) {
-                    showStatusMessage("Game Over! Restarting with $10000.", 3000);
-                    wallet = 10000; // Provide funds to continue playing
-                    walletAmountEl.textContent = wallet;
-                    setCookie('casinoWallet', wallet, 365);
-                }
-                updateButtonState('betting');
-            }, 2500);
+                if(wallet <= 0) showStatusMessage("Game Over!", 2000)
+                else updateButtonState('betting');
+            }, 1000);
         }
 
         function runGameSequence() {
@@ -576,6 +529,7 @@
 
                     if (!playerDraws && newBScore <= 5) bankerDraws = true;
 
+
                     if(bankerDraws) {
                          setTimeout(() => {
                             bankerHand.push(deck.pop());
@@ -593,75 +547,36 @@
         // Event Listeners
         betTypeButtons.forEach(button => {
             button.addEventListener('click', () => {
-                const newBetType = button.id.replace('btnBet', '').toLowerCase();
-                // If switching bet type, reset the current bet amount
-                if (playerBetType !== newBetType) {
-                    currentBet = 0;
-                    betAmountEl.textContent = currentBet;
-                }
                 betTypeButtons.forEach(b => b.classList.remove('active'));
                 button.classList.add('active');
-                playerBetType = newBetType;
-                updateButtonState('betting');
+                playerBetType = button.id.replace('btnBet', '').toLowerCase();
+                btnDeal.disabled = false;
             });
         });
 
-        btnClearBet.addEventListener('click', () => {
-            currentBet = 0;
-            betAmountEl.textContent = currentBet;
-            showStatusMessage("Bet Cleared", 1000);
-            updateButtonState('betting');
-        });
-
         btnDeal.addEventListener('click', () => {
-            if (currentBet === 0 || wallet < currentBet) {
-                showStatusMessage("Invalid Bet Amount!", 1500);
-                return;
-            }
-            if (!playerBetType) {
-                showStatusMessage("Select a Bet Type first!", 1500);
+             if (currentBet === 0 || wallet < currentBet) {
+                showStatusMessage("Invalid Bet!");
                 return;
             }
             wallet -= currentBet; // Deduct bet immediately upon dealing
             walletAmountEl.textContent = wallet;
-            setCookie('casinoWallet', wallet, 365); // Save wallet state
             runGameSequence();
         });
 
         betButtons.forEach(button => {
             button.addEventListener('click', () => {
-                if (!playerBetType) {
-                    showStatusMessage("Select Player, Banker, or Tie first!", 1500);
-                    return;
-                }
-                const betValueStr = button.dataset.bet;
-                if (betValueStr === 'max') {
-                    currentBet = wallet;
-                } else {
-                    const betToAdd = parseInt(betValueStr);
-                    if (currentBet + betToAdd > wallet) {
-                        currentBet = wallet; // If adding exceeds wallet, just bet the max
-                    } else {
-                        currentBet += betToAdd;
-                    }
-                }
+                const betValue = button.dataset.bet;
+                currentBet = (betValue === 'max') ? wallet : parseInt(betValue);
+                if (currentBet > wallet) currentBet = wallet;
                 betAmountEl.textContent = currentBet;
-                updateButtonState('betting');
+                updateActiveBetButton(currentBet);
             });
         });
 
         window.onload = () => {
-            const savedWallet = getCookie('casinoWallet');
-            if (savedWallet && !isNaN(parseInt(savedWallet))) {
-                wallet = parseInt(savedWallet);
-            } else {
-                wallet = 10000; // Default starting wallet
-            }
-            walletAmountEl.textContent = wallet;
-            setCookie('casinoWallet', wallet, 365); // Ensure cookie is set on load
-
-            betAmountEl.textContent = currentBet;
             updateButtonState('betting');
+            updateActiveBetButton(currentBet);
             renderHands(); // Render empty hands on load
         };
     </script>

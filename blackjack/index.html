@@ -173,14 +173,6 @@
             width: 100%;
         }
 
-        /* Highlight for active bet button */
-        .bet-button.active {
-            border: 3px solid var(--quartz-secondary) !important; /* Important to override Bootstrap's default active/focus styles */
-            box-shadow: 0 0 0 3px var(--quartz-secondary), 0 0 10px rgba(24, 178, 178, 0.7); /* Outer glow for active */
-            transform: scale(1.05); /* Slightly enlarge active button */
-        }
-
-
         /* Adjustments for better fit with reduced paddings */
         .actions-panel .row.g-2 {
             margin-top: 0.5rem;
@@ -324,16 +316,21 @@
 
         <div class="betting-panel mt-3">
               <div class="row g-2">
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button active" data-bet="100">$100</button></div>
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="100">$100</button></div>
                 <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="500">$500</button></div>
                 <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="1000">$1000</button></div>
                 <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="max">MAX</button></div>
+            </div>
+            <div class="row g-2 mt-2">
+                <div class="col-12">
+                    <button id="btnClearBet" class="btn btn-secondary bet-button w-100">Clear Bet</button>
+                </div>
             </div>
         </div>
 
         <div class="info-panel mt-3">
             <div class="row">
-                <div class="col-12 col-sm-6 info-display mb-2 mb-sm-0">Bet: $<span id="betAmount">100</span></div>
+                <div class="col-12 col-sm-6 info-display mb-2 mb-sm-0">Bet: $<span id="betAmount">0</span></div>
                 <div class="col-12 col-sm-6 info-display">Wallet: $<span id="walletAmount">10000</span></div>
             </div>
         </div>
@@ -357,17 +354,9 @@
                 if (window.innerWidth > 768) {
                     bodyElement.style.alignItems = 'center'; /* Center game-console vertically */
                     bodyElement.style.overflowY = 'hidden'; /* No scroll on desktop */
-                    // The game-console itself has `margin-top: auto; margin-bottom: auto;`
-                    // which allows it to center within the flex container.
                 } else { /* For mobile (max-width: 768px) */
                     bodyElement.style.alignItems = 'flex-start'; /* Align to top */
                     bodyElement.style.overflowY = 'auto'; /* Allow scroll on mobile */
-                    // Revert game-console's auto margins for mobile to its fixed margins
-                    const gameConsole = document.querySelector('.game-console');
-                    if (gameConsole) {
-                        gameConsole.style.marginTop = '1rem';
-                        gameConsole.style.marginBottom = '10px'; // Consistent with Craps mobile bottom margin
-                    }
                 }
             };
 
@@ -379,6 +368,28 @@
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // --- Cookie Functions ---
+        function setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                let date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+
+        function getCookie(name) {
+            let nameEQ = name + "=";
+            let ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
         // --- DOM Elements ---
         const dealerHandEl = document.getElementById('dealerHand');
         const playerHandEl = document.getElementById('playerHand');
@@ -389,25 +400,22 @@
         const btnStand = document.getElementById('btnStand');
         const btnDouble = document.getElementById('btnDouble');
         const btnDeal = document.getElementById('btnDeal');
-        const betButtons = document.querySelectorAll('.bet-button');
+        const btnClearBet = document.getElementById('btnClearBet');
+        const betButtons = document.querySelectorAll('.bet-value-button');
         const walletAmountEl = document.getElementById('walletAmount');
         const betAmountEl = document.getElementById('betAmount');
-        const playerActionButtonsEl = document.getElementById('playerActionButtons'); // New: Reference to the action buttons container
+        const playerActionButtonsEl = document.getElementById('playerActionButtons');
 
         // --- Game State Variables ---
         let deck = [], playerHand = [], dealerHand = [];
-        let wallet = 10000;
-        let currentBet = 100; // The player's selected bet amount for the next hand
+        let wallet;
+        let currentBet = 0; // The player's bet amount being built for the next hand
         let handBet = 0; // The actual amount wagered on the current hand, including doubles
         let gameInProgress = false;
 
         // --- Utility function for scrolling ---
         function scrollToTop() {
-            // Scroll the body to the top for better visibility on small screens
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         // --- Game Logic ---
@@ -465,44 +473,21 @@
         function updateButtonState(state) {
             const isBetting = state === 'bet', isPlaying = state === 'play';
 
-            // Control visibility of deal button vs player action buttons
-            if (isBetting) {
-                btnDeal.style.display = 'block'; // Show Deal button
-                playerActionButtonsEl.style.display = 'none'; // Hide Hit/Stand/Double
-            } else { // isPlaying state
-                btnDeal.style.display = 'none'; // Hide Deal button
-                playerActionButtonsEl.style.display = 'flex'; // Show Hit/Stand/Double (using flex for Bootstrap row)
-            }
+            btnDeal.style.display = isBetting ? 'block' : 'none';
+            playerActionButtonsEl.style.display = isPlaying ? 'flex' : 'none';
 
-            // Control disabled state of individual buttons
             btnDeal.disabled = !isBetting;
             btnHit.disabled = !isPlaying;
             btnStand.disabled = !isPlaying;
-            // Can double if it's the start of the hand and player can afford to match their initial bet
-            btnDouble.disabled = !(isPlaying && playerHand.length === 2 && wallet >= currentBet);
+            btnDouble.disabled = !(isPlaying && playerHand.length === 2 && wallet >= handBet);
             betButtons.forEach(btn => btn.disabled = !isBetting);
-        }
-
-        function updateActiveBetButton(selectedBet) {
-             betButtons.forEach(btn => {
-                if(btn.dataset.bet === 'max') {
-                    if (selectedBet === wallet && wallet > 0) { // Only active if wallet > 0 and it's the max bet
-                        btn.classList.add('active');
-                    } else {
-                        btn.classList.remove('active');
-                    }
-                } else if (parseInt(btn.dataset.bet) === selectedBet) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
+            btnClearBet.disabled = !isBetting;
         }
 
         function endGame() {
             gameInProgress = false;
             updateButtonState('bet');
-            renderHands(); // Reveal dealer's hidden card and final score
+            renderHands();
 
             const pScore = getScore(playerHand);
             const dScore = getScore(dealerHand);
@@ -515,51 +500,42 @@
             } else if (dScore > 21 || pScore > dScore) {
                 msg = 'Player Wins!';
                 winLossAmount = handBet;
-                wallet += handBet * 2; // Return stake and add winnings
+                wallet += handBet * 2;
             } else if (pScore < dScore) {
                 msg = 'Dealer Wins!';
                 winLossAmount = -handBet;
             } else {
                 msg = 'Push!';
                 winLossAmount = 0;
-                wallet += handBet; // Return stake
+                wallet += handBet;
             }
 
-            // Append win/loss amount to the message
-            if (winLossAmount > 0) {
-                msg += ` +$${winLossAmount}`;
-            } else if (winLossAmount < 0) {
-                msg += ` -$${Math.abs(winLossAmount)}`;
-            } else {
-                msg += ` $0`;
-            }
+            if (winLossAmount > 0) msg += ` +$${winLossAmount}`;
+            else if (winLossAmount < 0) msg += ` -$${Math.abs(winLossAmount)}`;
+            else msg += ` $0`;
 
-            showStatusMessage(msg, 1500); // Increased duration slightly for readability
-
+            showStatusMessage(msg, 2000);
             walletAmountEl.textContent = wallet;
-            // Ensure currentBet doesn't exceed wallet after a loss
-            if (currentBet > wallet && wallet > 0) {
-                currentBet = wallet;
-            } else if (wallet === 0) {
-                currentBet = 0; // If wallet is empty, bet should be 0
-            }
+            setCookie('casinoWallet', wallet, 365);
+
+            currentBet = 0;
             betAmountEl.textContent = currentBet;
-            updateActiveBetButton(currentBet); // Update active button after potential wallet change
 
             if (wallet <= 0) {
                 setTimeout(() => {
-                    showStatusMessage("Game Over! Your wallet is empty.", 2500);
-                    btnDeal.disabled = true;
-                    betButtons.forEach(btn => btn.disabled = true);
-                }, 1500); // Show game over after win/loss message
+                    showStatusMessage("Game Over! Restarting with $1000.", 3000);
+                    wallet = 1000;
+                    walletAmountEl.textContent = wallet;
+                    setCookie('casinoWallet', wallet, 365);
+                    updateButtonState('bet');
+                }, 2000);
             }
-            // Scroll to top after game ends to show final state and buttons
             scrollToTop();
         }
 
         function dealerTurn() {
             gameInProgress = false;
-            renderHands(); // Reveal dealer's hidden card immediately
+            renderHands();
             const dealerInterval = setInterval(() => {
                 if (getScore(dealerHand) < 17) {
                     dealerHand.push(deck.pop());
@@ -572,117 +548,70 @@
         }
 
         function dealNewHand() {
-            if (wallet <= 0) {
-                showStatusMessage("Wallet empty! Please refresh to play again.", 2000);
-                return;
-            }
             if (currentBet <= 0 || wallet < currentBet) {
-                showStatusMessage("Insufficient funds for this bet!", 1500);
-                // Attempt to set currentBet to max possible if selected bet is too high
-                if (wallet < currentBet) {
-                    currentBet = wallet;
-                    betAmountEl.textContent = currentBet;
-                    updateActiveBetButton(currentBet);
-                }
+                showStatusMessage("Invalid bet amount!", 1500);
                 return;
             }
 
             gameInProgress = true;
-
             handBet = currentBet;
             wallet -= handBet;
+            setCookie('casinoWallet', wallet, 365);
             walletAmountEl.textContent = wallet;
             betAmountEl.textContent = handBet;
 
             createDeck();
             shuffleDeck();
             playerHand = [deck.pop(), deck.pop()];
-            dealerHand = [deck.pop(), deck.pop()]; // Deal both dealer cards immediately
+            dealerHand = [deck.pop(), deck.pop()];
             renderHands();
-            updateButtonState('play'); // Transition to play state, showing action buttons
-
-            // Scroll to top after dealing to ensure cards are visible
+            updateButtonState('play');
             scrollToTop();
 
-            // Check for player Blackjack first.
             if (getScore(playerHand) === 21) {
-                gameInProgress = false;
-                renderHands(); // Show both player cards
-                const dealerScore = getScore(dealerHand);
-                let msg = '';
-                let winLossAmount = 0;
+                const isBlackjack = true;
+                processEndOfHand(isBlackjack);
+            } else if (getScore(dealerHand) === 21) {
+                processEndOfHand(false);
+            }
+        }
+
+        function processEndOfHand(playerHasBlackjack = false) {
+            gameInProgress = false;
+            renderHands();
+            const dealerScore = getScore(dealerHand);
+            let msg = '';
+
+            if (playerHasBlackjack) {
                 if (dealerScore === 21) {
-                    msg = 'Push! Both have Blackjack.';
-                    wallet += handBet; // Return player's stake
-                    winLossAmount = 0;
+                    msg = 'Push! Both have Blackjack. $0';
+                    wallet += handBet;
                 } else {
-                    msg = 'Blackjack!';
                     const blackjackWinnings = Math.floor(handBet * 1.5);
-                    wallet += handBet + blackjackWinnings; // Payout 3:2
-                    winLossAmount = blackjackWinnings;
+                    msg = `Blackjack! +$${blackjackWinnings}`;
+                    wallet += handBet + blackjackWinnings;
                 }
-
-                if (winLossAmount > 0) {
-                    msg += ` +$${winLossAmount}`;
-                } else if (winLossAmount < 0) { // Should not happen with Blackjack win
-                    msg += ` -$${Math.abs(winLossAmount)}`;
-                } else {
-                    msg += ` $0`;
-                }
-
-                showStatusMessage(msg, 1500);
-                walletAmountEl.textContent = wallet;
-                setTimeout(() => {
-                    updateButtonState('bet'); // Transition back to bet state
-                    // Ensure currentBet doesn't exceed wallet after winning/losing a hand
-                    if (currentBet > wallet && wallet > 0) {
-                        currentBet = wallet;
-                    } else if (wallet === 0) {
-                         currentBet = 0;
-                    }
-                    betAmountEl.textContent = currentBet;
-                    updateActiveBetButton(currentBet);
-                    if (wallet <= 0) { // Check for game over after processing win/loss
-                        showStatusMessage("Game Over! Your wallet is empty.", 2500);
-                        btnDeal.disabled = true;
-                        betButtons.forEach(btn => btn.disabled = true);
-                    }
-                    scrollToTop(); // Scroll after final state is set
-                }, 1500);
-                return; // End the hand here
+            } else { // Dealer Blackjack
+                msg = `Dealer has Blackjack! -$${handBet}`;
             }
 
-            // If player doesn't have BJ, check for dealer BJ if applicable
-            const dealerUpCard = dealerHand[1];
-            if (['10', 'J', 'Q', 'K', 'A'].includes(dealerUpCard.value)) {
-                if (getScore(dealerHand) === 21) {
-                    gameInProgress = false;
-                    renderHands(); // Reveal dealer's hand
-                    const msg = `Dealer has Blackjack! -$${handBet}`; // Player loses initial bet
-                    showStatusMessage(msg, 1500);
-                    // Player loses their bet, which was already subtracted.
-                    walletAmountEl.textContent = wallet; // Update wallet display immediately
-                    setTimeout(() => {
-                        updateButtonState('bet'); // Transition back to bet state
-                        // Ensure currentBet doesn't exceed wallet after a loss
-                        if (currentBet > wallet && wallet > 0) {
-                            currentBet = wallet;
-                        } else if (wallet === 0) {
-                             currentBet = 0;
-                        }
-                        betAmountEl.textContent = currentBet;
-                        updateActiveBetButton(currentBet);
-                        if (wallet <= 0) {
-                            showStatusMessage("Game Over! Your wallet is empty.", 2500);
-                            btnDeal.disabled = true;
-                            betButtons.forEach(btn => btn.disabled = true);
-                        }
-                        scrollToTop(); // Scroll after final state is set
-                    }, 1500);
-                    return; // End the hand here
+            showStatusMessage(msg, 2000);
+            walletAmountEl.textContent = wallet;
+            setCookie('casinoWallet', wallet, 365);
+
+            setTimeout(() => {
+                updateButtonState('bet');
+                currentBet = 0;
+                betAmountEl.textContent = currentBet;
+                if (wallet <= 0) {
+                    showStatusMessage("Game Over! Restarting with $10000.", 3000);
+                    wallet = 10000;
+                    walletAmountEl.textContent = wallet;
+                    setCookie('casinoWallet', wallet, 365);
+                    updateButtonState('bet');
                 }
-            }
-            // If neither has blackjack, the game continues with player's turn.
+                scrollToTop();
+            }, 2000);
         }
 
         btnDeal.addEventListener('click', dealNewHand);
@@ -691,23 +620,24 @@
             if (!gameInProgress) return;
             playerHand.push(deck.pop());
             renderHands();
-            btnDouble.disabled = true; // Can't double after hitting
+            updateButtonState('play');
             if (getScore(playerHand) > 21) {
                 endGame();
             }
-            scrollToTop(); // Scroll after hit
+            scrollToTop();
         });
 
         btnStand.addEventListener('click', () => {
             if (gameInProgress) dealerTurn();
-            scrollToTop(); // Scroll after stand (before dealer's turn starts)
+            scrollToTop();
         });
 
         btnDouble.addEventListener('click', () => {
-            if (!gameInProgress || playerHand.length !== 2 || wallet < currentBet) return;
+            if (!gameInProgress || playerHand.length !== 2 || wallet < handBet) return;
 
-            wallet -= currentBet;
-            handBet += currentBet; // Double the actual bet for this hand
+            wallet -= handBet;
+            setCookie('casinoWallet', wallet, 365);
+            handBet += handBet;
 
             betAmountEl.textContent = handBet;
             walletAmountEl.textContent = wallet;
@@ -715,7 +645,6 @@
             playerHand.push(deck.pop());
             renderHands();
 
-            // Disable all player action buttons after doubling down, as per rules
             btnHit.disabled = true;
             btnStand.disabled = true;
             btnDouble.disabled = true;
@@ -725,41 +654,43 @@
             } else {
                 dealerTurn();
             }
-            scrollToTop(); // Scroll after double
+            scrollToTop();
+        });
+
+        btnClearBet.addEventListener('click', () => {
+            currentBet = 0;
+            betAmountEl.textContent = currentBet;
         });
 
         betButtons.forEach(button => {
             button.addEventListener('click', () => {
-                const betValue = button.dataset.bet;
-                let newBet = 0;
-                if (betValue === 'max') {
-                    newBet = wallet;
+                const betValueStr = button.dataset.bet;
+                if (betValueStr === 'max') {
+                    currentBet = wallet;
                 } else {
-                    newBet = parseInt(betValue);
+                    const betToAdd = parseInt(betValueStr);
+                    if (currentBet + betToAdd > wallet) {
+                        currentBet = wallet;
+                    } else {
+                        currentBet += betToAdd;
+                    }
                 }
-
-                // Prevent setting a bet higher than the current wallet
-                if (newBet > wallet) {
-                    newBet = wallet;
-                }
-                // Ensure bet is at least 0
-                if (newBet < 0) {
-                    newBet = 0;
-                }
-
-                currentBet = newBet;
                 betAmountEl.textContent = currentBet;
-                updateActiveBetButton(currentBet);
             });
         });
 
-        // Initialize wallet and bet display on load
         window.onload = () => {
+            const savedWallet = getCookie('casinoWallet');
+            if (savedWallet && !isNaN(parseInt(savedWallet))) {
+                wallet = parseInt(savedWallet);
+            } else {
+                wallet = 10000;
+            }
+            setCookie('casinoWallet', wallet, 365);
             walletAmountEl.textContent = wallet;
             betAmountEl.textContent = currentBet;
-            updateButtonState('bet'); // Set initial button state (only Deal visible)
-            updateActiveBetButton(currentBet);
-            playerHandEl.innerHTML = ''; // Clear hands on initial load
+            updateButtonState('bet');
+            playerHandEl.innerHTML = '';
             dealerHandEl.innerHTML = '';
             dealerScoreEl.textContent = '0';
             playerScoreEl.textContent = '0';

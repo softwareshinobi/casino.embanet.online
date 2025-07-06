@@ -44,7 +44,7 @@
             width: 100%;
             max-width: 900px;
             position: relative;
-            display: flex;
+            display: flex; /* Changed to flex for easy toggling */
             flex-direction: column;
             /* Add a top margin for consistent spacing below the fixed navbar */
             margin-top: 1rem;
@@ -217,9 +217,30 @@
             border: 4px solid var(--quartz-secondary);
             z-index: 100;
             text-align: center;
-            display: none;
+            display: none; /* Hidden by default, will be set to block by JS */
             width: 90%;
+            opacity: 0; /* Start hidden for animation */
         }
+
+        /* Animation for status message */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            to { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+        }
+
+        .status-message.fade-in-animation {
+            animation: fadeIn 0.5s forwards;
+        }
+
+        .status-message.fade-out-animation {
+            animation: fadeOut 0.5s forwards;
+        }
+
 
         .info-display {
             font-size: 1.2rem;
@@ -231,9 +252,86 @@
             color: var(--quartz-secondary);
         }
 
+        /* --- Bonus Tracker Styles --- */
+        #bonusTrackerPanel {
+            background: linear-gradient(to bottom, #212529, #343f56);
+            border: 5px solid var(--quartz-secondary);
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(24, 178, 178, 0.5), inset 0 0 20px rgba(0, 0, 0, 0.5);
+            padding: 1.5rem;
+            width: 100%;
+            max-width: 900px;
+            position: relative;
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            margin-top: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .bonus-section {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid var(--quartz-secondary);
+            margin-bottom: 1rem; /* Space between sections */
+        }
+        .bonus-section h5 {
+            margin-bottom: 1rem;
+        }
+        .badge.hit {
+            background-color: var(--quartz-primary) !important; /* Use quartz-primary for hit numbers */
+            border: 1px solid var(--quartz-secondary);
+            color: var(--quartz-light);
+            font-size: 1.1rem;
+            padding: 0.5em 0.75em;
+            min-width: 35px; /* Ensure badges are a consistent size */
+        }
+        .badge.bg-secondary {
+            font-size: 1.1rem;
+            padding: 0.5em 0.75em;
+            min-width: 35px;
+        }
+
+        /* New styles for bonus betting areas */
+        .bonus-bet-area {
+            border: 2px solid var(--quartz-light);
+            border-radius: 10px;
+            padding: 0.5rem;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--quartz-light);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.2); /* Slightly darker background */
+            margin-top: 0.5rem; /* Space from bonus progress */
+        }
+
+        .bonus-bet-area:not(.disabled):hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .bonus-bet-area.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .bonus-bet-area .bet-amount {
+            display: block;
+            font-size: 1rem;
+            color: #ffc107;
+            min-height: 20px;
+            font-weight: normal;
+        }
+
+
         /* --- Mobile Responsiveness --- */
         @media (max-width: 768px) {
-            .game-console {
+            .game-console, #bonusTrackerPanel {
                 padding: 1rem;
                 margin-top: 1rem; /* Keep consistent margin for mobile too */
             }
@@ -241,7 +339,7 @@
             .bet-button { font-size: 0.8rem; }
             .info-display { font-size: 1rem; }
             .actions-panel, .betting-panel, .info-panel { padding: 0.75rem; }
-            .bet-area { font-size: 1rem; padding: 0.25rem; }
+            .bet-area, .bonus-bet-area { font-size: 1rem; padding: 0.25rem; }
 
             .place-bets-grid {
                 grid-template-columns: repeat(3, 1fr);
@@ -258,38 +356,40 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
 
-<ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-auto">
 
-<li class="nav-item">
-    <a class="nav-link" href="/blackjack/index.html">Blackjack</a>
-</li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/blackjack/index.html">Blackjack</a>
+                    </li>
 
-<li class="nav-item">
-    <a class="nav-link" href="/casinowar/index.html">Casino War</a>
-</li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/casinowar/index.html">Casino War</a>
+                    </li>
 
-<li class="nav-item">
-    <a class="nav-link" href="/roulette/index.html">Roulette</a>
-</li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/roulette/index.html">Roulette</a>
+                    </li>
 
-<li class="nav-item">
-    <a class="nav-link" href="/slots/index.html">Slots</a>
-</li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/slots/index.html">Slots</a>
+                    </li>
 
-<li class="nav-item">
-    <a class="nav-link" href="/baccarat/index.html">Baccarat</a>
-</li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/baccarat/index.html">Baccarat</a>
+                    </li>
 
-<li class="nav-item">
-    <a class="nav-link" href="/craps/index.html">Craps</a>
-</li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/craps/index.html">Craps</a>
+                    </li>
 
                 </ul>
 
             </div>
         </div>
     </nav>
-<div class="game-console">
+
+    <!-- Main Game Console -->
+    <div class="game-console" id="gameConsole">
         <div id="statusMessage" class="status-message"></div>
 
         <div class="playing-surface">
@@ -310,7 +410,7 @@
 
                 <!-- Field Bet Area -->
                 <div id="fieldBetArea" class="bet-area field-bet" data-bet-type="field">
-                    FIELD <small>(2)·3·4·9·10·11·(12)</small>
+                    FIELD <small>(2) 3 4 9 10 11 (12)</small>
                     <span id="fieldBetAmount" class="bet-amount"></span>
                 </div>
 
@@ -330,8 +430,11 @@
 
         <div class="actions-panel mt-3">
             <div class="row g-2 justify-content-center">
-                <div class="col-10">
+                <div class="col-12 col-sm-10">
                     <button id="btnRoll" class="btn btn-success action-button" disabled="">Roll</button>
+                </div>
+                <div class="col-12 col-sm-2">
+                    <button id="btnToggleBonus" class="btn btn-info action-button">Bonus</button>
                 </div>
             </div>
         </div>
@@ -339,8 +442,8 @@
         <div class="betting-panel mt-3">
             <div class="row g-2">
                 <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button active" data-bet="100">$100</button></div>
+                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="500">$500</button></div>
                 <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="1000">$1000</button></div>
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="5000">$5000</button></div>
                 <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="max">MAX</button></div>
             </div>
 
@@ -362,6 +465,68 @@
         </div>
     </div>
 
+    <!-- Bonus Tracker Panel -->
+    <div id="bonusTrackerPanel">
+        <h4 class="text-center text-light">Bonus Progress</h4>
+        <div class="row text-center mt-3">
+            <div class="col-md-6">
+                <div class="bonus-section">
+                    <h5 class="text-info">Small (<span id="smallBonusStatus">In Progress</span>)</h5>
+                    <div id="smallBonusNumbers" class="d-flex flex-wrap justify-content-center gap-2">
+                        <span class="badge bg-secondary" data-bonus-num="2">2</span>
+                        <span class="badge bg-secondary" data-bonus-num="3">3</span>
+                        <span class="badge bg-secondary" data-bonus-num="4">4</span>
+                        <span class="badge bg-secondary" data-bonus-num="5">5</span>
+                        <span class="badge bg-secondary" data-bonus-num="6">6</span>
+                    </div>
+                    <br/>
+                    <div class="bonus-bet-area" data-bet-type="bonus" data-bonus-target="small">
+                        Bet Small Bonus
+                        <span id="smallBonusBetAmount" class="bet-amount"></span>
+                    </div>
+                </div>
+            </div>
+
+                        <div style="display:none"  class="col-md-6">
+                <div class="bonus-section">
+                    <h5 class="text-info">All (<span id="allBonusStatus">In Progress</span>)</h5>
+                    <div id="allBonusNumbers" class="d-flex flex-wrap justify-content-center gap-2">
+                        <!-- Numbers will be dynamically copied from Small & Tall -->
+                    </div>
+                    <div class="bonus-bet-area" data-bet-type="bonus" data-bonus-target="all">
+                        Bet All Bonus
+                        <span id="allBonusBetAmount" class="bet-amount"></span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-6">
+                <div class="bonus-section">
+                    <h5 class="text-info">Tall (<span id="tallBonusStatus">In Progress</span>)</h5>
+                    <div id="tallBonusNumbers" class="d-flex flex-wrap justify-content-center gap-2">
+                        <span class="badge bg-secondary" data-bonus-num="8">8</span>
+                        <span class="badge bg-secondary" data-bonus-num="9">9</span>
+                        <span class="badge bg-secondary" data-bonus-num="10">10</span>
+                        <span class="badge bg-secondary" data-bonus-num="11">11</span>
+                        <span class="badge bg-secondary" data-bonus-num="12">12</span>
+                    </div>
+                    <br/>
+                    <div class="bonus-bet-area" data-bet-type="bonus" data-bonus-target="tall">
+                        Bet Tall Bonus
+                        <span id="tallBonusBetAmount" class="bet-amount"></span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row mt-4">
+            <div class="col text-center">
+                <button id="btnBackToGame" class="btn btn-info action-button">Back to Game</button>
+            </div>
+        </div>
+    </div>
+
 <script>
     // Adjust body padding-top based on fixed navbar height
     document.addEventListener('DOMContentLoaded', function() {
@@ -378,6 +543,39 @@
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+    // --- Cookie Functions ---
+    /**
+     * Sets a browser cookie.
+     * @param {string} name - The name of the cookie.
+     * @param {string} value - The value to store.
+     * @param {number} days - The number of days until the cookie expires.
+     */
+    function setCookie(name, value, days) {
+        let expires = "";
+        if (days) {
+            let date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    }
+
+    /**
+     * Gets the value of a browser cookie.
+     * @param {string} name - The name of the cookie.
+     * @returns {string|null} The cookie's value, or null if not found.
+     */
+    function getCookie(name) {
+        let nameEQ = name + "=";
+        let ca = document.cookie.split(';');
+        for(let i=0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+
     // --- DOM Elements ---
     const die1El = document.getElementById('die1');
     const die2El = document.getElementById('die2');
@@ -393,8 +591,27 @@
     const dontPassLineBetArea = document.getElementById('dontPassLineBetArea');
     const fieldBetArea = document.getElementById('fieldBetArea');
 
+    // Bonus UI Elements
+    const gameConsoleEl = document.getElementById('gameConsole'); // Main game view
+    const bonusTrackerPanelEl = document.getElementById('bonusTrackerPanel');
+    const btnToggleBonus = document.getElementById('btnToggleBonus');
+    const btnBackToGame = document.getElementById('btnBackToGame');
+
+    const smallBonusNumbersEl = document.getElementById('smallBonusNumbers');
+    const tallBonusNumbersEl = document.getElementById('tallBonusNumbers');
+    const allBonusNumbersEl = document.getElementById('allBonusNumbers');
+
+    const smallBonusStatusEl = document.getElementById('smallBonusStatus');
+    const tallBonusStatusEl = document.getElementById('tallBonusStatus');
+    const allBonusStatusEl = document.getElementById('allBonusStatus');
+
+    const smallBonusBetArea = document.querySelector('.bonus-bet-area[data-bonus-target="small"]');
+    const tallBonusBetArea = document.querySelector('.bonus-bet-area[data-bonus-target="tall"]');
+    const allBonusBetArea = document.querySelector('.bonus-bet-area[data-bonus-target="all"]');
+
+
     // --- Game State ---
-    let wallet = 10000;
+    let wallet; // Initialized from cookie
     let currentBet = 100;
     let passLineBet = 0;
     let dontPassBet = 0;
@@ -404,16 +621,40 @@
     let canRoll = false;
     let keepWinningBets = true; // true by default
 
+    // --- Bonus Game State ---
+    let smallBonusNumbersHit = new Set();
+    let tallBonusNumbersHit = new Set();
+    let allBonusNumbersHit = new Set(); // Will combine small and tall
+
+    const SMALL_BONUS_TARGETS = new Set([2, 3, 4, 5, 6]);
+    const TALL_BONUS_TARGETS = new Set([8, 9, 10, 11, 12]);
+    const ALL_BONUS_TARGETS = new Set([...SMALL_BONUS_TARGETS, ...TALL_BONUS_TARGETS]);
+
+    // New: Bonus Bet Amounts
+    let smallBonusBet = 0;
+    let tallBonusBet = 0;
+    let allBonusBet = 0;
+
+
     // --- Game Functions ---
     /**
-     * Displays a temporary status message to the user.
+     * Displays a temporary status message to the user with an animation.
      * @param {string} message - The message to display.
      * @param {number} duration - How long the message should be visible in milliseconds.
      */
     function showStatusMessage(message, duration = 1000) {
         statusMessageEl.innerHTML = message;
-        statusMessageEl.style.display = 'block';
-        setTimeout(() => statusMessageEl.style.display = 'none', duration);
+        statusMessageEl.style.display = 'block'; // Make it visible
+        statusMessageEl.classList.remove('fade-out-animation'); // Ensure previous animation is reset
+        statusMessageEl.classList.add('fade-in-animation'); // Trigger fade-in
+
+        setTimeout(() => {
+            statusMessageEl.classList.remove('fade-in-animation');
+            statusMessageEl.classList.add('fade-out-animation'); // Trigger fade-out
+            setTimeout(() => {
+                statusMessageEl.style.display = 'none';
+            }, 500); // Matches fade-out duration
+        }, duration - 500); // Start fade-out 0.5s before total duration ends
     }
 
     /**
@@ -426,8 +667,8 @@
 
         let canClear = false;
         if (point === 0) {
-            // Can clear bets if there's any bet on Pass, Don't Pass, or Field during come-out.
-            if (passLineBet > 0 || dontPassBet > 0 || fieldBet > 0) {
+            // Can clear bets if there's any bet on Pass, Don't Pass, Field, or Bonus during come-out.
+            if (passLineBet > 0 || dontPassBet > 0 || fieldBet > 0 || smallBonusBet > 0 || tallBonusBet > 0 || allBonusBet > 0) {
                 canClear = true;
             }
         } else {
@@ -478,6 +719,11 @@
                 area.classList.add('disabled');
             });
 
+            // Enable bonus bets during come-out roll
+            smallBonusBetArea.classList.remove('disabled');
+            tallBonusBetArea.classList.remove('disabled');
+            allBonusBetArea.classList.remove('disabled');
+
         } else { // Point is ON Phase
             // HIDE Pass Line, Don't Pass Line
             passLineBetArea.classList.add('d-none');
@@ -493,6 +739,11 @@
                     area.classList.add('point-on'); // Highlight the active point number
                 }
             });
+
+            // Disable bonus bets once point is established
+            smallBonusBetArea.classList.add('disabled');
+            tallBonusBetArea.classList.add('disabled');
+            allBonusBetArea.classList.add('disabled');
         }
         // Field bet is always enabled for interaction
         fieldBetArea.classList.remove('disabled');
@@ -509,6 +760,18 @@
         for (const num in placeBets) {
             document.getElementById(`placeBetAmount${num}`).textContent = placeBets[num] > 0 ? `$${placeBets[num]}` : '';
         }
+        // New: Render bonus bet amounts
+        document.getElementById('smallBonusBetAmount').textContent = smallBonusBet > 0 ? `$${smallBonusBet}` : '';
+        document.getElementById('tallBonusBetAmount').textContent = tallBonusBet > 0 ? `$${tallBonusBet}` : '';
+        document.getElementById('allBonusBetAmount').textContent = allBonusBet > 0 ? `$${allBonusBet}` : '';
+    }
+
+    /**
+     * Updates the wallet display and saves the current wallet amount to a cookie.
+     */
+    function updateWalletDisplayAndCookie() {
+        walletAmountEl.textContent = wallet;
+        setCookie('casinoWallet', wallet, 365); // Save for 365 days
     }
 
     /**
@@ -523,7 +786,7 @@
         renderAllBets();
         updatePointIndicator(); // Update UI for come-out roll phase
         updateButtonState('betting'); // Re-enable betting phase
-        walletAmountEl.textContent = wallet; // Update wallet display
+        updateWalletDisplayAndCookie(); // Update wallet display and cookie
         if (wallet <= 0) showStatusMessage("Game Over", 2000);
     }
 
@@ -542,31 +805,178 @@
             placeBets[num] = 0;
         }
 
-        if (point === 0) { // Only clear line bets if point is OFF (come out roll phase)
+        if (point === 0) { // Only clear line and bonus bets if point is OFF (come out roll phase)
             returnedAmount += passLineBet;
             returnedAmount += dontPassBet;
+            returnedAmount += smallBonusBet;
+            returnedAmount += tallBonusBet;
+            returnedAmount += allBonusBet;
+
             passLineBet = 0;
             dontPassBet = 0;
+            smallBonusBet = 0;
+            tallBonusBet = 0;
+            allBonusBet = 0;
         } else {
-            // Line bets cannot be removed if point is set, they are resolved by roll.
-            // Place bets are returned if point hits. Here, we're explicitly clearing them before a roll.
-            // This clearActiveBets is meant for manual user clearing.
-            // If the point is set, Pass/Don't Pass bets cannot be cleared manually.
-            showStatusMessage("Pass/Don't Pass bets cannot be cleared while point is set.", 2000);
+            // Line and bonus bets cannot be removed if point is set, they are resolved by roll.
+            showStatusMessage("Pass/Don't Pass and Bonus bets cannot be cleared while point is set.", 2000);
         }
 
         if (returnedAmount > 0) {
             wallet += returnedAmount;
-            walletAmountEl.textContent = wallet;
+            updateWalletDisplayAndCookie(); // Update wallet display and cookie
             renderAllBets();
             showStatusMessage(`Bets cleared: +$${returnedAmount}`);
             // After clearing, check if any bets remain to determine if game is ready to roll or betting.
-            const hasBets = passLineBet > 0 || dontPassBet > 0 || fieldBet > 0 || Object.values(placeBets).some(b => b > 0);
+            const hasBets = passLineBet > 0 || dontPassBet > 0 || fieldBet > 0 || smallBonusBet > 0 || tallBonusBet > 0 || allBonusBet > 0 || Object.values(placeBets).some(b => b > 0);
             updateButtonState(hasBets ? 'readyToRoll' : 'betting');
         } else {
             showStatusMessage("No bets to clear.", 1000);
         }
         updatePointIndicator(); // Re-evaluate disabled/visibility state for all bets
+    }
+
+    /**
+     * Initializes the bonus numbers display.
+     * Populates the 'All' bonus section dynamically.
+     */
+    function initializeBonusDisplay() {
+        // Populate All Bonus numbers dynamically
+        ALL_BONUS_TARGETS.forEach(num => {
+            const span = document.createElement('span');
+            span.classList.add('badge', 'bg-secondary');
+            span.textContent = num;
+            span.dataset.bonusNum = num;
+            allBonusNumbersEl.appendChild(span);
+        });
+        updateBonusDisplay(); // Set initial badge states
+    }
+
+    /**
+     * Updates the visual representation of bonus numbers (hit/not hit) and status.
+     */
+    function updateBonusDisplay() {
+        // Small Bonus
+        SMALL_BONUS_TARGETS.forEach(num => {
+            const span = smallBonusNumbersEl.querySelector(`[data-bonus-num="${num}"]`);
+            if (span) {
+                if (smallBonusNumbersHit.has(num)) {
+                    span.classList.add('bg-primary', 'hit');
+                    span.classList.remove('bg-secondary');
+                } else {
+                    span.classList.remove('bg-primary', 'hit');
+                    span.classList.add('bg-secondary');
+                }
+            }
+        });
+        if (smallBonusNumbersHit.size === SMALL_BONUS_TARGETS.size) {
+            smallBonusStatusEl.textContent = "COMPLETED!";
+            smallBonusStatusEl.style.color = "lightgreen";
+        } else {
+            smallBonusStatusEl.textContent = "In Progress";
+            smallBonusStatusEl.style.color = "";
+        }
+
+        // Tall Bonus
+        TALL_BONUS_TARGETS.forEach(num => {
+            const span = tallBonusNumbersEl.querySelector(`[data-bonus-num="${num}"]`);
+            if (span) {
+                if (tallBonusNumbersHit.has(num)) {
+                    span.classList.add('bg-primary', 'hit');
+                    span.classList.remove('bg-secondary');
+                } else {
+                    span.classList.remove('bg-primary', 'hit');
+                    span.classList.add('bg-secondary');
+                }
+            }
+        });
+        if (tallBonusNumbersHit.size === TALL_BONUS_TARGETS.size) {
+            tallBonusStatusEl.textContent = "COMPLETED!";
+            tallBonusStatusEl.style.color = "lightgreen";
+        } else {
+            tallBonusStatusEl.textContent = "In Progress";
+            tallBonusStatusEl.style.color = "";
+        }
+
+        // All Bonus
+        ALL_BONUS_TARGETS.forEach(num => {
+            const span = allBonusNumbersEl.querySelector(`[data-bonus-num="${num}"]`);
+            if (span) {
+                if (allBonusNumbersHit.has(num)) {
+                    span.classList.add('bg-primary', 'hit');
+                    span.classList.remove('bg-secondary');
+                } else {
+                    span.classList.remove('bg-primary', 'hit');
+                    span.classList.add('bg-secondary');
+                }
+            }
+        });
+        if (allBonusNumbersHit.size === ALL_BONUS_TARGETS.size) {
+            allBonusStatusEl.textContent = "COMPLETED!";
+            allBonusStatusEl.style.color = "lightgreen";
+        } else {
+            allBonusStatusEl.textContent = "In Progress";
+            allBonusStatusEl.style.color = "";
+        }
+    }
+
+    /**
+     * Tracks the progress of Small, Tall, and All bonuses based on the rolled number.
+     * Awards payout if a bonus is completed.
+     * @param {number} roll - The sum of the two dice.
+     */
+    function trackBonusProgress(roll) {
+        if (SMALL_BONUS_TARGETS.has(roll)) {
+            smallBonusNumbersHit.add(roll);
+            allBonusNumbersHit.add(roll);
+        }
+        if (TALL_BONUS_TARGETS.has(roll)) {
+            tallBonusNumbersHit.add(roll);
+            allBonusNumbersHit.add(roll);
+        }
+        updateBonusDisplay(); // Update UI after each roll
+
+        // Check for bonus completion and payout
+        // Small Bonus Payout
+        if (smallBonusNumbersHit.size === SMALL_BONUS_TARGETS.size && smallBonusBet > 0) {
+            const payout = smallBonusBet * 30; // 20x payout for Small
+            wallet += payout + smallBonusBet; // Return original bet + payout
+            showStatusMessage(`Small Bonus Completed! You won +$${payout}!`, 3000); // Increased duration
+            smallBonusBet = 0; // Clear the bet after payout
+            updateWalletDisplayAndCookie();
+            renderAllBets();
+        }
+
+        // Tall Bonus Payout
+        if (tallBonusNumbersHit.size === TALL_BONUS_TARGETS.size && tallBonusBet > 0) {
+            const payout = tallBonusBet * 30; // 20x payout for Tall
+            wallet += payout + tallBonusBet; // Return original bet + payout
+            showStatusMessage(`Tall Bonus Completed! You won +$${payout}!`, 3000); // Increased duration
+            tallBonusBet = 0; // Clear the bet after payout
+            updateWalletDisplayAndCookie();
+            renderAllBets();
+        }
+
+        // All Bonus Payout
+        if (allBonusNumbersHit.size === ALL_BONUS_TARGETS.size && allBonusBet > 0) {
+            const payout = allBonusBet * 150; // 50x payout for All
+            wallet += payout + allBonusBet; // Return original bet + payout
+            showStatusMessage(`All Bonus Completed! You won +$${payout}!`, 3000); // Increased duration
+            allBonusBet = 0; // Clear the bet after payout
+            updateWalletDisplayAndCookie();
+            renderAllBets();
+        }
+    }
+
+    /**
+     * Resets all bonus tracking sets and updates the display.
+     * This is typically called when a "seven out" occurs.
+     */
+    function resetBonusProgress() {
+        smallBonusNumbersHit.clear();
+        tallBonusNumbersHit.clear();
+        allBonusNumbersHit.clear();
+        updateBonusDisplay();
     }
 
 
@@ -576,6 +986,11 @@
      */
     function handleRollResult(roll) {
         let messages = [];
+
+        // Track bonus progress for any non-7 roll
+        if (roll !== 7) {
+            trackBonusProgress(roll);
+        }
 
         // --- Resolve one-roll field bet first ---
         if (fieldBet > 0) {
@@ -587,8 +1002,12 @@
                 payout = bet; // 1:1 payout
                 isWin = true;
                 messages.push(`Field bet wins <span style="color:#ffc107;">+$${payout}!</span>`);
-            } else if ([2, 12].includes(roll)) {
+            } else if (roll === 2) { // Specific payout for 2
                 payout = bet * 2; // 2:1 payout
+                isWin = true;
+                messages.push(`Field bet wins <span style="color:#ffc107;">+$${payout}</span> on ${roll}!`);
+            } else if (roll === 12) { // Specific payout for 12 (TRIPLE)
+                payout = bet * 3; // 3:1 payout
                 isWin = true;
                 messages.push(`Field bet wins <span style="color:#ffc107;">+$${payout}</span> on ${roll}!`);
             }
@@ -609,7 +1028,6 @@
         // --- POINT IS ON (After Come-Out Roll) ---
         if (point !== 0) {
             // Resolve Place Bets
-            // Iterate over active place bets, not just the rolled number
             for (const num in placeBets) {
                 const bet = placeBets[num];
                 if (bet > 0) {
@@ -629,7 +1047,6 @@
                     }
                 }
             }
-
 
             if (roll === point) {
                 messages.push(`Point ${point} Hit! Pass Line Wins!`);
@@ -654,6 +1071,12 @@
                     wallet += dontPassBet * 2; // Win original bet + payout
                     messages.push("Don't Pass Wins!");
                 }
+                // Bonus bets are lost on 7-out if not already won
+                if (smallBonusBet > 0) { showStatusMessage("Small Bonus bet loses."); smallBonusBet = 0; }
+                if (tallBonusBet > 0) { showStatusMessage("Tall Bonus bet loses."); tallBonusBet = 0; }
+                if (allBonusBet > 0) { showStatusMessage("All Bonus bet loses."); allBonusBet = 0; }
+
+                resetBonusProgress(); // Reset bonus tracking on Seven Out
                 clearBoardForNewRound(); // Reset game state for new come-out roll
 
             }
@@ -681,11 +1104,11 @@
         }
 
         showStatusMessage(messages.length > 0 ? messages.join('<br>') : `Rolled ${roll}.`);
-        walletAmountEl.textContent = wallet;
+        updateWalletDisplayAndCookie(); // Update wallet display and cookie
         renderAllBets();
 
         // Determine if ready for next roll or back to betting phase
-        const hasBets = passLineBet > 0 || dontPassBet > 0 || fieldBet > 0 || (point !== 0 && Object.values(placeBets).some(b => b > 0));
+        const hasBets = passLineBet > 0 || dontPassBet > 0 || fieldBet > 0 || smallBonusBet > 0 || tallBonusBet > 0 || allBonusBet > 0 || (point !== 0 && Object.values(placeBets).some(b => b > 0));
         if (point !== 0) updateButtonState('readyToRoll'); // If point is set, you can always roll
         else if (hasBets) updateButtonState('readyToRoll'); // If no point, but still have bets (e.g. field), you can roll
         else updateButtonState('betting'); // If no point and no bets, go to betting phase
@@ -697,13 +1120,14 @@
     function rollDice() {
         const hasLineBet = passLineBet > 0 || dontPassBet > 0;
         const hasOtherBets = fieldBet > 0 || Object.values(placeBets).some(b => b > 0);
+        const hasBonusBets = smallBonusBet > 0 || tallBonusBet > 0 || allBonusBet > 0;
 
         // Can only roll if there's a Pass/Don't Pass bet (if point is off)
-        // Or if there are any bets at all (if point is on or if it's a field bet)
-        if (point === 0 && !hasLineBet && !hasOtherBets) { // No point, and no line bets to set a point
+        // Or if there are any bets at all (if point is on or if it's a field bet or bonus bet)
+        if (point === 0 && !hasLineBet && !hasOtherBets && !hasBonusBets) { // No point, and no line bets to set a point
              showStatusMessage("Place a Pass Line or Don't Pass bet to start!");
              return;
-        } else if (point !== 0 && !hasLineBet && !hasOtherBets) { // Point is on, but no bets remain (e.g., cleared them all)
+        } else if (point !== 0 && !hasLineBet && !hasOtherBets && !hasBonusBets) { // Point is on, but no bets remain (e.g., cleared them all)
             showStatusMessage("Place a bet to continue the round!");
             return;
         }
@@ -736,6 +1160,7 @@
     function handleBetPlacement(area) {
         const type = area.dataset.betType;
         const number = parseInt(area.dataset.number); // For place bets
+        const bonusTarget = area.dataset.bonusTarget; // For bonus bets
 
         if (currentBet <= 0 || wallet < currentBet) {
             showStatusMessage("Insufficient funds or invalid bet amount!");
@@ -762,10 +1187,22 @@
             placeBets[number] = (placeBets[number] || 0) + currentBet;
         } else if (type === 'field') {
             fieldBet += currentBet;
+        } else if (type === 'bonus') {
+            if (point !== 0) { showStatusMessage("Bonus bets can only be placed on a Come-Out roll.", 1000); return; }
+            if (bonusTarget === 'small') {
+                if (smallBonusBet > 0) { showStatusMessage("You already have a Small Bonus bet placed.", 1000); return; }
+                smallBonusBet += currentBet;
+            } else if (bonusTarget === 'tall') {
+                if (tallBonusBet > 0) { showStatusMessage("You already have a Tall Bonus bet placed.", 1000); return; }
+                tallBonusBet += currentBet;
+            } else if (bonusTarget === 'all') {
+                if (allBonusBet > 0) { showStatusMessage("You already have an All Bonus bet placed.", 1000); return; }
+                allBonusBet += currentBet;
+            }
         }
 
         wallet -= currentBet;
-        walletAmountEl.textContent = wallet;
+        updateWalletDisplayAndCookie(); // Update wallet display and cookie
         renderAllBets();
         updateButtonState('readyToRoll'); // Game is ready to roll once bets are placed
         updatePointIndicator(); // Re-evaluate UI state after placing a bet
@@ -776,6 +1213,14 @@
     // Use event delegation for all bet areas to handle clicks
     const bettingLayoutElements = document.querySelectorAll('.bet-area');
     bettingLayoutElements.forEach(area => {
+        area.addEventListener('click', () => {
+            handleBetPlacement(area);
+        });
+    });
+
+    // New: Event delegation for bonus bet areas
+    const bonusBettingElements = document.querySelectorAll('.bonus-bet-area');
+    bonusBettingElements.forEach(area => {
         area.addEventListener('click', () => {
             handleBetPlacement(area);
         });
@@ -802,14 +1247,39 @@
         });
     });
 
+    // Event listeners for Bonus View Toggle
+    btnToggleBonus.addEventListener('click', () => {
+        gameConsoleEl.style.display = 'none';
+        bonusTrackerPanelEl.style.display = 'flex'; // Use flex as defined in .game-console style
+    });
+
+    btnBackToGame.addEventListener('click', () => {
+        gameConsoleEl.style.display = 'flex'; // Use flex as defined in .game-console style
+        bonusTrackerPanelEl.style.display = 'none';
+    });
+
+
     // --- Initial Game Setup ---
     window.onload = () => {
+        // Try to load wallet from cookie
+        const savedWallet = getCookie('casinoWallet');
+        if (savedWallet && !isNaN(parseInt(savedWallet))) { // Ensure it's a valid number
+            wallet = parseInt(savedWallet);
+        } else {
+            wallet = 10000; // Default starting balance if no cookie exists or invalid
+            setCookie('casinoWallet', wallet, 365); // Save initial balance for 365 days
+        }
+        updateWalletDisplayAndCookie(); // Update display and ensure cookie is set
+
         updateButtonState('betting'); // Start in the betting phase
         updateActiveBetButton(currentBet); // Highlight initial bet amount
         renderAllBets(); // Display initial bet amounts (should be 0)
         updatePointIndicator(); // Initialize point indicators and bet area visibility
         // Set initial state of the Keep Bets button
         btnKeepBets.classList.toggle('active-toggle-button', keepWinningBets);
+
+        initializeBonusDisplay(); // Initialize bonus UI elements
+        resetBonusProgress(); // Ensure bonuses are reset at start of a new game session
     };
 </script>
 
