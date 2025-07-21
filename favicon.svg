@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <circle cx="16" cy="16" r="15" fill="#18b2b2"/>
+  <circle cx="16" cy="16" r="13" fill="#343f56"/>
+  <circle cx="16" cy="16" r="11" fill="#f8f9fa"/>
+  <text x="50%" y="54%" dominant-baseline="central" text-anchor="middle" font-size="20px" fill="#593196" font-family="serif">♠</text>
+</svg>

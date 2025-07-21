@@ -1,10 +1,17 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Craps / Shinobi Casino</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/quartz/bootstrap.min.css" rel="stylesheet">
+
     <style>
         /* Custom styles adapted for the Quartz theme */
         :root {
@@ -346,7 +353,11 @@
             }
         }
     </style>
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+
 </head>
+
 <body style="padding-top: 72px;">
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
@@ -386,7 +397,7 @@
 
             </div>
         </div>
-    </nav>
+</nav>
 
     <!-- Main Game Console -->
     <div class="game-console" id="gameConsole">
@@ -460,7 +471,7 @@
         <div class="info-panel mt-3">
             <div class="row">
                 <div class="col-12 col-sm-6 info-display mb-2 mb-sm-0">Bet: $<span id="betAmount">100</span></div>
-                <div class="col-12 col-sm-6 info-display">Wallet: $<span id="walletAmount">10000</span></div>
+                <div class="col-12 col-sm-6 info-display">Wallet: $<span id="walletAmount">--</span></div>
             </div>
         </div>
     </div>
@@ -487,7 +498,7 @@
                 </div>
             </div>
 
-                        <div style="display:none"  class="col-md-6">
+                        <div sty6le="display:none"  class="col-md-6">
                 <div class="bonus-section">
                     <h5 class="text-info">All (<span id="allBonusStatus">In Progress</span>)</h5>
                     <div id="allBonusNumbers" class="d-flex flex-wrap justify-content-center gap-2">
@@ -527,6 +538,10 @@
         </div>
     </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="bonus.js"></script>
+
 <script>
     // Adjust body padding-top based on fixed navbar height
     document.addEventListener('DOMContentLoaded', function() {
@@ -541,7 +556,7 @@
         }
     });
 </script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
     // --- Cookie Functions ---
     /**
@@ -836,148 +851,6 @@
         updatePointIndicator(); // Re-evaluate disabled/visibility state for all bets
     }
 
-    /**
-     * Initializes the bonus numbers display.
-     * Populates the 'All' bonus section dynamically.
-     */
-    function initializeBonusDisplay() {
-        // Populate All Bonus numbers dynamically
-        ALL_BONUS_TARGETS.forEach(num => {
-            const span = document.createElement('span');
-            span.classList.add('badge', 'bg-secondary');
-            span.textContent = num;
-            span.dataset.bonusNum = num;
-            allBonusNumbersEl.appendChild(span);
-        });
-        updateBonusDisplay(); // Set initial badge states
-    }
-
-    /**
-     * Updates the visual representation of bonus numbers (hit/not hit) and status.
-     */
-    function updateBonusDisplay() {
-        // Small Bonus
-        SMALL_BONUS_TARGETS.forEach(num => {
-            const span = smallBonusNumbersEl.querySelector(`[data-bonus-num="${num}"]`);
-            if (span) {
-                if (smallBonusNumbersHit.has(num)) {
-                    span.classList.add('bg-primary', 'hit');
-                    span.classList.remove('bg-secondary');
-                } else {
-                    span.classList.remove('bg-primary', 'hit');
-                    span.classList.add('bg-secondary');
-                }
-            }
-        });
-        if (smallBonusNumbersHit.size === SMALL_BONUS_TARGETS.size) {
-            smallBonusStatusEl.textContent = "COMPLETED!";
-            smallBonusStatusEl.style.color = "lightgreen";
-        } else {
-            smallBonusStatusEl.textContent = "In Progress";
-            smallBonusStatusEl.style.color = "";
-        }
-
-        // Tall Bonus
-        TALL_BONUS_TARGETS.forEach(num => {
-            const span = tallBonusNumbersEl.querySelector(`[data-bonus-num="${num}"]`);
-            if (span) {
-                if (tallBonusNumbersHit.has(num)) {
-                    span.classList.add('bg-primary', 'hit');
-                    span.classList.remove('bg-secondary');
-                } else {
-                    span.classList.remove('bg-primary', 'hit');
-                    span.classList.add('bg-secondary');
-                }
-            }
-        });
-        if (tallBonusNumbersHit.size === TALL_BONUS_TARGETS.size) {
-            tallBonusStatusEl.textContent = "COMPLETED!";
-            tallBonusStatusEl.style.color = "lightgreen";
-        } else {
-            tallBonusStatusEl.textContent = "In Progress";
-            tallBonusStatusEl.style.color = "";
-        }
-
-        // All Bonus
-        ALL_BONUS_TARGETS.forEach(num => {
-            const span = allBonusNumbersEl.querySelector(`[data-bonus-num="${num}"]`);
-            if (span) {
-                if (allBonusNumbersHit.has(num)) {
-                    span.classList.add('bg-primary', 'hit');
-                    span.classList.remove('bg-secondary');
-                } else {
-                    span.classList.remove('bg-primary', 'hit');
-                    span.classList.add('bg-secondary');
-                }
-            }
-        });
-        if (allBonusNumbersHit.size === ALL_BONUS_TARGETS.size) {
-            allBonusStatusEl.textContent = "COMPLETED!";
-            allBonusStatusEl.style.color = "lightgreen";
-        } else {
-            allBonusStatusEl.textContent = "In Progress";
-            allBonusStatusEl.style.color = "";
-        }
-    }
-
-    /**
-     * Tracks the progress of Small, Tall, and All bonuses based on the rolled number.
-     * Awards payout if a bonus is completed.
-     * @param {number} roll - The sum of the two dice.
-     */
-    function trackBonusProgress(roll) {
-        if (SMALL_BONUS_TARGETS.has(roll)) {
-            smallBonusNumbersHit.add(roll);
-            allBonusNumbersHit.add(roll);
-        }
-        if (TALL_BONUS_TARGETS.has(roll)) {
-            tallBonusNumbersHit.add(roll);
-            allBonusNumbersHit.add(roll);
-        }
-        updateBonusDisplay(); // Update UI after each roll
-
-        // Check for bonus completion and payout
-        // Small Bonus Payout
-        if (smallBonusNumbersHit.size === SMALL_BONUS_TARGETS.size && smallBonusBet > 0) {
-            const payout = smallBonusBet * 30; // 20x payout for Small
-            wallet += payout + smallBonusBet; // Return original bet + payout
-            showStatusMessage(`Small Bonus Completed! You won +$${payout}!`, 3000); // Increased duration
-            smallBonusBet = 0; // Clear the bet after payout
-            updateWalletDisplayAndCookie();
-            renderAllBets();
-        }
-
-        // Tall Bonus Payout
-        if (tallBonusNumbersHit.size === TALL_BONUS_TARGETS.size && tallBonusBet > 0) {
-            const payout = tallBonusBet * 30; // 20x payout for Tall
-            wallet += payout + tallBonusBet; // Return original bet + payout
-            showStatusMessage(`Tall Bonus Completed! You won +$${payout}!`, 3000); // Increased duration
-            tallBonusBet = 0; // Clear the bet after payout
-            updateWalletDisplayAndCookie();
-            renderAllBets();
-        }
-
-        // All Bonus Payout
-        if (allBonusNumbersHit.size === ALL_BONUS_TARGETS.size && allBonusBet > 0) {
-            const payout = allBonusBet * 150; // 50x payout for All
-            wallet += payout + allBonusBet; // Return original bet + payout
-            showStatusMessage(`All Bonus Completed! You won +$${payout}!`, 3000); // Increased duration
-            allBonusBet = 0; // Clear the bet after payout
-            updateWalletDisplayAndCookie();
-            renderAllBets();
-        }
-    }
-
-    /**
-     * Resets all bonus tracking sets and updates the display.
-     * This is typically called when a "seven out" occurs.
-     */
-    function resetBonusProgress() {
-        smallBonusNumbersHit.clear();
-        tallBonusNumbersHit.clear();
-        allBonusNumbersHit.clear();
-        updateBonusDisplay();
-    }
 
 
     /**
@@ -1266,7 +1139,8 @@
         if (savedWallet && !isNaN(parseInt(savedWallet))) { // Ensure it's a valid number
             wallet = parseInt(savedWallet);
         } else {
-            wallet = 10000; // Default starting balance if no cookie exists or invalid
+          alert('seeing for first time');
+          wallet = 10000; // Default starting balance if no cookie exists or invalid
             setCookie('casinoWallet', wallet, 365); // Save initial balance for 365 days
         }
         updateWalletDisplayAndCookie(); // Update display and ensure cookie is set
@@ -1284,4 +1158,5 @@
 </script>
 
 </body>
+
 </html>
