@@ -598,7 +598,7 @@ window.onload = () => {
     if (savedWallet && !isNaN(parseInt(savedWallet))) { // Ensure it's a valid number
         wallet = parseInt(savedWallet);
     } else {
-        alert('seeing for first time');
+        //alert('seeing for first time');
         wallet = 10000; // Default starting balance if no cookie exists or invalid
         setCookie('casinoWallet', wallet, 365); // Save initial balance for 365 days
     }
