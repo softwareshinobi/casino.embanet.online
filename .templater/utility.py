@@ -18,7 +18,9 @@ def update_html_section(htmlFilePath, content_template_filepath, section_start_m
 
     try:
         with open(content_template_filepath, 'r') as template_file:
-            new_content_for_section = template_file.read()
+
+            new_content_for_section = "\n\n" + template_file.read().strip() + "\n\n"
+
     except FileNotFoundError:
         print(f"Error: Template file not found at {content_template_filepath}")
         return

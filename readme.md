@@ -9,10 +9,15 @@ Welcome to **The Shinobi Casino**, your premier destination for a collection of 
 Explore a variety of thrilling casino games, each offering unique challenges and opportunities for fun:
 
   * [**Blackjack**](https://casino.softwareshinobi.com/blackjack/index.html) - Test your strategy against the dealer and aim for 21\!
+
   * [**Casino War**](https://casino.softwareshinobi.com/casinowar/index.html) - A straightforward yet engaging card game where the highest card wins.
+
   * [**Roulette**](https://casino.softwareshinobi.com/roulette/index.html) - Place your bets on the wheel and watch the ball decide your fate.
+
   * [**Slots**](https://casino.softwareshinobi.com/slots/index.html) - Spin the reels and hope for winning combinations across multiple paylines.
+
   * [**Baccarat**](https://casino.softwareshinobi.com/baccarat/index.html) - Bet on the player, banker, or a tie in this elegant and fast-paced card game.
+
   * [**Craps**](https://casino.softwareshinobi.com/craps/index.html) - Roll the dice and experience the high energy and diverse betting options of the craps table.
 
 -----
@@ -27,7 +32,7 @@ The Shinobi Casino is built using a modern and robust stack to ensure a smooth a
 | **Bootstrap** | A powerful front-end framework used for responsive design and consistent UI components. |
 | **Bootswatch** | Offers free themes for Bootstrap, enhancing the visual appeal and styling of the casino interface. |
 | **jQuery** | A fast, small, and feature-rich JavaScript library that simplifies client-side scripting and DOM manipulation. |
-| **Gemini Pro 2.5** | Utilized for advanced AI capabilities, potentially enhancing game logic or user interactions. |
+| **Gemini Pro 2.5** | Utilized for advanced AI capabilities, enhancing game logic or user interactions. |
 
 -----
 
