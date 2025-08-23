@@ -1,1 +1,1 @@
-alert("common JS!");
+
