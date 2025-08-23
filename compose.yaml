@@ -4,7 +4,7 @@ services:
 
         container_name: casino.softwareshinobi.com
 
-        image: softwareshinobi/casino.softwareshinobi.com
+        image: softwareshinobi/casino.softwareshinobi.com:1.0
 
         build:
 
@@ -15,19 +15,5 @@ services:
         ports:
 
             - 8000:80
-
-    casino.softwareshinobi.com1:
-
-        container_name: casino.softwareshinobi.com1
-
-        image: softwareshinobi/casino.softwareshinobi.com
-
-        build:
-
-            context: .
-
-            dockerfile: Dockerfile
-
-        ports:
 
             - 80:80
