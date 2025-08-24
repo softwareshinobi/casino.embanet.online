@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 
+
 // --- DOM Elements ---
 const bankerHandEl = document.getElementById('bankerHand');
 const playerHandEl = document.getElementById('playerHand');
@@ -93,7 +94,9 @@ setTimeout(() => statusMessageEl.style.display = 'none', duration);
 function updateButtonState(state) {
 // States: 'betting', 'inprogress'
 const isBetting = state === 'betting';
-btnDeal.disabled = !playerBetType || !isBetting || currentBet === 0;
+
+btnDeal.disabled = !isBetting || !playerBetType || currentBet <= 0;
+
 betTypeButtons.forEach(b => b.disabled = !isBetting);
 betButtons.forEach(b => b.disabled = !isBetting);
 btnClearBet.disabled = !isBetting;
@@ -208,16 +211,17 @@ setTimeout(() => {
 // Event Listeners
 betTypeButtons.forEach(button => {
 button.addEventListener('click', () => {
+
     const newBetType = button.id.replace('btnBet', '').toLowerCase();
-    // If switching bet type, reset the current bet amount
-    if (playerBetType !== newBetType) {
-        currentBet = 0;
-        betAmountEl.textContent = currentBet;
-    }
+
     betTypeButtons.forEach(b => b.classList.remove('active'));
+
     button.classList.add('active');
+
     playerBetType = newBetType;
+
     updateButtonState('betting');
+
 });
 });
 
@@ -249,25 +253,25 @@ runGameSequence();
 });
 
 betButtons.forEach(button => {
-button.addEventListener('click', () => {
-    if (!playerBetType) {
-        showStatusMessage("Select Player, Banker, or Tie first!", 1500);
-        return;
-    }
-    const betValueStr = button.dataset.bet;
-    if (betValueStr === 'max') {
-        currentBet = wallet;
-    } else {
-        const betToAdd = parseInt(betValueStr);
-        if (currentBet + betToAdd > wallet) {
-            currentBet = wallet; // If adding exceeds wallet, just bet the max
+
+    button.addEventListener('click', () => {
+
+        const betValueStr = button.dataset.bet;
+        if (betValueStr === 'max') {
+            currentBet = wallet;
         } else {
-            currentBet += betToAdd;
+            const betToAdd = parseInt(betValueStr);
+            if (currentBet + betToAdd > wallet) {
+                currentBet = wallet; // If adding exceeds wallet, just bet the max
+            } else {
+                currentBet += betToAdd;
+            }
         }
-    }
-    betAmountEl.textContent = currentBet;
-    updateButtonState('betting');
-});
+        betAmountEl.textContent = currentBet;
+        updateButtonState('betting');
+
+    });
+
 });
 
 window.onload = () => {
