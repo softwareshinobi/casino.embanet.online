@@ -22,9 +22,11 @@
 
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 
+<link rel="stylesheet" href="/css/global.css">
+
 <!-- html / styling / end -->
 
-    <link href="craps.css" rel="stylesheet">
+    <link href="css/craps.css" rel="stylesheet">
 
 </head>
 
@@ -56,11 +58,11 @@
                         <a class="nav-link" href="/casinowar/index.html">Casino War</a>
                     </li>
 
-                    <li class="nav-item">
+                    <li class="nav-item HIDDEN">
                         <a class="nav-link" href="/roulette/index.html">Roulette</a>
                     </li>
 
-                    <li class="nav-item">
+                    <li class="nav-item HIDDEN">
                         <a class="nav-link" href="/slots/index.html">Slots</a>
                     </li>
 
@@ -69,7 +71,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="/craps/index.html">Craps</a>
+                        <a class="nav-link" href="/craps/craps.html">Craps</a>
                     </li>
 
                 </ul>
@@ -134,12 +136,21 @@
 
 <div class="betting-panel mt-2">
 
+<!-- html / WAGER AREA / begin -->
+
     <div class="row g-2">
-        <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="100" style="background-color: black; color: white; border-color: black;">$100</button></div>
-        <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="500" style="background-color: purple; color: white; border-color: purple;">$500</button></div>
-        <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button active" data-bet="1000" style="background-color: yellow; color: black; border-color: yellow;">$1000</button></div>
-        <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="5000" style="background-color: orange; color: white; border-color: orange;">$5000</button></div>
+
+        <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="1000" style="background-color: black; color: white; border-color: black;">$1000</button></div>
+
+        <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="5000" style="background-color: purple; color: white; border-color: purple;">$5000</button></div>
+
+        <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button active" data-bet="10000" style="background-color: yellow; color: black; border-color: yellow;">$10000</button></div>
+
+        <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="50000" style="background-color: orange; color: white; border-color: orange;">$50000</button></div>
+
     </div>
+
+<!-- html / WAGER AREA / end -->
 
     <div class="row g-2 mt-2 align-items-center">
         <div class="col-7 col-sm-7">
@@ -152,14 +163,14 @@
 
 </div>
 
-        <div class="info-panel mt-2">
-            <div class="row">
-                <div class="col-12 col-sm-6 info-display mb-2 mb-sm-0">Bet: $<span id="betAmount">100</span></div>
-                <div class="col-12 col-sm-6 info-display">Wallet: $<span id="walletAmount">--</span></div>
-            </div>
+    <div class="info-panel mt-2">
+        <div class="row">
+            <div class="col-12 col-sm-6 info-display mb-2 mb-sm-0">Bet: $<span id="betAmount">--</span></div>
+            <div class="col-12 col-sm-6 info-display">Wallet: $<span id="walletAmount">--</span></div>
         </div>
-
     </div>
+
+</div>
 
     <!-- Bonus Tracker Panel -->
     <div id="bonusTrackerPanel">
@@ -231,9 +242,9 @@
 
 <!-- html / scripting / end -->
 
-<script src="craps.js"></script>
+<script src="js/craps.js"></script>
 
-<script src="bonus.js"></script>
+<script src="js/bonus.js"></script>
 
 </body>
 
