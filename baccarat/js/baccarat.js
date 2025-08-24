@@ -20,27 +20,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 
-// --- Cookie Functions ---
-function setCookie(name, value, days) {
-let expires = "";
-if (days) {
-    let date = new Date();
-    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-    expires = "; expires=" + date.toUTCString();
-}
-document.cookie = name + "=" + (value || "") + expires + "; path=/";
-}
-
-function getCookie(name) {
-let nameEQ = name + "=";
-let ca = document.cookie.split(';');
-for(let i=0; i < ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-    if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
-}
-return null;
-}
 
 // --- DOM Elements ---
 const bankerHandEl = document.getElementById('bankerHand');
@@ -115,7 +94,9 @@ setTimeout(() => statusMessageEl.style.display = 'none', duration);
 function updateButtonState(state) {
 // States: 'betting', 'inprogress'
 const isBetting = state === 'betting';
-btnDeal.disabled = !playerBetType || !isBetting || currentBet === 0;
+
+btnDeal.disabled = !isBetting || !playerBetType || currentBet <= 0;
+
 betTypeButtons.forEach(b => b.disabled = !isBetting);
 betButtons.forEach(b => b.disabled = !isBetting);
 btnClearBet.disabled = !isBetting;
@@ -230,16 +211,17 @@ setTimeout(() => {
 // Event Listeners
 betTypeButtons.forEach(button => {
 button.addEventListener('click', () => {
+
     const newBetType = button.id.replace('btnBet', '').toLowerCase();
-    // If switching bet type, reset the current bet amount
-    if (playerBetType !== newBetType) {
-        currentBet = 0;
-        betAmountEl.textContent = currentBet;
-    }
+
     betTypeButtons.forEach(b => b.classList.remove('active'));
+
     button.classList.add('active');
+
     playerBetType = newBetType;
+
     updateButtonState('betting');
+
 });
 });
 
@@ -271,25 +253,25 @@ runGameSequence();
 });
 
 betButtons.forEach(button => {
-button.addEventListener('click', () => {
-    if (!playerBetType) {
-        showStatusMessage("Select Player, Banker, or Tie first!", 1500);
-        return;
-    }
-    const betValueStr = button.dataset.bet;
-    if (betValueStr === 'max') {
-        currentBet = wallet;
-    } else {
-        const betToAdd = parseInt(betValueStr);
-        if (currentBet + betToAdd > wallet) {
-            currentBet = wallet; // If adding exceeds wallet, just bet the max
+
+    button.addEventListener('click', () => {
+
+        const betValueStr = button.dataset.bet;
+        if (betValueStr === 'max') {
+            currentBet = wallet;
         } else {
-            currentBet += betToAdd;
+            const betToAdd = parseInt(betValueStr);
+            if (currentBet + betToAdd > wallet) {
+                currentBet = wallet; // If adding exceeds wallet, just bet the max
+            } else {
+                currentBet += betToAdd;
+            }
         }
-    }
-    betAmountEl.textContent = currentBet;
-    updateButtonState('betting');
-});
+        betAmountEl.textContent = currentBet;
+        updateButtonState('betting');
+
+    });
+
 });
 
 window.onload = () => {

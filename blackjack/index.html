@@ -22,6 +22,8 @@
 
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 
+<link rel="stylesheet" href="/css/global.css">
+
 <!-- html / styling / end -->
 
     <link href="blackjack.css" rel="stylesheet">
@@ -56,20 +58,20 @@
                         <a class="nav-link" href="/casinowar/index.html">Casino War</a>
                     </li>
 
-                    <li class="nav-item">
+                    <li class="nav-item HIDDEN">
                         <a class="nav-link" href="/roulette/index.html">Roulette</a>
                     </li>
 
-                    <li class="nav-item">
+                    <li class="nav-item HIDDEN">
                         <a class="nav-link" href="/slots/index.html">Slots</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="/baccarat/index.html">Baccarat</a>
+                        <a class="nav-link" href="/baccarat/baccarat.html">Baccarat</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="/craps/index.html">Craps</a>
+                        <a class="nav-link" href="/craps/craps.html">Craps</a>
                     </li>
 
                 </ul>
@@ -114,10 +116,10 @@
 
         <div class="betting-panel mt-2">
     <div class="row g-2">
-        <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="100" style="background-color: black; color: white; border-color: black;">$100</button></div>
-        <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="500" style="background-color: purple; color: white; border-color: purple;">$500</button></div>
-        <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button active" data-bet="1000" style="background-color: yellow; color: black; border-color: yellow;">$1000</button></div>
-        <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="5000" style="background-color: orange; color: white; border-color: orange;">$5000</button></div>
+        <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="1000" style="background-color: black; color: white; border-color: black;">$1000</button></div>
+        <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="5000" style="background-color: purple; color: white; border-color: purple;">$5000</button></div>
+        <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button active" data-bet="10000" style="background-color: yellow; color: black; border-color: yellow;">$10000</button></div>
+        <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="50000" style="background-color: orange; color: white; border-color: orange;">$50000</button></div>
     </div>
             <div class="row g-2 mt-0">
                 <div class="col-12">
@@ -128,13 +130,17 @@
 
         <div class="info-panel mt-2">
             <div class="row">
-                <div class="col-12 col-sm-6 info-display mb-2 mb-sm-0">Bet: $<span id="betAmount">0</span></div>
-                <div class="col-12 col-sm-6 info-display">Wallet: $<span id="walletAmount">10000</span></div>
+                <div class="col-12 col-sm-6 info-display mb-2 mb-sm-0">Bet: $<span id="betAmount">--</span></div>
+                <div class="col-12 col-sm-6 info-display">Wallet: $<span id="walletAmount">--</span></div>
             </div>
         </div>
     </div>
 
 <!-- html / scripting / begin -->
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
