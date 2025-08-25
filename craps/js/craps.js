@@ -1,3 +1,26 @@
+// --- Initial Game Setup ---
+window.onload = () => {
+    // Try to load wallet from cookie
+    const savedWallet = getCookie('casinoWallet');
+    if (savedWallet && !isNaN(parseInt(savedWallet))) { // Ensure it's a valid number
+        wallet = parseInt(savedWallet);
+    } else {
+        //alert('seeing for first time');
+        wallet = 10000; // Default starting balance if no cookie exists or invalid
+        setCookie('casinoWallet', wallet, 365); // Save initial balance for 365 days
+    }
+    updateWalletDisplayAndCookie(); // Update display and ensure cookie is set
+
+    updateButtonState('betting'); // Start in the betting phase
+    updateActiveBetButton(currentBet); // Highlight initial bet amount
+    renderAllBets(); // Display initial bet amounts (should be 0)
+    updatePointIndicator(); // Initialize point indicators and bet area visibility
+    // Set initial state of the Keep Bets button
+    btnKeepBets.classList.toggle('active-toggle-button', keepWinningBets);
+
+    initializeBonusDisplay(); // Initialize bonus UI elements
+    resetBonusProgress(); // Ensure bonuses are reset at start of a new game session
+};
 
 // Adjust body padding-top based on fixed navbar height
 document.addEventListener('DOMContentLoaded', function() {
@@ -33,19 +56,6 @@ const bonusTrackerPanelEl = document.getElementById('bonusTrackerPanel');
 const btnToggleBonus = document.getElementById('btnToggleBonus');
 const btnBackToGame = document.getElementById('btnBackToGame');
 
-const smallBonusNumbersEl = document.getElementById('smallBonusNumbers');
-const tallBonusNumbersEl = document.getElementById('tallBonusNumbers');
-const allBonusNumbersEl = document.getElementById('allBonusNumbers');
-
-const smallBonusStatusEl = document.getElementById('smallBonusStatus');
-const tallBonusStatusEl = document.getElementById('tallBonusStatus');
-const allBonusStatusEl = document.getElementById('allBonusStatus');
-
-const smallBonusBetArea = document.querySelector('.bonus-bet-area[data-bonus-target="small"]');
-const tallBonusBetArea = document.querySelector('.bonus-bet-area[data-bonus-target="tall"]');
-const allBonusBetArea = document.querySelector('.bonus-bet-area[data-bonus-target="all"]');
-
-
 // --- Game State ---
 let wallet; // Initialized from cookie
 let currentBet = 100;
@@ -57,46 +67,8 @@ let point = 0; // 0 means point is OFF
 let canRoll = false;
 let keepWinningBets = true; // true by default
 
-// --- Bonus Game State ---
-let smallBonusNumbersHit = new Set();
-let tallBonusNumbersHit = new Set();
-let allBonusNumbersHit = new Set(); // Will combine small and tall
-
-const SMALL_BONUS_TARGETS = new Set([2, 3, 4, 5, 6]);
-const TALL_BONUS_TARGETS = new Set([8, 9, 10, 11, 12]);
-const ALL_BONUS_TARGETS = new Set([...SMALL_BONUS_TARGETS, ...TALL_BONUS_TARGETS]);
-
-// New: Bonus Bet Amounts
-let smallBonusBet = 0;
-let tallBonusBet = 0;
-let allBonusBet = 0;
-
-
 // --- Game Functions ---
-/**
-    * Displays a temporary status message to the user with an animation.
-    * @param {string} message - The message to display.
-    * @param {number} duration - How long the message should be visible in milliseconds.
-    */
-function showStatusMessage(message, duration = 1000) {
-    statusMessageEl.innerHTML = message;
-    statusMessageEl.style.display = 'block'; // Make it visible
-    statusMessageEl.classList.remove('fade-out-animation'); // Ensure previous animation is reset
-    statusMessageEl.classList.add('fade-in-animation'); // Trigger fade-in
 
-    setTimeout(() => {
-        statusMessageEl.classList.remove('fade-in-animation');
-        statusMessageEl.classList.add('fade-out-animation'); // Trigger fade-out
-        setTimeout(() => {
-            statusMessageEl.style.display = 'none';
-        }, 500); // Matches fade-out duration
-    }, duration - 500); // Start fade-out 0.5s before total duration ends
-}
-
-/**
-    * Updates the state of the Roll and Clear buttons based on game phase.
-    * @param {string} state - 'betting', 'readyToRoll', or 'inProgress'.
-    */
 function updateButtonState(state) {
     canRoll = state === 'readyToRoll';
     btnRoll.disabled = !canRoll;
@@ -117,10 +89,6 @@ function updateButtonState(state) {
     btnClearBets.disabled = !canClear;
 }
 
-/**
-    * Highlights the currently selected bet value button.
-    * @param {number} selectedBet - The currently selected bet amount.
-    */
 function updateActiveBetButton(selectedBet) {
     betButtons.forEach(btn => {
         if (btn.dataset.bet === 'max' && selectedBet === wallet) btn.classList.add('active');
@@ -129,10 +97,6 @@ function updateActiveBetButton(selectedBet) {
     });
 }
 
-/**
-    * Manages the visibility and styling of betting areas based on the 'point' state.
-    * Hides/shows Place bets and Pass/Don't Pass bets accordingly.
-    */
 function updatePointIndicator() {
     // First, ensure all 'point-on' highlights are removed
     placeBetAreas.forEach(area => {
@@ -185,7 +149,6 @@ function updatePointIndicator() {
     fieldBetArea.classList.remove('disabled');
 }
 
-
 /**
     * Renders the current bet amounts on the UI.
     */
@@ -202,9 +165,6 @@ function renderAllBets() {
     document.getElementById('allBonusBetAmount').textContent = allBonusBet > 0 ? `$${allBonusBet}` : '';
 }
 
-/**
-    * Updates the wallet display and saves the current wallet amount to a cookie.
-    */
 function updateWalletDisplayAndCookie() {
     walletAmountEl.textContent = wallet.toLocaleString('en-US');
     setCookie('casinoWallet', wallet, 365); // Save for 365 days
@@ -214,23 +174,35 @@ function updateWalletDisplayAndCookie() {
     * Resets the board for a new round, clearing all bets and point.
     */
 function clearBoardForNewRound() {
+
+    alert("clearing board!");
+
     passLineBet = 0;
+
     dontPassBet = 0;
+
     fieldBet = 0;
+
     for (const num in placeBets) { placeBets[num] = 0; }
+
     point = 0; // Reset point
+
     renderAllBets();
+
     updatePointIndicator(); // Update UI for come-out roll phase
+
     updateButtonState('betting'); // Re-enable betting phase
+
     updateWalletDisplayAndCookie(); // Update wallet display and cookie
+
     if (wallet <= 0) showStatusMessage("Game Over", 2000);
+
 }
 
-/**
-    * Clears all currently placed bets and returns money to the wallet.
-    * Behavior changes slightly if point is set (line bets cannot be cleared).
-    */
 function clearActiveBets() {
+
+    alert("clear active bets?");
+
     let returnedAmount = 0;
 
     returnedAmount += fieldBet;
@@ -272,12 +244,6 @@ function clearActiveBets() {
     updatePointIndicator(); // Re-evaluate disabled/visibility state for all bets
 }
 
-
-
-/**
-    * Resolves the outcome of the roll, updating bets and game state.
-    * @param {number} roll - The sum of the two dice.
-    */
 function handleRollResult(roll) {
     let messages = [];
 
@@ -408,9 +374,6 @@ function handleRollResult(roll) {
     else updateButtonState('betting'); // If no point and no bets, go to betting phase
 }
 
-/**
-    * Initiates the dice rolling animation and determines the final result.
-    */
 function rollDice() {
 
     const hasLineBet = passLineBet > 0 || dontPassBet > 0;
@@ -451,11 +414,6 @@ function rollDice() {
     }, 100);
 }
 
-/**
-    * Handles the logic for placing bets on the craps table.
-    * Prevents invalid bets based on game state (point on/off, conflicting bets).
-    * @param {HTMLElement} area - The betting area element that was clicked.
-    */
 function handleBetPlacement(area) {
     const type = area.dataset.betType;
     const number = parseInt(area.dataset.number); // For place bets
@@ -507,9 +465,6 @@ function handleBetPlacement(area) {
     updatePointIndicator(); // Re-evaluate UI state after placing a bet
 }
 
-
-// --- Event Listeners ---
-// Use event delegation for all bet areas to handle clicks
 const bettingLayoutElements = document.querySelectorAll('.bet-area');
 bettingLayoutElements.forEach(area => {
     area.addEventListener('click', () => {
@@ -526,6 +481,7 @@ bonusBettingElements.forEach(area => {
 });
 
 btnRoll.addEventListener('click', rollDice);
+
 btnClearBets.addEventListener('click', clearActiveBets);
 
 // Event listener for the Keep Bets button (toggle functionality)
@@ -544,40 +500,3 @@ betButtons.forEach(button => {
         betAmountEl.textContent = currentBet.toLocaleString('en-US');        updateActiveBetButton(currentBet);
     });
 });
-
-// Event listeners for Bonus View Toggle
-btnToggleBonus.addEventListener('click', () => {
-    gameConsoleEl.style.display = 'none';
-    bonusTrackerPanelEl.style.display = 'flex'; // Use flex as defined in .game-console style
-});
-
-btnBackToGame.addEventListener('click', () => {
-    gameConsoleEl.style.display = 'flex'; // Use flex as defined in .game-console style
-    bonusTrackerPanelEl.style.display = 'none';
-});
-
-
-// --- Initial Game Setup ---
-window.onload = () => {
-    // Try to load wallet from cookie
-    const savedWallet = getCookie('casinoWallet');
-    if (savedWallet && !isNaN(parseInt(savedWallet))) { // Ensure it's a valid number
-        wallet = parseInt(savedWallet);
-    } else {
-        //alert('seeing for first time');
-        wallet = 10000; // Default starting balance if no cookie exists or invalid
-        setCookie('casinoWallet', wallet, 365); // Save initial balance for 365 days
-    }
-    updateWalletDisplayAndCookie(); // Update display and ensure cookie is set
-
-    updateButtonState('betting'); // Start in the betting phase
-    updateActiveBetButton(currentBet); // Highlight initial bet amount
-    renderAllBets(); // Display initial bet amounts (should be 0)
-    updatePointIndicator(); // Initialize point indicators and bet area visibility
-    // Set initial state of the Keep Bets button
-    btnKeepBets.classList.toggle('active-toggle-button', keepWinningBets);
-
-    initializeBonusDisplay(); // Initialize bonus UI elements
-    resetBonusProgress(); // Ensure bonuses are reset at start of a new game session
-};
-

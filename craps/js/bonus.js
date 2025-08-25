@@ -1,3 +1,30 @@
+const smallBonusNumbersEl = document.getElementById('smallBonusNumbers');
+const tallBonusNumbersEl = document.getElementById('tallBonusNumbers');
+const allBonusNumbersEl = document.getElementById('allBonusNumbers');
+
+const smallBonusStatusEl = document.getElementById('smallBonusStatus');
+const tallBonusStatusEl = document.getElementById('tallBonusStatus');
+const allBonusStatusEl = document.getElementById('allBonusStatus');
+
+const smallBonusBetArea = document.querySelector('.bonus-bet-area[data-bonus-target="small"]');
+const tallBonusBetArea = document.querySelector('.bonus-bet-area[data-bonus-target="tall"]');
+const allBonusBetArea = document.querySelector('.bonus-bet-area[data-bonus-target="all"]');
+
+// --- Bonus Game State ---
+let smallBonusNumbersHit = new Set();
+let tallBonusNumbersHit = new Set();
+let allBonusNumbersHit = new Set(); // Will combine small and tall
+
+const SMALL_BONUS_TARGETS = new Set([2, 3, 4, 5, 6]);
+const TALL_BONUS_TARGETS = new Set([8, 9, 10, 11, 12]);
+const ALL_BONUS_TARGETS = new Set([...SMALL_BONUS_TARGETS, ...TALL_BONUS_TARGETS]);
+
+// New: Bonus Bet Amounts
+let smallBonusBet = 0;
+let tallBonusBet = 0;
+let allBonusBet = 0;
+
+
 /**
     * Initializes the bonus numbers display.
     * Populates the 'All' bonus section dynamically.
@@ -140,3 +167,17 @@ function resetBonusProgress() {
     allBonusNumbersHit.clear();
     updateBonusDisplay();
 }
+
+
+
+// Event listeners for Bonus View Toggle
+btnToggleBonus.addEventListener('click', () => {
+    gameConsoleEl.style.display = 'none';
+    bonusTrackerPanelEl.style.display = 'flex'; // Use flex as defined in .game-console style
+});
+
+btnBackToGame.addEventListener('click', () => {
+    gameConsoleEl.style.display = 'flex'; // Use flex as defined in .game-console style
+    bonusTrackerPanelEl.style.display = 'none';
+});
+

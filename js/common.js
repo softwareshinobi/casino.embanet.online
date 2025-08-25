@@ -40,3 +40,18 @@ function getCookie(name) {
     return null;
 
 }
+
+function showStatusMessage(message, duration = 1000) {
+    statusMessageEl.innerHTML = message;
+    statusMessageEl.style.display = 'block'; // Make it visible
+    statusMessageEl.classList.remove('fade-out-animation'); // Ensure previous animation is reset
+    statusMessageEl.classList.add('fade-in-animation'); // Trigger fade-in
+
+    setTimeout(() => {
+        statusMessageEl.classList.remove('fade-in-animation');
+        statusMessageEl.classList.add('fade-out-animation'); // Trigger fade-out
+        setTimeout(() => {
+            statusMessageEl.style.display = 'none';
+        }, 500); // Matches fade-out duration
+    }, duration - 500); // Start fade-out 0.5s before total duration ends
+}
