@@ -175,7 +175,7 @@ function updateWalletDisplayAndCookie() {
     */
 function clearBoardForNewRound() {
 
-    alert("clearing board!");
+    //alert("clearing board!");
 
     passLineBet = 0;
 
@@ -201,7 +201,7 @@ function clearBoardForNewRound() {
 
 function clearActiveBets() {
 
-    alert("clear active bets?");
+ //   alert("clear active bets?");
 
     let returnedAmount = 0;
 
