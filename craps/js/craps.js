@@ -206,7 +206,7 @@ function renderAllBets() {
     * Updates the wallet display and saves the current wallet amount to a cookie.
     */
 function updateWalletDisplayAndCookie() {
-    walletAmountEl.textContent = wallet;
+    walletAmountEl.textContent = wallet.toLocaleString('en-US');
     setCookie('casinoWallet', wallet, 365); // Save for 365 days
 }
 
@@ -541,8 +541,7 @@ betButtons.forEach(button => {
         const betValue = button.dataset.bet;
         currentBet = (betValue === 'max') ? wallet : parseInt(betValue);
         if (currentBet > wallet) currentBet = wallet; // Cap bet at wallet amount
-        betAmountEl.textContent = currentBet;
-        updateActiveBetButton(currentBet);
+        betAmountEl.textContent = currentBet.toLocaleString('en-US');        updateActiveBetButton(currentBet);
     });
 });
 
