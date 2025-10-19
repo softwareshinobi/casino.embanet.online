@@ -1,26 +1,21 @@
-// --- Initial Game Setup ---
-window.onload = () => {
-    // Try to load wallet from cookie
-    const savedWallet = getCookie('casinoWallet');
-    if (savedWallet && !isNaN(parseInt(savedWallet))) { // Ensure it's a valid number
-        wallet = parseInt(savedWallet);
-    } else {
-        //alert('seeing for first time');
-        wallet = 10000; // Default starting balance if no cookie exists or invalid
-        setCookie('casinoWallet', wallet, 365); // Save initial balance for 365 days
-    }
-    updateWalletDisplayAndCookie(); // Update display and ensure cookie is set
+$(document).ready(function() {
 
     updateButtonState('betting'); // Start in the betting phase
+
     updateActiveBetButton(currentBet); // Highlight initial bet amount
+
     renderAllBets(); // Display initial bet amounts (should be 0)
+
     updatePointIndicator(); // Initialize point indicators and bet area visibility
+
     // Set initial state of the Keep Bets button
     btnKeepBets.classList.toggle('active-toggle-button', keepWinningBets);
 
     initializeBonusDisplay(); // Initialize bonus UI elements
+
     resetBonusProgress(); // Ensure bonuses are reset at start of a new game session
-};
+
+});
 
 // Adjust body padding-top based on fixed navbar height
 document.addEventListener('DOMContentLoaded', function() {
@@ -43,7 +38,6 @@ const btnRoll = document.getElementById('btnRoll');
 const btnClearBets = document.getElementById('btnClearBets');
 const btnKeepBets = document.getElementById('btnKeepBets');
 const betButtons = document.querySelectorAll('.bet-value-button');
-const walletAmountEl = document.getElementById('walletAmount');
 const betAmountEl = document.getElementById('betAmount');
 const placeBetAreas = document.querySelectorAll('.bet-area[data-bet-type="place"]');
 const passLineBetArea = document.getElementById('passLineBetArea');
@@ -149,9 +143,6 @@ function updatePointIndicator() {
     fieldBetArea.classList.remove('disabled');
 }
 
-/**
-    * Renders the current bet amounts on the UI.
-    */
 function renderAllBets() {
     document.getElementById('passLineBetAmount').textContent = passLineBet > 0 ? `$${passLineBet}` : '';
     document.getElementById('dontPassBetAmount').textContent = dontPassBet > 0 ? `$${dontPassBet}` : '';
@@ -165,14 +156,6 @@ function renderAllBets() {
     document.getElementById('allBonusBetAmount').textContent = allBonusBet > 0 ? `$${allBonusBet}` : '';
 }
 
-function updateWalletDisplayAndCookie() {
-    walletAmountEl.textContent = wallet.toLocaleString('en-US');
-    setCookie('casinoWallet', wallet, 365); // Save for 365 days
-}
-
-/**
-    * Resets the board for a new round, clearing all bets and point.
-    */
 function clearBoardForNewRound() {
 
     //alert("clearing board!");
