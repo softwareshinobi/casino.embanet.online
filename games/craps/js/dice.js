@@ -9,9 +9,14 @@ function throwDice() {
 
     const rollInterval = setInterval(() => {
 
-        die1El.textContent = Math.floor(Math.random() * 6) + 1;
 
-        die2El.textContent = Math.floor(Math.random() * 6) + 1;
+        const d1 = Math.floor(Math.random() * 6) + 1;
+        
+            const d2 = Math.floor(Math.random() * 6) + 1;        
+
+        die1El.textContent = d1;
+
+        die2El.textContent = d2;
 
         rollCount++;
 
@@ -19,26 +24,28 @@ function throwDice() {
 
             clearInterval(rollInterval);
 
-            const d1 = Math.floor(Math.random() * 6) + 1;
+            const dieOne = Math.floor(Math.random() * 6) + 1;
 
-            const d2 = Math.floor(Math.random() * 6) + 1;
+            const dieTwo = Math.floor(Math.random() * 6) + 1;
 
-            die1El.textContent = d1;
+                        const dieTotal = dieOne + dieTwo;
 
-            die2El.textContent = d2;
+            die1El.textContent = dieOne;
+
+            die2El.textContent = dieTwo;
 
             //
             //
             //
 
-            events.publish('dieRolled', { d1, d2 });
+            events.publish('dieRolled', { dieOne, dieTwo, dieTotal });
 
             // --- ADDED: Record the roll result ---
             // Push an object containing the individual dice values and the total
-            rollHistoryArray.push({ die1: d1, die2: d2, total: d1 + d2, timestamp: new Date() });
+            rollHistoryArray.push({ die1: dieOne, die2: dieTwo, total: dieOne + dieTwo, timestamp: new Date() });
             // ------------------------------------
 
-            handleRollResult(d1 + d2);
+            handleRollResult(dieOne + dieTwo);
 
         }
 
@@ -48,18 +55,21 @@ function throwDice() {
 
 }
 
-function throwDiceRigged(dieOne, dieTwo) {
+function throwDiceRigged(riggedDieOne, riggedDieTwo) {
 
     console.log("throwRiggedDice called");
-    console.log("Rigged Dice Values:", dieOne, dieTwo);
+    console.log("Rigged Dice Values:", riggedDieOne, riggedDieTwo);
 
     let rollCount = 0;
 
     const rollInterval = setInterval(() => {
 
-        die1El.textContent = Math.floor(Math.random() * 6) + 1;
+const d1 = ((riggedDieOne - 1) % 6) + 1;
+const d2 = ((riggedDieTwo - 1) % 6) + 1;   
 
-        die2El.textContent = Math.floor(Math.random() * 6) + 1;
+        die1El.textContent = d1;
+
+        die2El.textContent = d2;
 
         rollCount++;
 
@@ -67,20 +77,23 @@ function throwDiceRigged(dieOne, dieTwo) {
 
             clearInterval(rollInterval);
 
-            const d1 = ((dieOne - 1) % 6) + 1;
+            const dieOne = ((d1 - 1) % 6) + 1;
 
-            const d2 = ((dieTwo - 1) % 6) + 1;
+            const dieTwo = ((d2 - 1) % 6) + 1;
 
-            die1El.textContent = d1;
+            const dieTotal = dieOne + dieTwo;
 
-            die2El.textContent = d2;
+            die1El.textContent = dieOne;
 
-            events.publish('dieRolled', { d1, d2 });
+            die2El.textContent = dieTwo;
 
-            rollHistoryArray.push({ die1: d1, die2: d2, total: d1 + d2, timestamp: new Date() });
+            events.publish('dieRolled', { dieOne, dieTwo, dieTotal });
+
+            rollHistoryArray.push({ dieOne, dieTwo, dieTotal, timestamp: new Date() });
+
             // ------------------------------------
 
-            handleRollResult(d1 + d2);
+            handleRollResult(dieOne + dieTwo);
 
         }
 

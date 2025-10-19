@@ -10,15 +10,15 @@ class HardwaysWatcher {
 
     }
 
-    checkHardways({ d1, d2 }) {
+    checkHardways({ dieOne, dieTwo, dieTotal }) {
 
-        if (d1 === d2 && [2, 3, 4, 5].includes(d1)) {
+        console.log(`[HardwaysWatcher] Event Received: dieOne=${dieOne}, dieTwo=${dieTwo}, Total=${dieTotal}`);
 
-            const total = d1 + d2;
+        if (dieOne === dieTwo && [2, 3, 4, 5].includes(dieOne)) {
 
-            alert(`🔥 Hardways! Rolled doubles ${d1} + ${d2} = ${total}`);
+            // alert(`🔥 Hardways! Rolled doubles ${dieOne} + ${dieTwo} = ${dieTotal}`);
 
-            console.log(`Hardways detected: ${d1} + ${d2} = ${total}`);
+            console.log(`Hardways detected: ${dieOne} + ${dieTwo} = ${dieTotal}`);
 
         }
 

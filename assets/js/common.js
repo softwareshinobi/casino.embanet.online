@@ -1,3 +1,8 @@
+const EVENT_KEYS = {
+
+    DICE_ROLLED: 'dieRolled',
+    
+};
 
 const KEY_COOKIE_WALLET = 'casinoWallet';
 
