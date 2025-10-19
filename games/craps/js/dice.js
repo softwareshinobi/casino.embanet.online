@@ -85,7 +85,7 @@ function completeRollAndLog(dieOne, dieTwo) {
 
     dieTotal = dieOne + dieTwo;
 
-    events.publish('dieRolled', { dieOne, dieTwo, dieTotal });
+    events.publish('dieRolled', { dieOne, dieTwo, dieTotal });    
 
     rollHistoryArray.push({ dieOne, dieTwo, dieTotal, timestamp: new Date() });
     
