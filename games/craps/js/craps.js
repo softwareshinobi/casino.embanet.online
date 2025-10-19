@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
 
     updateButtonState('betting'); // Start in the betting phase
 
@@ -17,18 +17,7 @@ $(document).ready(function() {
 
 });
 
-// Adjust body padding-top based on fixed navbar height
-document.addEventListener('DOMContentLoaded', function() {
-    const navbar = document.querySelector('.navbar.fixed-top');
-    if (navbar) {
-        const setBodyPadding = () => {
-            const navbarHeight = navbar.offsetHeight;
-            document.body.style.paddingTop = navbarHeight + 'px';
-        };
-        setBodyPadding(); // Set initially
-        window.addEventListener('resize', setBodyPadding); // Adjust on resize
-    }
-});
+
 
 // --- DOM Elements ---
 const die1El = document.getElementById('die1');
@@ -184,7 +173,7 @@ function clearBoardForNewRound() {
 
 function clearActiveBets() {
 
- //   alert("clear active bets?");
+    //   alert("clear active bets?");
 
     let returnedAmount = 0;
 
@@ -366,8 +355,8 @@ function rollDice() {
     // Can only roll if there's a Pass/Don't Pass bet (if point is off)
     // Or if there are any bets at all (if point is on or if it's a field bet or bonus bet)
     if (point === 0 && !hasLineBet && !hasOtherBets && !hasBonusBets) { // No point, and no line bets to set a point
-            showStatusMessage("Place a Pass Line or Don't Pass bet to start!");
-            return;
+        showStatusMessage("Place a Pass Line or Don't Pass bet to start!");
+        return;
     } else if (point !== 0 && !hasLineBet && !hasOtherBets && !hasBonusBets) { // Point is on, but no bets remain (e.g., cleared them all)
         showStatusMessage("Place a bet to continue the round!");
         return;
@@ -377,24 +366,13 @@ function rollDice() {
 
     gameConsoleEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-// Scroll to the top of the game console so dice are visible
+    // Scroll to the top of the game console so dice are visible
     //die1El.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
     updateButtonState('inProgress'); // Disable buttons during roll animation
-    let rollCount = 0;
-    const rollInterval = setInterval(() => {
-        die1El.textContent = Math.floor(Math.random() * 6) + 1;
-        die2El.textContent = Math.floor(Math.random() * 6) + 1;
-        rollCount++;
-        if (rollCount > 10) { // Simulate a few rolls before showing final result
-            clearInterval(rollInterval);
-            const d1 = Math.floor(Math.random() * 6) + 1;
-            const d2 = Math.floor(Math.random() * 6) + 1;
-            die1El.textContent = d1;
-            die2El.textContent = d2;
-            handleRollResult(d1 + d2);
-        }
-    }, 100);
+
+    throwDice();
+
 }
 
 function handleBetPlacement(area) {
@@ -480,6 +458,6 @@ betButtons.forEach(button => {
         const betValue = button.dataset.bet;
         currentBet = (betValue === 'max') ? wallet : parseInt(betValue);
         if (currentBet > wallet) currentBet = wallet; // Cap bet at wallet amount
-        betAmountEl.textContent = currentBet.toLocaleString('en-US');        updateActiveBetButton(currentBet);
+        betAmountEl.textContent = currentBet.toLocaleString('en-US'); updateActiveBetButton(currentBet);
     });
 });
