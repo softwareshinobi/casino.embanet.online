@@ -1,5 +1,5 @@
-// A global array to store the results of all rolls
-const rollHistory = [];
+
+const rollHistoryArray = [];
 
 function throwDice() {
 
@@ -27,9 +27,15 @@ function throwDice() {
 
             die2El.textContent = d2;
 
+            //
+            //
+            //
+
+            events.publish('dieRolled', { d1, d2 });
+
             // --- ADDED: Record the roll result ---
             // Push an object containing the individual dice values and the total
-            rollHistory.push({ die1: d1, die2: d2, total: d1 + d2, timestamp: new Date() });
+            rollHistoryArray.push({ die1: d1, die2: d2, total: d1 + d2, timestamp: new Date() });
             // ------------------------------------
 
             handleRollResult(d1 + d2);
@@ -69,9 +75,9 @@ function throwDiceRigged(dieOne, dieTwo) {
 
             die2El.textContent = d2;
 
-            // --- ADDED: Record the roll result ---
-            // Push an object containing the individual dice values and the total
-            rollHistory.push({ die1: d1, die2: d2, total: d1 + d2, timestamp: new Date() });
+            events.publish('dieRolled', { d1, d2 });
+
+            rollHistoryArray.push({ die1: d1, die2: d2, total: d1 + d2, timestamp: new Date() });
             // ------------------------------------
 
             handleRollResult(d1 + d2);
@@ -84,16 +90,16 @@ function throwDiceRigged(dieOne, dieTwo) {
 
 }
 
-function getRollHistory(rollCount = 20) {
+function rollHistory(rollCount = 20) {
 
     console.log("--- Last 20 Rolls ---");
 
     // Calculate the starting index: 
     // This starts from the array length minus 20, or 0 if there are less than 20 rolls.
-    const startIndex = Math.max(0, rollHistory.length - 20);
+    const startIndex = Math.max(0, rollHistoryArray.length - 20);
 
     // Use slice to get a new array containing only the last 20 (or fewer) elements
-    const last20Rolls = rollHistory.slice(startIndex);
+    const last20Rolls = rollHistoryArray.slice(startIndex);
 
     if (last20Rolls.length === 0) {
         console.log("No rolls recorded yet.");
@@ -103,7 +109,7 @@ function getRollHistory(rollCount = 20) {
     // Iterate over the last rolls and log the details
     last20Rolls.forEach((roll, index) => {
         // Calculate the roll number based on the current history length
-        const rollNumber = rollHistory.length - last20Rolls.length + index + 1;
+        const rollNumber = rollHistoryArray.length - last20Rolls.length + index + 1;
 
         // Format the timestamp for cleaner output
         const time = roll.timestamp.toLocaleTimeString();
