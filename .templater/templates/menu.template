@@ -10,36 +10,30 @@
 
 </button>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
+        <div class="collapse navbar-collapse" id="navbarNav">
 
-                <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav ms-auto">
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="/blackjack/index.html">Blackjack</a>
-                    </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/games/blackjack/index.html">Blackjack</a>
+                </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="/casinowar/index.html">Casino War</a>
-                    </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/games/casinowar/index.html">Casino War</a>
+                </li>
 
-                    <li class="nav-item HIDDEN">
-                        <a class="nav-link" href="/roulette/index.html">Roulette</a>
-                    </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/games/baccarat/baccarat.html">Baccarat</a>
+                </li>
 
-                    <li class="nav-item HIDDEN">
-                        <a class="nav-link" href="/slots/index.html">Slots</a>
-                    </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/games/craps/craps.html">Craps</a>
+                </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="/baccarat/baccarat.html">Baccarat</a>
-                    </li>
+            </ul>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="/craps/craps.html">Craps</a>
-                    </li>
-
-                </ul>
-
-            </div>
         </div>
+
+    </div>
+
 </nav>

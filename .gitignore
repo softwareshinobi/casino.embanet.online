@@ -11,3 +11,5 @@
 .template
 
 .calendar
+
+__pycache__
