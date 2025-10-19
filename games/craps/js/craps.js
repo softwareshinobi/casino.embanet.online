@@ -1,39 +1,23 @@
-// --- Initial Game Setup ---
-window.onload = () => {
-    // Try to load wallet from cookie
-    const savedWallet = getCookie('casinoWallet');
-    if (savedWallet && !isNaN(parseInt(savedWallet))) { // Ensure it's a valid number
-        wallet = parseInt(savedWallet);
-    } else {
-        //alert('seeing for first time');
-        wallet = 10000; // Default starting balance if no cookie exists or invalid
-        setCookie('casinoWallet', wallet, 365); // Save initial balance for 365 days
-    }
-    updateWalletDisplayAndCookie(); // Update display and ensure cookie is set
+$(document).ready(function () {
 
     updateButtonState('betting'); // Start in the betting phase
+
     updateActiveBetButton(currentBet); // Highlight initial bet amount
+
     renderAllBets(); // Display initial bet amounts (should be 0)
+
     updatePointIndicator(); // Initialize point indicators and bet area visibility
+
     // Set initial state of the Keep Bets button
     btnKeepBets.classList.toggle('active-toggle-button', keepWinningBets);
 
     initializeBonusDisplay(); // Initialize bonus UI elements
-    resetBonusProgress(); // Ensure bonuses are reset at start of a new game session
-};
 
-// Adjust body padding-top based on fixed navbar height
-document.addEventListener('DOMContentLoaded', function() {
-    const navbar = document.querySelector('.navbar.fixed-top');
-    if (navbar) {
-        const setBodyPadding = () => {
-            const navbarHeight = navbar.offsetHeight;
-            document.body.style.paddingTop = navbarHeight + 'px';
-        };
-        setBodyPadding(); // Set initially
-        window.addEventListener('resize', setBodyPadding); // Adjust on resize
-    }
+    resetBonusProgress(); // Ensure bonuses are reset at start of a new game session
+
 });
+
+
 
 // --- DOM Elements ---
 const die1El = document.getElementById('die1');
@@ -43,7 +27,6 @@ const btnRoll = document.getElementById('btnRoll');
 const btnClearBets = document.getElementById('btnClearBets');
 const btnKeepBets = document.getElementById('btnKeepBets');
 const betButtons = document.querySelectorAll('.bet-value-button');
-const walletAmountEl = document.getElementById('walletAmount');
 const betAmountEl = document.getElementById('betAmount');
 const placeBetAreas = document.querySelectorAll('.bet-area[data-bet-type="place"]');
 const passLineBetArea = document.getElementById('passLineBetArea');
@@ -149,9 +132,6 @@ function updatePointIndicator() {
     fieldBetArea.classList.remove('disabled');
 }
 
-/**
-    * Renders the current bet amounts on the UI.
-    */
 function renderAllBets() {
     document.getElementById('passLineBetAmount').textContent = passLineBet > 0 ? `$${passLineBet}` : '';
     document.getElementById('dontPassBetAmount').textContent = dontPassBet > 0 ? `$${dontPassBet}` : '';
@@ -165,14 +145,6 @@ function renderAllBets() {
     document.getElementById('allBonusBetAmount').textContent = allBonusBet > 0 ? `$${allBonusBet}` : '';
 }
 
-function updateWalletDisplayAndCookie() {
-    walletAmountEl.textContent = wallet.toLocaleString('en-US');
-    setCookie('casinoWallet', wallet, 365); // Save for 365 days
-}
-
-/**
-    * Resets the board for a new round, clearing all bets and point.
-    */
 function clearBoardForNewRound() {
 
     //alert("clearing board!");
@@ -201,7 +173,7 @@ function clearBoardForNewRound() {
 
 function clearActiveBets() {
 
- //   alert("clear active bets?");
+    //   alert("clear active bets?");
 
     let returnedAmount = 0;
 
@@ -383,8 +355,8 @@ function rollDice() {
     // Can only roll if there's a Pass/Don't Pass bet (if point is off)
     // Or if there are any bets at all (if point is on or if it's a field bet or bonus bet)
     if (point === 0 && !hasLineBet && !hasOtherBets && !hasBonusBets) { // No point, and no line bets to set a point
-            showStatusMessage("Place a Pass Line or Don't Pass bet to start!");
-            return;
+        showStatusMessage("Place a Pass Line or Don't Pass bet to start!");
+        return;
     } else if (point !== 0 && !hasLineBet && !hasOtherBets && !hasBonusBets) { // Point is on, but no bets remain (e.g., cleared them all)
         showStatusMessage("Place a bet to continue the round!");
         return;
@@ -394,24 +366,13 @@ function rollDice() {
 
     gameConsoleEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-// Scroll to the top of the game console so dice are visible
+    // Scroll to the top of the game console so dice are visible
     //die1El.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
     updateButtonState('inProgress'); // Disable buttons during roll animation
-    let rollCount = 0;
-    const rollInterval = setInterval(() => {
-        die1El.textContent = Math.floor(Math.random() * 6) + 1;
-        die2El.textContent = Math.floor(Math.random() * 6) + 1;
-        rollCount++;
-        if (rollCount > 10) { // Simulate a few rolls before showing final result
-            clearInterval(rollInterval);
-            const d1 = Math.floor(Math.random() * 6) + 1;
-            const d2 = Math.floor(Math.random() * 6) + 1;
-            die1El.textContent = d1;
-            die2El.textContent = d2;
-            handleRollResult(d1 + d2);
-        }
-    }, 100);
+
+    throwDice();
+
 }
 
 function handleBetPlacement(area) {
@@ -497,6 +458,6 @@ betButtons.forEach(button => {
         const betValue = button.dataset.bet;
         currentBet = (betValue === 'max') ? wallet : parseInt(betValue);
         if (currentBet > wallet) currentBet = wallet; // Cap bet at wallet amount
-        betAmountEl.textContent = currentBet.toLocaleString('en-US');        updateActiveBetButton(currentBet);
+        betAmountEl.textContent = currentBet.toLocaleString('en-US'); updateActiveBetButton(currentBet);
     });
 });
