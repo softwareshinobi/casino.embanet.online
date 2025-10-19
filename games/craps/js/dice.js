@@ -27,7 +27,7 @@ function throwDice() {
 
             die2El.textContent = d2;
 
-                        // --- ADDED: Record the roll result ---
+            // --- ADDED: Record the roll result ---
             // Push an object containing the individual dice values and the total
             rollHistory.push({ die1: d1, die2: d2, total: d1 + d2, timestamp: new Date() });
             // ------------------------------------
@@ -42,10 +42,50 @@ function throwDice() {
 
 }
 
-/**
- * Displays the last 20 dice rolls in the console.
- */
-function viewLast20Rolls() {
+function throwDiceRigged(dieOne, dieTwo) {
+
+    console.log("throwRiggedDice called");
+    console.log("Rigged Dice Values:", dieOne, dieTwo);
+
+    let rollCount = 0;
+
+    const rollInterval = setInterval(() => {
+
+        die1El.textContent = Math.floor(Math.random() * 6) + 1;
+
+        die2El.textContent = Math.floor(Math.random() * 6) + 1;
+
+        rollCount++;
+
+        if (rollCount > 10) {
+
+            clearInterval(rollInterval);
+
+            const d1 = ((dieOne - 1) % 6) + 1;
+
+            const d2 = ((dieTwo - 1) % 6) + 1;
+
+            die1El.textContent = d1;
+
+            die2El.textContent = d2;
+
+            // --- ADDED: Record the roll result ---
+            // Push an object containing the individual dice values and the total
+            rollHistory.push({ die1: d1, die2: d2, total: d1 + d2, timestamp: new Date() });
+            // ------------------------------------
+
+            handleRollResult(d1 + d2);
+
+        }
+
+    }, 100);
+
+    console.log("throwRiggedDice finished");
+
+}
+
+function getRollHistory(rollCount = 20) {
+
     console.log("--- Last 20 Rolls ---");
 
     // Calculate the starting index: 
