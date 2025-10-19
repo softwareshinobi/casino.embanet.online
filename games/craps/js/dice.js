@@ -1,5 +1,36 @@
 const rollHistoryArray = [];
 
+function throwDice() {
+
+    console.log("throwDice called");
+
+    const { dieOne, dieTwo } = animateDiceRoll();
+
+    console.log("Animated Dice Values:", dieOne, dieTwo);
+
+    completeRollAndLog(dieOne, dieTwo);
+
+    console.log("throwDice finished");
+
+    handleRollResult(dieOne + dieTwo);
+
+    console.log("handleRollResult finished");
+
+}
+
+function throwDiceRigged(riggedDieOne, riggedDieTwo) {
+
+    console.log("throwRiggedDice called");
+    console.log("Rigged Dice Values:", riggedDieOne, riggedDieTwo);
+
+    const { dieOne, dieTwo } = animateDiceRoll();
+
+    completeRollAndLog(riggedDieOne, riggedDieTwo);
+
+    handleRollResult(dieOne + dieTwo);
+
+}
+
 function generateRandomDiceValues() {
 
     const d1 = Math.floor(Math.random() * 6) + 1;
@@ -10,37 +41,41 @@ function generateRandomDiceValues() {
 
 }
 
-function animateAndDraw() {
-
-    let rollCount = 0;
+function animateDiceRoll() {
 
     const maxRolls = 10;
 
-    const intervalTime = 100;
+    let dieOne, dieTwo;
 
-    const rollInterval = setInterval(() => {
+    for (let rollCount = 0; rollCount < maxRolls; rollCount++) {
+
+        console.log("Animating roll:", rollCount + 1);
 
         const { d1, d2 } = generateRandomDiceValues();
 
-        die1El.textContent = d1;
+        updateDieDisplay(d1, d2);
 
-        die2El.textContent = d2;
+        dieOne = d1;
 
-        rollCount++;
+        dieTwo = d2;
 
-        if (rollCount >= maxRolls) {
+    }
 
-            clearInterval(rollInterval);
+    console.log("Final Dice Values after animation:", dieOne, dieTwo);
 
-        }
-
-    }, intervalTime);
-
-    return { d1, d2 };
+    return { dieOne, dieTwo };
 
 }
 
-function handleRollResult( dieOne, dieTwo) {
+function updateDieDisplay(d1, d2) {
+
+    die1El.textContent = d1;
+
+    die2El.textContent = d2;
+
+}
+
+function completeRollAndLog(dieOne, dieTwo) {
 
     console.log("handleRollResult called with:", dieOne, dieTwo);
 
@@ -48,21 +83,15 @@ function handleRollResult( dieOne, dieTwo) {
 
     die2El.textContent = dieTwo;
 
+    dieTotal = dieOne + dieTwo;
+
     events.publish('dieRolled', { dieOne, dieTwo, dieTotal });
 
-    rollHistoryArray.push({ die1: dieOne, die2: dieTwo, total: dieOne + dieTwo, timestamp: new Date() });
-
-}
-
-function throwDice() {
-
-    const { dieOne, dieTwo } = animateAndDraw();
+    rollHistoryArray.push({ dieOne, dieTwo, dieTotal, timestamp: new Date() });
     
-    handleRollResult(dieOne, dieTwo);
-
+    rollHistory();
 
 }
-
 
 function throwDice1() {
 
@@ -107,7 +136,7 @@ function throwDice1() {
             rollHistoryArray.push({ die1: dieOne, die2: dieTwo, total: dieOne + dieTwo, timestamp: new Date() });
             // ------------------------------------
 
-            handleRollResult(dieOne + dieTwo);
+            completeRollAndLog(dieOne + dieTwo);
 
         }
 
@@ -117,7 +146,7 @@ function throwDice1() {
 
 }
 
-function throwDiceRigged(riggedDieOne, riggedDieTwo) {
+function throwDiceRigged1(riggedDieOne, riggedDieTwo) {
 
     console.log("throwRiggedDice called");
     console.log("Rigged Dice Values:", riggedDieOne, riggedDieTwo);
@@ -155,7 +184,7 @@ function throwDiceRigged(riggedDieOne, riggedDieTwo) {
 
             // ------------------------------------
 
-            handleRollResult(dieOne + dieTwo);
+            completeRollAndLog(dieOne + dieTwo);
 
         }
 
@@ -189,9 +218,9 @@ function rollHistory(rollCount = 20) {
         // Format the timestamp for cleaner output
         const time = roll.timestamp.toLocaleTimeString();
 
-        console.log(
-            `Roll #${rollNumber} (${time}): Die 1: ${roll.die1}, Die 2: ${roll.die2}, Total: ${roll.total}`
-        );
+console.log(
+            `Roll #${rollNumber} (${time}): Die 1: ${roll.dieOne}, Die 2: ${roll.dieTwo}, Total: ${roll.dieTotal}`
+        );        
     });
 
     console.log("-----------------------");
