@@ -1,7 +1,70 @@
-
 const rollHistoryArray = [];
 
+function generateRandomDiceValues() {
+
+    const d1 = Math.floor(Math.random() * 6) + 1;
+
+    const d2 = Math.floor(Math.random() * 6) + 1;
+
+    return { d1, d2 };
+
+}
+
+function animateAndDraw() {
+
+    let rollCount = 0;
+
+    const maxRolls = 10;
+
+    const intervalTime = 100;
+
+    const rollInterval = setInterval(() => {
+
+        const { d1, d2 } = generateRandomDiceValues();
+
+        die1El.textContent = d1;
+
+        die2El.textContent = d2;
+
+        rollCount++;
+
+        if (rollCount >= maxRolls) {
+
+            clearInterval(rollInterval);
+
+        }
+
+    }, intervalTime);
+
+    return { d1, d2 };
+
+}
+
+function handleRollResult( dieOne, dieTwo) {
+
+    console.log("handleRollResult called with:", dieOne, dieTwo);
+
+    die1El.textContent = dieOne;
+
+    die2El.textContent = dieTwo;
+
+    events.publish('dieRolled', { dieOne, dieTwo, dieTotal });
+
+    rollHistoryArray.push({ die1: dieOne, die2: dieTwo, total: dieOne + dieTwo, timestamp: new Date() });
+
+}
+
 function throwDice() {
+
+    const { dieOne, dieTwo } = animateAndDraw();
+    
+    handleRollResult(dieOne, dieTwo);
+
+
+}
+
+
+function throwDice1() {
 
     console.log("throwDice called");
 
@@ -9,10 +72,9 @@ function throwDice() {
 
     const rollInterval = setInterval(() => {
 
-
         const d1 = Math.floor(Math.random() * 6) + 1;
-        
-            const d2 = Math.floor(Math.random() * 6) + 1;        
+
+        const d2 = Math.floor(Math.random() * 6) + 1;
 
         die1El.textContent = d1;
 
@@ -28,7 +90,7 @@ function throwDice() {
 
             const dieTwo = Math.floor(Math.random() * 6) + 1;
 
-                        const dieTotal = dieOne + dieTwo;
+            const dieTotal = dieOne + dieTwo;
 
             die1El.textContent = dieOne;
 
@@ -64,8 +126,8 @@ function throwDiceRigged(riggedDieOne, riggedDieTwo) {
 
     const rollInterval = setInterval(() => {
 
-const d1 = ((riggedDieOne - 1) % 6) + 1;
-const d2 = ((riggedDieTwo - 1) % 6) + 1;   
+        const d1 = ((riggedDieOne - 1) % 6) + 1;
+        const d2 = ((riggedDieTwo - 1) % 6) + 1;
 
         die1El.textContent = d1;
 
