@@ -109,21 +109,140 @@ function updateBonusDisplay() {
     }
 }
 
+function updateBonusDisplay2() {
+
+let statusString = "";
+const hitSymbol = '&#x2605;'; // Renders as a Black Star ★
+// 
+
+// Convert ALL_BONUS_TARGETS Set to an Array for ordered iteration
+    const targetsArray = Array.from(SMALL_BONUS_TARGETS).sort((a, b) => a - b);
+    
+    // Use allBonusNumbersHit to check hit status 
+    targetsArray.forEach(num => {
+        
+        // Check if the current number is hit
+        const isHit = allBonusNumbersHit.has(num);
+        
+        // Use double quotes and concatenation to decide the display format
+        // If hit: "(10)"  If not hit: "9"
+        const numDisplay = isHit ?  hitSymbol  : "" + num; 
+        
+        // Append the number/indicator and a space
+        statusString = statusString + numDisplay + " ";
+    });
+
+    statusString = statusString.trim();
+
+    const element = document.getElementById('smallBonusText');
+
+    if (element) {
+        // .textContent is generally safer and better for setting plain text
+        element.innerHTML = statusString;
+        
+        // If you need to include HTML tags in the value, use .innerHTML instead
+        // element.innerHTML = newText;
+    }
+
+/////////////////////////////////
+///////////////////////////////
+////////////////////////////////
+
+statusString = "";
+    
+    // Convert ALL_BONUS_TARGETS Set to an Array for ordered iteration
+    const targetsArrayTALL = Array.from(TALL_BONUS_TARGETS).sort((a, b) => a - b);
+    
+    // Use allBonusNumbersHit to check hit status 
+    targetsArrayTALL.forEach(num => {
+        
+        // Check if the current number is hit
+        const isHit = allBonusNumbersHit.has(num);
+        
+        // Use double quotes and concatenation to decide the display format
+        // If hit: "(10)"  If not hit: "9"
+        const numDisplay = isHit ?  hitSymbol  : "" + num; 
+        
+        // Append the number/indicator and a space
+        statusString = statusString + numDisplay + " ";
+    });
+
+    statusString = statusString.trim();
+
+    const elementTALL = document.getElementById('tallBonusText');
+
+    if (elementTALL) {
+        // .textContent is generally safer and better for setting plain text
+        elementTALL.innerHTML = statusString; 
+        
+        // If you need to include HTML tags in the value, use .innerHTML instead
+        // element.innerHTML = newText;
+    }
+
+}
+
+function updateBonusDisplay3() {
+
+let statusString = "Bonus: ";
+    
+    // Convert ALL_BONUS_TARGETS Set to an Array for ordered iteration
+    const targetsArray = Array.from(SMALL_BONUS_TARGETS).sort((a, b) => a - b);
+    
+    // Use allBonusNumbersHit to check hit status 
+    targetsArray.forEach(num => {
+        
+        // Check if the current number is hit
+        const isHit = allBonusNumbersHit.has(num);
+        
+        // Use double quotes and concatenation to decide the display format
+        // If hit: "(10)"  If not hit: "9"
+        const numDisplay = isHit ? "(" + num + ")" : "" + num; 
+        
+        // Append the number/indicator and a space
+        statusString = statusString + numDisplay + " ";
+    });
+
+    statusString = statusString.trim();
+
+    const element = document.getElementById('smallBonusText');
+
+    if (element) {
+        // .textContent is generally safer and better for setting plain text
+        element.textContent = statusString; 
+        
+        // If you need to include HTML tags in the value, use .innerHTML instead
+        // element.innerHTML = newText;
+    }
+
+
+
+
+
+    // Print the final string, trimming the trailing space
+    console.log(statusString.trim());
+}
 /**
     * Tracks the progress of Small, Tall, and All bonuses based on the rolled number.
     * Awards payout if a bonus is completed.
     * @param {number} roll - The sum of the two dice.
     */
 function trackBonusProgress(roll) {
+
+    //console.log(`Tracking bonus progress for roll: ${roll}`);
+
     if (SMALL_BONUS_TARGETS.has(roll)) {
         smallBonusNumbersHit.add(roll);
         allBonusNumbersHit.add(roll);
     }
+
     if (TALL_BONUS_TARGETS.has(roll)) {
         tallBonusNumbersHit.add(roll);
         allBonusNumbersHit.add(roll);
     }
+
     updateBonusDisplay(); // Update UI after each roll
+    
+    updateBonusDisplay2(); // Update UI after each roll
 
     // Check for bonus completion and payout
     // Small Bonus Payout
@@ -162,10 +281,19 @@ function trackBonusProgress(roll) {
     * This is typically called when a "seven out" occurs.
     */
 function resetBonusProgress() {
+
+    console.log("Resetting bonus progress");
+
     smallBonusNumbersHit.clear();
+
     tallBonusNumbersHit.clear();
+
     allBonusNumbersHit.clear();
+
     updateBonusDisplay();
+
+    updateBonusDisplay2();
+
 }
 
 

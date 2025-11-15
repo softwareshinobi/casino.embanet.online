@@ -338,3 +338,20 @@ body {
         grid-template-columns: repeat(3, 1fr);
     }
 }
+
+
+/* This is the key that makes the children sit on the same row */
+#diceAndBonusArea {
+    display: flex; 
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 1rem;
+    gap: 10px; /* Provides space between the items */
+}
+
+/* This is the key that makes the bonus areas expand equally */
+.equal-bonus-area {
+    flex: 1 1 0; /* Grow, Shrink, and Base Width */
+    /* ... (rest of your styling) ... */
+}
