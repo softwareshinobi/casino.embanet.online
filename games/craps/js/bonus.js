@@ -111,25 +111,31 @@ function updateBonusDisplay() {
 
 function updateBonusDisplay2() {
 
-let statusString = "";
-const hitSymbol = '&#x2605;'; // Renders as a Black Star ★
-// 
+    let statusString = "";
 
-// Convert ALL_BONUS_TARGETS Set to an Array for ordered iteration
+    const hitSymbol = '&#x2605;'; // black Star ★
+    
+    //const padSymbol = '#';
+
+    const padSymbol = '&nbsp;';
+
     const targetsArray = Array.from(SMALL_BONUS_TARGETS).sort((a, b) => a - b);
     
-    // Use allBonusNumbersHit to check hit status 
     targetsArray.forEach(num => {
         
-        // Check if the current number is hit
         const isHit = allBonusNumbersHit.has(num);
         
-        // Use double quotes and concatenation to decide the display format
-        // If hit: "(10)"  If not hit: "9"
-        const numDisplay = isHit ?  hitSymbol  : "" + num; 
+        let numDisplay = isHit ?  hitSymbol  : "" + num; 
         
-        // Append the number/indicator and a space
-        statusString = statusString + numDisplay + " ";
+        if (!isHit && num < 10) {
+        
+            //numDisplay = "&nbsp;" + numDisplay;
+            //numDisplay = padSymbol + numDisplay;
+            
+        }
+        
+        statusString = statusString + numDisplay + padSymbol;
+        
     });
 
     statusString = statusString.trim();
@@ -137,11 +143,9 @@ const hitSymbol = '&#x2605;'; // Renders as a Black Star ★
     const element = document.getElementById('smallBonusText');
 
     if (element) {
-        // .textContent is generally safer and better for setting plain text
+  
         element.innerHTML = statusString;
-        
-        // If you need to include HTML tags in the value, use .innerHTML instead
-        // element.innerHTML = newText;
+  
     }
 
 /////////////////////////////////
@@ -156,15 +160,19 @@ statusString = "";
     // Use allBonusNumbersHit to check hit status 
     targetsArrayTALL.forEach(num => {
         
-        // Check if the current number is hit
         const isHit = allBonusNumbersHit.has(num);
         
-        // Use double quotes and concatenation to decide the display format
-        // If hit: "(10)"  If not hit: "9"
-        const numDisplay = isHit ?  hitSymbol  : "" + num; 
+        let numDisplay = isHit ?  hitSymbol  : "" + num; 
         
-        // Append the number/indicator and a space
-        statusString = statusString + numDisplay + " ";
+        if (!isHit && num < 10) {
+        
+            //numDisplay = "&nbsp;" + numDisplay;
+            //numDisplay = padSymbol + numDisplay;
+            
+        }
+        
+        statusString = statusString + numDisplay + padSymbol;
+              
     });
 
     statusString = statusString.trim();

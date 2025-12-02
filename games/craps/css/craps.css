@@ -335,6 +335,12 @@ body {
     flex: 1 1 0; /* Grow, Shrink, and Base Width (for desktop side layout) */
     text-align: center;
     font-size: 1.4em; /* Centering and bigger text from first request */
+
+    /*  font-family: "Courier New", Courier, monospace; Optional: gives a classic casino feel */
+    font-family: "Monaco", "Consolas", "Lucida Console", "Courier New", Courier, monospace;
+    
+   /* font-weight: bold; /* Optional: makes it easier to read on the felt background */ 
+
 }
 
 
@@ -401,7 +407,7 @@ body {
     .equal-bonus-area {
         margin: 0;
         /* Ensure font size is readable on mobile */
-        font-size: 1.1rem; 
+        font-size: 1.0rem; 
     }
     
 /* ... rest of mobile styles ... */

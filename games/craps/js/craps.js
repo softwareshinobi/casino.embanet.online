@@ -41,7 +41,7 @@ const btnBackToGame = document.getElementById('btnBackToGame');
 
 // --- Game State ---
 let wallet; // Initialized from cookie
-let currentBet = 100;
+let currentBet = 1000;
 let passLineBet = 0;
 let dontPassBet = 0;
 let fieldBet = 0;
