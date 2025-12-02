@@ -4,7 +4,7 @@ services:
 
         container_name: casino.softwareshinobi.online
 
-        image: softwareshinobi/casino.softwareshinobi.online:bonus
+        image: softwareshinobi/casino.softwareshinobi.online:production
 
         build:
 
