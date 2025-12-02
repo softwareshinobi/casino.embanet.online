@@ -1,10 +1,10 @@
 services:
 
-    casino.softwareshinobi.com:
+    casino.softwareshinobi.online:
 
-        container_name: casino.softwareshinobi.com
+        container_name: casino.softwareshinobi.online
 
-        image: softwareshinobi/casino.softwareshinobi.com:1.0
+        image: softwareshinobi/casino.softwareshinobi.online:bonus
 
         build:
 

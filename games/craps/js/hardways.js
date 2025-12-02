@@ -18,7 +18,7 @@ class HardwaysWatcher {
 
             // alert(`🔥 Hardways! Rolled doubles ${dieOne} + ${dieTwo} = ${dieTotal}`);
 
-            console.log("🔥 Hardways! Rolled doubles: ${dieOne} + ${dieTwo} = ${dieTotal}");
+            console.log("🔥 Hardways! Rolled doubles: " + dieOne + " + " + dieTwo + " = " + dieTotal);
 
         }
 

@@ -1,4 +1,3 @@
-
 /* Custom styles adapted for the Quartz theme */
 :root {
     --quartz-primary: #593196;
@@ -322,11 +321,36 @@ body {
 }
 
 
+/* This is the key that makes the children sit on the same row on DESKTOP */
+#diceAndBonusArea {
+    display: flex; /* Default is flex-direction: row for desktop */
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 1rem;
+    gap: 10px; /* Provides space between the items */
+}
+
+.equal-bonus-area {
+    flex: 1 1 0; /* Grow, Shrink, and Base Width (for desktop side layout) */
+    text-align: center;
+    font-size: 1.4em; /* Centering and bigger text from first request */
+
+    /*  font-family: "Courier New", Courier, monospace; Optional: gives a classic casino feel */
+    font-family: "Monaco", "Consolas", "Lucida Console", "Courier New", Courier, monospace;
+    
+   /* font-weight: bold; /* Optional: makes it easier to read on the felt background */ 
+
+}
+
+
+
+
 /* --- Mobile Responsiveness --- */
 @media (max-width: 768px) {
     .game-console, #bonusTrackerPanel {
         padding: 1rem;
-        margin-top: 1rem; /* Keep consistent margin for mobile too */
+        margin-top: 1rem;
     }
     .action-button { font-size: 1.2rem; }
     .bet-button { font-size: 0.8rem; }
@@ -337,4 +361,67 @@ body {
     .place-bets-grid {
         grid-template-columns: repeat(3, 1fr);
     }
+    
+    /* === CRITICAL MOBILE LAYOUT CHANGES FOR BONUS/DICE AREA === */
+
+/* ... existing mobile styles ... */
+
+    /* === UPDATED MOBILE LAYOUT FOR BONUS/DICE AREA === */
+
+    /* A. Main Container: Allow wrapping so items can sit side-by-side */
+    #diceAndBonusArea {
+        flex-direction: row; /* Change from column to row */
+        flex-wrap: wrap;     /* Allow items to wrap to new lines */
+        align-items: center;
+        gap: 0;              /* Remove gap to ensure 50% widths fit perfectly */
+        width: 100%;
+    }
+    
+    /* B. Left Bonus Text: Top Left */
+    #bonusTextLeft {
+        order: 1;
+        width: 50%;          /* Take exactly half the screen */
+        text-align: center;
+        padding: 0 5px;      /* Add slight padding for text safety */
+        margin: 0;
+    }
+
+    /* C. Right Bonus Text: Top Right */
+    #bonusTextRight {
+        order: 2;
+        width: 50%;          /* Take the other half */
+        text-align: center;
+        padding: 0 5px;
+        margin: 0;
+    }
+
+    /* D. Dice Wrapper: Bottom (Full Width) */
+    #diceWrapper {
+        order: 3;            /* Force to position 3 (bottom) */
+        width: 100%;         /* Span full width */
+        margin-top: 0.5rem;  /* Add space between bonus text and dice */
+        margin-bottom: 0;
+    }
+
+    /* E. General Cleanup */
+    .equal-bonus-area {
+        margin: 0;
+        /* Ensure font size is readable on mobile */
+        font-size: 1.0rem; 
+    }
+    
+/* ... rest of mobile styles ... */
+    
+    /* E. Restore Horizontal Alignment (The trick to put order 1 items side-by-side) */
+    #diceAndBonusArea {
+        /* The `align-items: center` from the desktop rule is what keeps them centered. */
+        /* To make the two 49% bonus areas sit next to each other when in column mode, 
+           we need to make the parent container wider than 100% or allow wrapping,
+           but since the dice area is also a child, the best way is usually to 
+           ensure the bonus areas are aligned to the start/center of the column.
+           Let's keep the desktop's `align-items: center;` and rely on `width: 100%`.
+           We will just remove the left/right margins on the children that might be pushing them apart. */
+        align-items: center; 
+    }
+    /* ========================================================= */
 }

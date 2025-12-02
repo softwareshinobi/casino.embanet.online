@@ -49,7 +49,7 @@ function animateDiceRoll() {
 
     for (let rollCount = 0; rollCount < maxRolls; rollCount++) {
 
-        console.log("Animating roll:", rollCount + 1);
+        //console.log("Animating roll:", rollCount + 1);
 
         const { d1, d2 } = generateRandomDiceValues();
 
