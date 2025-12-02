@@ -50,3 +50,10 @@ This section outlines planned and ongoing upgrades to improve the overall gaming
 Ready to try your luck? Visit the live casino site at [casino.softwareshinobi.com](https://casino.softwareshinobi.com/)!
 
 ---
+
+### The Big opportunities
+
+[] blacjack especially and craps too, suffer from a double click issue. Maybe it's my mouse, but it's an issue.
+[] half of the games have an shared wallet balance
+[] slots needs to allow for multiple lines
+[] craps bonus system is heavily broken
