@@ -1,0 +1,1757 @@
+#### file: ./css/craps.css
+/* Custom styles adapted for the Quartz theme */
+:root {
+    --quartz-primary: #593196;
+    --quartz-secondary: #18b2b2;
+    --quartz-dark: #343f56;
+    --quartz-light: #f8f9fa;
+    --craps-felt: #343f56; /* Changed from green to match theme */
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    /* Allow vertical scrolling on all screen sizes */
+    overflow-y: auto;
+}
+
+body {
+    /* Changed to a standard system font stack */
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    /* Align items to the top to respect padding-top */
+    align-items: flex-start;
+    padding: 0.5rem; /* Padding for small screens (sides) */
+    background-color: var(--bs-body-bg);
+    box-sizing: border-box; /* Include padding in element's total width and height */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+.game-console {
+    background: linear-gradient(to bottom, #212529, #343f56);
+    border: 5px solid var(--quartz-secondary);
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(24, 178, 178, 0.5), inset 0 0 20px rgba(0, 0, 0, 0.5);
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 900px;
+    position: relative;
+    display: flex; /* Changed to flex for easy toggling */
+    flex-direction: column;
+    /* Add a top margin for consistent spacing below the fixed navbar */
+    margin-top: 1rem;
+    margin-bottom: 20px; /* Add some space at the bottom */
+}
+
+.playing-surface {
+    background-color: var(--craps-felt);
+    border-radius: 15px;
+    padding: 1rem;
+    border: 3px solid #495057;
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
+}
+
+.dice-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    min-height: 80px;
+}
+
+.die {
+    width: 60px;
+    height: 60px;
+    background-color: #fff;
+    border: 2px solid #333;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.betting-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.place-bets-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.5rem;
+}
+
+.bet-area {
+    border: 2px solid var(--quartz-light);
+    border-radius: 10px;
+    padding: 0.5rem;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--quartz-light);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.bet-area:not(.disabled):hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.bet-area.point-on {
+    border-color: var(--quartz-secondary);
+    box-shadow: 0 0 12px var(--quartz-secondary), inset 0 0 8px rgba(24, 178, 178, 0.5);
+    transform: scale(1.05);
+}
+
+.bet-area.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.line-bets-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+}
+
+.bet-area .bet-amount {
+    display: block;
+    font-size: 1rem;
+    color: #ffc107;
+    min-height: 20px;
+    font-weight: normal;
+}
+
+.actions-panel, .betting-panel, .info-panel {
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 1rem 1.5rem;
+    border-radius: 15px;
+}
+.actions-panel{
+    border-top: 3px solid var(--quartz-secondary);
+}
+.betting-panel, .info-panel {
+    border-top: 2px solid #212529;
+}
+
+.action-button, .bet-button {
+    /* Use consistent system font */
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    transition: all 0.1s ease-in-out;
+    padding: 0.75rem 0;
+    width: 100%;
+}
+
+.action-button { font-size: 1.5rem; }
+.bet-button { font-size: 1rem; }
+
+/* Styles for the new "Keep Bets" button */
+.trash{
+    border-radius: 0.375rem; /* Bootstrap's default button border-radius */
+    border: 2px solid var(--quartz-light);
+    padding: 0.5rem 1rem;
+}
+
+#btnKeepBetsTRASH {
+    background-color: transparent;
+    color: var(--quartz-light);
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+#btnKeepBets {
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+#btnKee33pBets { /* This ID seems like a typo, consider removing if not used */
+    border: 2px solid var(--quartz-light);
+    background-color: transparent;
+    color: var(--quartz-light);
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem; /* Bootstrap's default button border-radius */
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+/* Updated: Style for active "Keep Bets" button to match "point-on" visual */
+#btnKeepBets.active-toggle-button {
+    /*background-color: green;  Still keep the green background as per original design */
+    border-color: var(--quartz-secondary); /* Added: Border color */
+    box-shadow: 0 0 12px var(--quartz-secondary), inset 0 0 8px rgba(24, 178, 178, 0.5); /* Added: Box shadow */
+}
+
+#btnKeepBets:hover:not(.active-toggle-button) {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.status-message {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.9);
+    color: var(--quartz-secondary);
+    font-size: 1.5rem;
+    padding: 1.5rem;
+    border-radius: 15px;
+    border: 4px solid var(--quartz-secondary);
+    z-index: 100;
+    text-align: center;
+    display: none; /* Hidden by default, will be set to block by JS */
+    width: 90%;
+    opacity: 0; /* Start hidden for animation */
+}
+
+/* Animation for status message */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+    to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    to { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+}
+
+.status-message.fade-in-animation {
+    animation: fadeIn 0.5s forwards;
+}
+
+.status-message.fade-out-animation {
+    animation: fadeOut 0.5s forwards;
+}
+
+
+.info-display {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--quartz-light);
+    text-align: center;
+}
+.info-display span {
+    color: var(--quartz-secondary);
+}
+
+/* --- Bonus Tracker Styles --- */
+#bonusTrackerPanel {
+    background: linear-gradient(to bottom, #212529, #343f56);
+    border: 5px solid var(--quartz-secondary);
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(24, 178, 178, 0.5), inset 0 0 20px rgba(0, 0, 0, 0.5);
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 900px;
+    position: relative;
+    display: none; /* Hidden by default */
+    flex-direction: column;
+    margin-top: 1rem;
+    margin-bottom: 20px;
+}
+
+.bonus-section {
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 1rem;
+    border-radius: 10px;
+    border: 1px solid var(--quartz-secondary);
+    margin-bottom: 1rem; /* Space between sections */
+}
+.bonus-section h5 {
+    margin-bottom: 1rem;
+}
+.badge.hit {
+    background-color: var(--quartz-primary) !important; /* Use quartz-primary for hit numbers */
+    border: 1px solid var(--quartz-secondary);
+    color: var(--quartz-light);
+    font-size: 1.1rem;
+    padding: 0.5em 0.75em;
+    min-width: 35px; /* Ensure badges are a consistent size */
+}
+.badge.bg-secondary {
+    font-size: 1.1rem;
+    padding: 0.5em 0.75em;
+    min-width: 35px;
+}
+
+/* New styles for bonus betting areas */
+.bonus-bet-area {
+    border: 2px solid var(--quartz-light);
+    border-radius: 10px;
+    padding: 0.5rem;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--quartz-light);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.2); /* Slightly darker background */
+    margin-top: 0.5rem; /* Space from bonus progress */
+}
+
+.bonus-bet-area:not(.disabled):hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.bonus-bet-area.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.bonus-bet-area .bet-amount {
+    display: block;
+    font-size: 1rem;
+    color: #ffc107;
+    min-height: 20px;
+    font-weight: normal;
+}
+
+
+/* This is the key that makes the children sit on the same row on DESKTOP */
+#diceAndBonusArea {
+    display: flex; /* Default is flex-direction: row for desktop */
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 1rem;
+    gap: 10px; /* Provides space between the items */
+}
+
+.equal-bonus-area {
+    flex: 1 1 0; /* Grow, Shrink, and Base Width (for desktop side layout) */
+    text-align: center;
+    font-size: 1.4em; /* Centering and bigger text from first request */
+}
+
+
+
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 768px) {
+    .game-console, #bonusTrackerPanel {
+        padding: 1rem;
+        margin-top: 1rem;
+    }
+    .action-button { font-size: 1.2rem; }
+    .bet-button { font-size: 0.8rem; }
+    .info-display { font-size: 1rem; }
+    .actions-panel, .betting-panel, .info-panel { padding: 0.75rem; }
+    .bet-area, .bonus-bet-area { font-size: 1rem; padding: 0.25rem; }
+
+    .place-bets-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    /* === CRITICAL MOBILE LAYOUT CHANGES FOR BONUS/DICE AREA === */
+
+    /* A. Main Container: Stack the children vertically */
+    #diceAndBonusArea {
+        flex-direction: column; 
+        gap: 0.5rem; /* This controls the spacing between rows (bonus group and dice) */
+    }
+    
+    /* B. Dice Area Reset: Remove desktop margin that causes vertical gaps */
+    #diceWrapper {
+        order: 2; 
+        width: 100%; 
+        **margin-bottom: 0;** /* Critical: Remove the 1rem margin-bottom from the .dice-area rule */
+    }
+
+    /* C. Bonus Areas: Force to top (order: 1) and make them share the row space */
+    #bonusTextLeft {
+        order: 1; 
+        flex: 0 0 49%; 
+    }
+
+    #bonusTextRight {
+        order: 1; 
+        flex: 0 0 49%; 
+    }
+
+    /* D. General Cleanup for Bonus/Dice area */
+    .equal-bonus-area {
+        /* Ensure no extra vertical margin/padding is causing gaps within the row */
+        margin: 0;
+        padding: 0.5rem; /* Keep some padding inside the element if necessary */
+    }
+    
+    /* E. Restore Horizontal Alignment (The trick to put order 1 items side-by-side) */
+    #diceAndBonusArea {
+        /* The `align-items: center` from the desktop rule is what keeps them centered. */
+        /* To make the two 49% bonus areas sit next to each other when in column mode, 
+           we need to make the parent container wider than 100% or allow wrapping,
+           but since the dice area is also a child, the best way is usually to 
+           ensure the bonus areas are aligned to the start/center of the column.
+           Let's keep the desktop's `align-items: center;` and rely on `width: 100%`.
+           We will just remove the left/right margins on the children that might be pushing them apart. */
+        align-items: center; 
+    }
+    /* ========================================================= */
+}
+
+#### file: ./craps.html
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <title>Craps / Shinobi Casino</title>
+
+<!-- html / styling / begin -->
+
+<meta charset="UTF-8" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/quartz/bootstrap.min.css" rel="stylesheet">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&amp;family=Roboto+Condensed:wght@700&amp;display=swap" rel="stylesheet">
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+
+<link rel="stylesheet" href="/assets/css/global.css">
+
+<!-- html / styling / end -->
+
+    <link href="css/craps.css" rel="stylesheet">
+
+</head>
+
+<body style="padding-top: 72px;">
+
+<!-- html / menu / begin -->
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+
+<div class="container-fluid">
+
+<a class="navbar-brand" href="/">Shinobi Casino</a>
+
+<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+
+<span class="navbar-toggler-icon"></span>
+
+</button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+
+            <ul class="navbar-nav ms-auto">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/games/blackjack/index.html">Blackjack</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/games/casinowar/index.html">Casino War</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/games/baccarat/baccarat.html">Baccarat</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/games/craps/craps.html">Craps</a>
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</nav>
+
+<!-- html / menu / end -->
+
+    <!-- Main Game Console -->
+    <div class="game-console" id="gameConsole">
+        <div id="statusMessage" class="status-message"></div>
+
+        <div id="playingSurface" class="playing-surface">
+
+<div id="diceAndBonusArea" class="dice-and-bonus-display-area">
+
+    <div id="bonusTextLeft" class="equal-bonus-area">
+        <p id="smallBonusText"></p>
+    </div>
+
+    <div id="diceWrapper" class="dice-area">
+        <div id="die1" class="die">?</div>
+        <div id="die2" class="die">?</div>
+    </div>
+
+    <div id="bonusTextRight" class="equal-bonus-area">
+        <p id="tallBonusText"></p>
+    </div>
+</div>
+
+            <div class="betting-layout">
+                <!-- Place Bets Grid -->
+                <div class="place-bets-grid">
+                    <div class="bet-area" data-bet-type="place" data-number="4">4 <span class="bet-amount" id="placeBetAmount4"></span></div>
+                    <div class="bet-area" data-bet-type="place" data-number="5">5 <span class="bet-amount" id="placeBetAmount5"></span></div>
+                    <div class="bet-area" data-bet-type="place" data-number="6">6 <span class="bet-amount" id="placeBetAmount6"></span></div>
+                    <div class="bet-area" data-bet-type="place" data-number="8">8 <span class="bet-amount" id="placeBetAmount8"></span></div>
+                    <div class="bet-area" data-bet-type="place" data-number="9">9 <span class="bet-amount" id="placeBetAmount9"></span></div>
+                    <div class="bet-area" data-bet-type="place" data-number="10">10 <span class="bet-amount" id="placeBetAmount10"></span></div>
+                </div>
+
+                <!-- Field Bet Area -->
+                <div id="fieldBetArea" class="bet-area field-bet" data-bet-type="field">
+                    FIELD <small>(2) 3 4 9 10 11 (12)</small>
+                    <span id="fieldBetAmount" class="bet-amount"></span>
+                </div>
+
+                <!-- Pass/Don't Pass Line Bets Container -->
+                <div class="line-bets-container">
+                    <div id="passLineBetArea" class="bet-area pass-line" data-bet-type="pass">
+                        PASS LINE
+                        <span id="passLineBetAmount" class="bet-amount"></span>
+                    </div>
+                    <div id="dontPassLineBetArea" class="bet-area dont-pass-line" data-bet-type="dontpass">
+                        DONT PASS
+                        <span id="dontPassBetAmount" class="bet-amount"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="actions-panel mt-2">
+            <div class="row g-2 justify-content-center">
+                <div class="col-12 col-sm-12">
+                    <button id="btnRoll" class="btn btn-success action-button" disabled="">Roll</button>
+                </div>
+                <div class="col-12 col-sm-2 HIDDEN">
+                    <button id="btnToggleBonus" class="btn btn-info action-button">Bonus</button>
+                </div>
+            </div>
+        </div>
+
+<div class="betting-panel mt-2">
+
+<!-- html / WAGER AREA / begin -->
+
+    <div class="row g-2">
+
+        <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="1000" style="background-color: black; color: white; border-color: black;">$1000</button></div>
+
+        <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="5000" style="background-color: purple; color: white; border-color: purple;">$5000</button></div>
+
+        <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button active" data-bet="25000" style="background-color: yellow; color: black; border-color: yellow;">$25000</button></div>
+
+        <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="100000" style="background-color: orange; color: white; border-color: orange;">$100000</button></div>
+
+    </div>
+
+<!-- html / WAGER AREA / end -->
+
+    <div class="row g-2 mt-2 align-items-center">
+        <div class="col-7 col-sm-7">
+        <button id="btnClearBets" class="bet-button btn btn-secondDDary w-100" disabled="">Clear Bets</button>
+        </div>
+        <div class="col-5 col-sm-5">
+        <button id="btnKeepBets" class="bet-button btn btn-sDDecondary w-100 active-toggle-button">Keep Bets</button>
+        </div>
+    </div>
+
+</div>
+
+    <div class="info-panel mt-2">
+        <div class="row">
+            <div class="col-12 col-sm-6 info-display mb-2 mb-sm-0">Bet: $&nbsp;<span id="betAmount">--</span></div>
+            <div class="col-12 col-sm-6 info-display">Wallet: $&nbsp;<span id="walletAmount">--</span></div>
+        </div>
+    </div>
+
+</div>
+
+    <!-- Bonus Tracker Panel -->
+    <div id="bonusTrackerPanel">
+        <h4 class="text-center text-light">Bonus Progress</h4>
+        <div class="row text-center mt-3">
+            <div class="col-md-6">
+                <div class="bonus-section">
+                    <h5 class="text-info">Small (<span id="smallBonusStatus">In Progress</span>)</h5>
+                    <div id="smallBonusNumbers" class="d-flex flex-wrap justify-content-center gap-2">
+                        <span class="badge bg-secondary" data-bonus-num="2">2</span>
+                        <span class="badge bg-secondary" data-bonus-num="3">3</span>
+                        <span class="badge bg-secondary" data-bonus-num="4">4</span>
+                        <span class="badge bg-secondary" data-bonus-num="5">5</span>
+                        <span class="badge bg-secondary" data-bonus-num="6">6</span>
+                    </div>
+                    <br/>
+                    <div class="bonus-bet-area" data-bet-type="bonus" data-bonus-target="small">
+                        Bet Small Bonus
+                        <span id="smallBonusBetAmount" class="bet-amount"></span>
+                    </div>
+                </div>
+            </div>
+
+                        <div sty6le="display:none"  class="col-md-6">
+                <div class="bonus-section">
+                    <h5 class="text-info">All (<span id="allBonusStatus">In Progress</span>)</h5>
+                    <div id="allBonusNumbers" class="d-flex flex-wrap justify-content-center gap-2">
+                        <!-- Numbers will be dynamically copied from Small & Tall -->
+                    </div>
+                    <div class="bonus-bet-area" data-bet-type="bonus" data-bonus-target="all">
+                        Bet All Bonus
+                        <span id="allBonusBetAmount" class="bet-amount"></span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-6">
+                <div class="bonus-section">
+                    <h5 class="text-info">Tall (<span id="tallBonusStatus">In Progress</span>)</h5>
+                    <div id="tallBonusNumbers" class="d-flex flex-wrap justify-content-center gap-2">
+                        <span class="badge bg-secondary" data-bonus-num="8">8</span>
+                        <span class="badge bg-secondary" data-bonus-num="9">9</span>
+                        <span class="badge bg-secondary" data-bonus-num="10">10</span>
+                        <span class="badge bg-secondary" data-bonus-num="11">11</span>
+                        <span class="badge bg-secondary" data-bonus-num="12">12</span>
+                    </div>
+                    <br/>
+                    <div class="bonus-bet-area" data-bet-type="bonus" data-bonus-target="tall">
+                        Bet Tall Bonus
+                        <span id="tallBonusBetAmount" class="bet-amount"></span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row mt-4">
+            <div class="col text-center">
+                <button id="btnBackToGame" class="btn btn-info action-button">Back to Game</button>
+            </div>
+        </div>
+    </div>
+
+<!-- html / scripting / begin -->
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="/assets/js/common.js"></script>
+
+<script src="/assets/js/player.js"></script>
+
+<s22cript type="module" src="/assets/js/events.js"></script>
+
+<!-- html / scripting / end -->
+
+<script src="/assets/js/events.js"></script> 
+<script src="js/hardways.js"></script>
+<script src="js/bonus.js"></script>
+<script src="js/bonusWatcher.js"></script>
+
+<script src="js/craps.js"></script>
+<script src="js/dice.js"></script>
+
+</body>
+
+</html>
+
+#### file: ./js/dice.js
+const rollHistoryArray = [];
+
+function throwDice() {
+
+    console.log("throwDice called");
+
+    const { dieOne, dieTwo } = animateDiceRoll();
+
+    console.log("Animated Dice Values:", dieOne, dieTwo);
+
+    completeRollAndLog(dieOne, dieTwo);
+
+    console.log("throwDice finished");
+
+    handleRollResult(dieOne + dieTwo);
+
+    console.log("handleRollResult finished");
+
+}
+
+function throwDiceRigged(riggedDieOne, riggedDieTwo) {
+
+    console.log("throwRiggedDice called");
+    console.log("Rigged Dice Values:", riggedDieOne, riggedDieTwo);
+
+    const { dieOne, dieTwo } = animateDiceRoll();
+
+    completeRollAndLog(riggedDieOne, riggedDieTwo);
+
+    handleRollResult(dieOne + dieTwo);
+
+}
+
+function generateRandomDiceValues() {
+
+    const d1 = Math.floor(Math.random() * 6) + 1;
+
+    const d2 = Math.floor(Math.random() * 6) + 1;
+
+    return { d1, d2 };
+
+}
+
+function animateDiceRoll() {
+
+    const maxRolls = 10;
+
+    let dieOne, dieTwo;
+
+    for (let rollCount = 0; rollCount < maxRolls; rollCount++) {
+
+        //console.log("Animating roll:", rollCount + 1);
+
+        const { d1, d2 } = generateRandomDiceValues();
+
+        updateDieDisplay(d1, d2);
+
+        dieOne = d1;
+
+        dieTwo = d2;
+
+    }
+
+    console.log("Final Dice Values after animation:", dieOne, dieTwo);
+
+    return { dieOne, dieTwo };
+
+}
+
+function updateDieDisplay(d1, d2) {
+
+    die1El.textContent = d1;
+
+    die2El.textContent = d2;
+
+}
+
+function completeRollAndLog(dieOne, dieTwo) {
+
+    console.log("handleRollResult called with:", dieOne, dieTwo);
+
+    die1El.textContent = dieOne;
+
+    die2El.textContent = dieTwo;
+
+    dieTotal = dieOne + dieTwo;
+
+    events.publish('dieRolled', { dieOne, dieTwo, dieTotal });    
+
+    rollHistoryArray.push({ dieOne, dieTwo, dieTotal, timestamp: new Date() });
+    
+    rollHistory();
+
+}
+
+function throwDice1() {
+
+    console.log("throwDice called");
+
+    let rollCount = 0;
+
+    const rollInterval = setInterval(() => {
+
+        const d1 = Math.floor(Math.random() * 6) + 1;
+
+        const d2 = Math.floor(Math.random() * 6) + 1;
+
+        die1El.textContent = d1;
+
+        die2El.textContent = d2;
+
+        rollCount++;
+
+        if (rollCount > 10) {
+
+            clearInterval(rollInterval);
+
+            const dieOne = Math.floor(Math.random() * 6) + 1;
+
+            const dieTwo = Math.floor(Math.random() * 6) + 1;
+
+            const dieTotal = dieOne + dieTwo;
+
+            die1El.textContent = dieOne;
+
+            die2El.textContent = dieTwo;
+
+            //
+            //
+            //
+
+            events.publish('dieRolled', { dieOne, dieTwo, dieTotal });
+
+            // --- ADDED: Record the roll result ---
+            // Push an object containing the individual dice values and the total
+            rollHistoryArray.push({ die1: dieOne, die2: dieTwo, total: dieOne + dieTwo, timestamp: new Date() });
+            // ------------------------------------
+
+            completeRollAndLog(dieOne + dieTwo);
+
+        }
+
+    }, 100);
+
+    console.log("throwDice finished");
+
+}
+
+function throwDiceRigged1(riggedDieOne, riggedDieTwo) {
+
+    console.log("throwRiggedDice called");
+    console.log("Rigged Dice Values:", riggedDieOne, riggedDieTwo);
+
+    let rollCount = 0;
+
+    const rollInterval = setInterval(() => {
+
+        const d1 = ((riggedDieOne - 1) % 6) + 1;
+        const d2 = ((riggedDieTwo - 1) % 6) + 1;
+
+        die1El.textContent = d1;
+
+        die2El.textContent = d2;
+
+        rollCount++;
+
+        if (rollCount > 10) {
+
+            clearInterval(rollInterval);
+
+            const dieOne = ((d1 - 1) % 6) + 1;
+
+            const dieTwo = ((d2 - 1) % 6) + 1;
+
+            const dieTotal = dieOne + dieTwo;
+
+            die1El.textContent = dieOne;
+
+            die2El.textContent = dieTwo;
+
+            events.publish('dieRolled', { dieOne, dieTwo, dieTotal });
+
+            rollHistoryArray.push({ dieOne, dieTwo, dieTotal, timestamp: new Date() });
+
+            // ------------------------------------
+
+            completeRollAndLog(dieOne + dieTwo);
+
+        }
+
+    }, 100);
+
+    console.log("throwRiggedDice finished");
+
+}
+
+function rollHistory(rollCount = 20) {
+
+    console.log("--- Last 20 Rolls ---");
+
+    // Calculate the starting index: 
+    // This starts from the array length minus 20, or 0 if there are less than 20 rolls.
+    const startIndex = Math.max(0, rollHistoryArray.length - 20);
+
+    // Use slice to get a new array containing only the last 20 (or fewer) elements
+    const last20Rolls = rollHistoryArray.slice(startIndex);
+
+    if (last20Rolls.length === 0) {
+        console.log("No rolls recorded yet.");
+        return;
+    }
+
+    // Iterate over the last rolls and log the details
+    last20Rolls.forEach((roll, index) => {
+        // Calculate the roll number based on the current history length
+        const rollNumber = rollHistoryArray.length - last20Rolls.length + index + 1;
+
+        // Format the timestamp for cleaner output
+        const time = roll.timestamp.toLocaleTimeString();
+
+console.log(
+            `Roll #${rollNumber} (${time}): Die 1: ${roll.dieOne}, Die 2: ${roll.dieTwo}, Total: ${roll.dieTotal}`
+        );        
+    });
+
+    console.log("-----------------------");
+}
+
+#### file: ./js/bonusWatcher.js
+class BonusWatcher {
+
+    constructor() {
+
+        console.log("BonusWatcher initialized");
+
+        events.subscribe('dieRolled', this.checkHardways2.bind(this));
+
+        console.log("BonusWatcher initialized");
+
+    }
+
+    checkHardways2({ dieOne, dieTwo, dieTotal }) {
+
+        console.log(`[BonusWatcher] Event Received: dieOne=${dieOne}, dieTwo=${dieTwo}, Total=${dieTotal}`);
+
+        //updateBonusDisplay2();
+
+    }
+
+}
+
+new BonusWatcher();
+
+#### file: ./js/bonus.js
+const smallBonusNumbersEl = document.getElementById('smallBonusNumbers');
+const tallBonusNumbersEl = document.getElementById('tallBonusNumbers');
+const allBonusNumbersEl = document.getElementById('allBonusNumbers');
+
+const smallBonusStatusEl = document.getElementById('smallBonusStatus');
+const tallBonusStatusEl = document.getElementById('tallBonusStatus');
+const allBonusStatusEl = document.getElementById('allBonusStatus');
+
+const smallBonusBetArea = document.querySelector('.bonus-bet-area[data-bonus-target="small"]');
+const tallBonusBetArea = document.querySelector('.bonus-bet-area[data-bonus-target="tall"]');
+const allBonusBetArea = document.querySelector('.bonus-bet-area[data-bonus-target="all"]');
+
+// --- Bonus Game State ---
+let smallBonusNumbersHit = new Set();
+let tallBonusNumbersHit = new Set();
+let allBonusNumbersHit = new Set(); // Will combine small and tall
+
+const SMALL_BONUS_TARGETS = new Set([2, 3, 4, 5, 6]);
+const TALL_BONUS_TARGETS = new Set([8, 9, 10, 11, 12]);
+const ALL_BONUS_TARGETS = new Set([...SMALL_BONUS_TARGETS, ...TALL_BONUS_TARGETS]);
+
+// New: Bonus Bet Amounts
+let smallBonusBet = 0;
+let tallBonusBet = 0;
+let allBonusBet = 0;
+
+
+/**
+    * Initializes the bonus numbers display.
+    * Populates the 'All' bonus section dynamically.
+    */
+function initializeBonusDisplay() {
+    // Populate All Bonus numbers dynamically
+    ALL_BONUS_TARGETS.forEach(num => {
+        const span = document.createElement('span');
+        span.classList.add('badge', 'bg-secondary');
+        span.textContent = num;
+        span.dataset.bonusNum = num;
+        allBonusNumbersEl.appendChild(span);
+    });
+    updateBonusDisplay(); // Set initial badge states
+}
+
+/**
+    * Updates the visual representation of bonus numbers (hit/not hit) and status.
+    */
+function updateBonusDisplay() {
+    // Small Bonus
+    SMALL_BONUS_TARGETS.forEach(num => {
+        const span = smallBonusNumbersEl.querySelector(`[data-bonus-num="${num}"]`);
+        if (span) {
+            if (smallBonusNumbersHit.has(num)) {
+                span.classList.add('bg-primary', 'hit');
+                span.classList.remove('bg-secondary');
+            } else {
+                span.classList.remove('bg-primary', 'hit');
+                span.classList.add('bg-secondary');
+            }
+        }
+    });
+    if (smallBonusNumbersHit.size === SMALL_BONUS_TARGETS.size) {
+        smallBonusStatusEl.textContent = "COMPLETED!";
+        smallBonusStatusEl.style.color = "lightgreen";
+    } else {
+        smallBonusStatusEl.textContent = "In Progress";
+        smallBonusStatusEl.style.color = "";
+    }
+
+    // Tall Bonus
+    TALL_BONUS_TARGETS.forEach(num => {
+        const span = tallBonusNumbersEl.querySelector(`[data-bonus-num="${num}"]`);
+        if (span) {
+            if (tallBonusNumbersHit.has(num)) {
+                span.classList.add('bg-primary', 'hit');
+                span.classList.remove('bg-secondary');
+            } else {
+                span.classList.remove('bg-primary', 'hit');
+                span.classList.add('bg-secondary');
+            }
+        }
+    });
+    if (tallBonusNumbersHit.size === TALL_BONUS_TARGETS.size) {
+        tallBonusStatusEl.textContent = "COMPLETED!";
+        tallBonusStatusEl.style.color = "lightgreen";
+    } else {
+        tallBonusStatusEl.textContent = "In Progress";
+        tallBonusStatusEl.style.color = "";
+    }
+
+    // All Bonus
+    ALL_BONUS_TARGETS.forEach(num => {
+        const span = allBonusNumbersEl.querySelector(`[data-bonus-num="${num}"]`);
+        if (span) {
+            if (allBonusNumbersHit.has(num)) {
+                span.classList.add('bg-primary', 'hit');
+                span.classList.remove('bg-secondary');
+            } else {
+                span.classList.remove('bg-primary', 'hit');
+                span.classList.add('bg-secondary');
+            }
+        }
+    });
+    if (allBonusNumbersHit.size === ALL_BONUS_TARGETS.size) {
+        allBonusStatusEl.textContent = "COMPLETED!";
+        allBonusStatusEl.style.color = "lightgreen";
+    } else {
+        allBonusStatusEl.textContent = "In Progress";
+        allBonusStatusEl.style.color = "";
+    }
+}
+
+function updateBonusDisplay2() {
+
+let statusString = "";
+const hitSymbol = '&#x2605;'; // Renders as a Black Star ★
+// 
+
+// Convert ALL_BONUS_TARGETS Set to an Array for ordered iteration
+    const targetsArray = Array.from(SMALL_BONUS_TARGETS).sort((a, b) => a - b);
+    
+    // Use allBonusNumbersHit to check hit status 
+    targetsArray.forEach(num => {
+        
+        // Check if the current number is hit
+        const isHit = allBonusNumbersHit.has(num);
+        
+        // Use double quotes and concatenation to decide the display format
+        // If hit: "(10)"  If not hit: "9"
+        const numDisplay = isHit ?  hitSymbol  : "" + num; 
+        
+        // Append the number/indicator and a space
+        statusString = statusString + numDisplay + " ";
+    });
+
+    statusString = statusString.trim();
+
+    const element = document.getElementById('smallBonusText');
+
+    if (element) {
+        // .textContent is generally safer and better for setting plain text
+        element.innerHTML = statusString;
+        
+        // If you need to include HTML tags in the value, use .innerHTML instead
+        // element.innerHTML = newText;
+    }
+
+/////////////////////////////////
+///////////////////////////////
+////////////////////////////////
+
+statusString = "";
+    
+    // Convert ALL_BONUS_TARGETS Set to an Array for ordered iteration
+    const targetsArrayTALL = Array.from(TALL_BONUS_TARGETS).sort((a, b) => a - b);
+    
+    // Use allBonusNumbersHit to check hit status 
+    targetsArrayTALL.forEach(num => {
+        
+        // Check if the current number is hit
+        const isHit = allBonusNumbersHit.has(num);
+        
+        // Use double quotes and concatenation to decide the display format
+        // If hit: "(10)"  If not hit: "9"
+        const numDisplay = isHit ?  hitSymbol  : "" + num; 
+        
+        // Append the number/indicator and a space
+        statusString = statusString + numDisplay + " ";
+    });
+
+    statusString = statusString.trim();
+
+    const elementTALL = document.getElementById('tallBonusText');
+
+    if (elementTALL) {
+        // .textContent is generally safer and better for setting plain text
+        elementTALL.innerHTML = statusString; 
+        
+        // If you need to include HTML tags in the value, use .innerHTML instead
+        // element.innerHTML = newText;
+    }
+
+}
+
+function updateBonusDisplay3() {
+
+let statusString = "Bonus: ";
+    
+    // Convert ALL_BONUS_TARGETS Set to an Array for ordered iteration
+    const targetsArray = Array.from(SMALL_BONUS_TARGETS).sort((a, b) => a - b);
+    
+    // Use allBonusNumbersHit to check hit status 
+    targetsArray.forEach(num => {
+        
+        // Check if the current number is hit
+        const isHit = allBonusNumbersHit.has(num);
+        
+        // Use double quotes and concatenation to decide the display format
+        // If hit: "(10)"  If not hit: "9"
+        const numDisplay = isHit ? "(" + num + ")" : "" + num; 
+        
+        // Append the number/indicator and a space
+        statusString = statusString + numDisplay + " ";
+    });
+
+    statusString = statusString.trim();
+
+    const element = document.getElementById('smallBonusText');
+
+    if (element) {
+        // .textContent is generally safer and better for setting plain text
+        element.textContent = statusString; 
+        
+        // If you need to include HTML tags in the value, use .innerHTML instead
+        // element.innerHTML = newText;
+    }
+
+
+
+
+
+    // Print the final string, trimming the trailing space
+    console.log(statusString.trim());
+}
+/**
+    * Tracks the progress of Small, Tall, and All bonuses based on the rolled number.
+    * Awards payout if a bonus is completed.
+    * @param {number} roll - The sum of the two dice.
+    */
+function trackBonusProgress(roll) {
+
+    //console.log(`Tracking bonus progress for roll: ${roll}`);
+
+    if (SMALL_BONUS_TARGETS.has(roll)) {
+        smallBonusNumbersHit.add(roll);
+        allBonusNumbersHit.add(roll);
+    }
+
+    if (TALL_BONUS_TARGETS.has(roll)) {
+        tallBonusNumbersHit.add(roll);
+        allBonusNumbersHit.add(roll);
+    }
+
+    updateBonusDisplay(); // Update UI after each roll
+    
+    updateBonusDisplay2(); // Update UI after each roll
+
+    // Check for bonus completion and payout
+    // Small Bonus Payout
+    if (smallBonusNumbersHit.size === SMALL_BONUS_TARGETS.size && smallBonusBet > 0) {
+        const payout = smallBonusBet * 30; // 20x payout for Small
+        wallet += payout + smallBonusBet; // Return original bet + payout
+        showStatusMessage(`Small Bonus Completed! You won +$${payout}!`, 3000); // Increased duration
+        smallBonusBet = 0; // Clear the bet after payout
+        updateWalletDisplayAndCookie();
+        renderAllBets();
+    }
+
+    // Tall Bonus Payout
+    if (tallBonusNumbersHit.size === TALL_BONUS_TARGETS.size && tallBonusBet > 0) {
+        const payout = tallBonusBet * 30; // 20x payout for Tall
+        wallet += payout + tallBonusBet; // Return original bet + payout
+        showStatusMessage(`Tall Bonus Completed! You won +$${payout}!`, 3000); // Increased duration
+        tallBonusBet = 0; // Clear the bet after payout
+        updateWalletDisplayAndCookie();
+        renderAllBets();
+    }
+
+    // All Bonus Payout
+    if (allBonusNumbersHit.size === ALL_BONUS_TARGETS.size && allBonusBet > 0) {
+        const payout = allBonusBet * 150; // 50x payout for All
+        wallet += payout + allBonusBet; // Return original bet + payout
+        showStatusMessage(`All Bonus Completed! You won +$${payout}!`, 3000); // Increased duration
+        allBonusBet = 0; // Clear the bet after payout
+        updateWalletDisplayAndCookie();
+        renderAllBets();
+    }
+}
+
+/**
+    * Resets all bonus tracking sets and updates the display.
+    * This is typically called when a "seven out" occurs.
+    */
+function resetBonusProgress() {
+
+    console.log("Resetting bonus progress");
+
+    smallBonusNumbersHit.clear();
+
+    tallBonusNumbersHit.clear();
+
+    allBonusNumbersHit.clear();
+
+    updateBonusDisplay();
+
+    updateBonusDisplay2();
+
+}
+
+
+
+// Event listeners for Bonus View Toggle
+btnToggleBonus.addEventListener('click', () => {
+    gameConsoleEl.style.display = 'none';
+    bonusTrackerPanelEl.style.display = 'flex'; // Use flex as defined in .game-console style
+});
+
+btnBackToGame.addEventListener('click', () => {
+    gameConsoleEl.style.display = 'flex'; // Use flex as defined in .game-console style
+    bonusTrackerPanelEl.style.display = 'none';
+});
+
+
+#### file: ./js/craps.js
+$(document).ready(function () {
+
+    updateButtonState('betting'); // Start in the betting phase
+
+    updateActiveBetButton(currentBet); // Highlight initial bet amount
+
+    renderAllBets(); // Display initial bet amounts (should be 0)
+
+    updatePointIndicator(); // Initialize point indicators and bet area visibility
+
+    // Set initial state of the Keep Bets button
+    btnKeepBets.classList.toggle('active-toggle-button', keepWinningBets);
+
+    initializeBonusDisplay(); // Initialize bonus UI elements
+
+    resetBonusProgress(); // Ensure bonuses are reset at start of a new game session
+
+});
+
+
+
+// --- DOM Elements ---
+const die1El = document.getElementById('die1');
+const die2El = document.getElementById('die2');
+const statusMessageEl = document.getElementById('statusMessage');
+const btnRoll = document.getElementById('btnRoll');
+const btnClearBets = document.getElementById('btnClearBets');
+const btnKeepBets = document.getElementById('btnKeepBets');
+const betButtons = document.querySelectorAll('.bet-value-button');
+const betAmountEl = document.getElementById('betAmount');
+const placeBetAreas = document.querySelectorAll('.bet-area[data-bet-type="place"]');
+const passLineBetArea = document.getElementById('passLineBetArea');
+const dontPassLineBetArea = document.getElementById('dontPassLineBetArea');
+const fieldBetArea = document.getElementById('fieldBetArea');
+
+// Bonus UI Elements
+const gameConsoleEl = document.getElementById('gameConsole'); // Main game view
+const bonusTrackerPanelEl = document.getElementById('bonusTrackerPanel');
+const btnToggleBonus = document.getElementById('btnToggleBonus');
+const btnBackToGame = document.getElementById('btnBackToGame');
+
+// --- Game State ---
+let wallet; // Initialized from cookie
+let currentBet = 100;
+let passLineBet = 0;
+let dontPassBet = 0;
+let fieldBet = 0;
+let placeBets = { 4: 0, 5: 0, 6: 0, 8: 0, 9: 0, 10: 0 };
+let point = 0; // 0 means point is OFF
+let canRoll = false;
+let keepWinningBets = true; // true by default
+
+// --- Game Functions ---
+
+function updateButtonState(state) {
+    canRoll = state === 'readyToRoll';
+    btnRoll.disabled = !canRoll;
+
+    let canClear = false;
+    if (point === 0) {
+        // Can clear bets if there's any bet on Pass, Don't Pass, Field, or Bonus during come-out.
+        if (passLineBet > 0 || dontPassBet > 0 || fieldBet > 0 || smallBonusBet > 0 || tallBonusBet > 0 || allBonusBet > 0) {
+            canClear = true;
+        }
+    } else {
+        // Can clear bets if there's any Place bet or Field bet during point-on.
+        const hasPlaceBets = Object.values(placeBets).some(bet => bet > 0);
+        if (fieldBet > 0 || hasPlaceBets) {
+            canClear = true;
+        }
+    }
+    btnClearBets.disabled = !canClear;
+}
+
+function updateActiveBetButton(selectedBet) {
+    betButtons.forEach(btn => {
+        if (btn.dataset.bet === 'max' && selectedBet === wallet) btn.classList.add('active');
+        else if (parseInt(btn.dataset.bet) === selectedBet) btn.classList.add('active');
+        else btn.classList.remove('active');
+    });
+}
+
+function updatePointIndicator() {
+    // First, ensure all 'point-on' highlights are removed
+    placeBetAreas.forEach(area => {
+        area.classList.remove('point-on');
+    });
+
+    if (point === 0) { // Come-Out Roll Phase (Point is OFF)
+        // SHOW Pass Line, Don't Pass Line, Field
+        passLineBetArea.classList.remove('d-none');
+        dontPassLineBetArea.classList.remove('d-none');
+        fieldBetArea.classList.remove('d-none');
+
+        // ENABLE Pass Line, Don't Pass Line for new bets (logic in handleBetPlacement prevents invalid combinations)
+        passLineBetArea.classList.remove('disabled');
+        dontPassLineBetArea.classList.remove('disabled');
+
+        // HIDE and DISABLE all Place Bets for interaction
+        placeBetAreas.forEach(area => {
+            area.classList.add('d-none');
+            area.classList.add('disabled');
+        });
+
+        // Enable bonus bets during come-out roll
+        smallBonusBetArea.classList.remove('disabled');
+        tallBonusBetArea.classList.remove('disabled');
+        allBonusBetArea.classList.remove('disabled');
+
+    } else { // Point is ON Phase
+        // HIDE Pass Line, Don't Pass Line
+        passLineBetArea.classList.add('d-none');
+        dontPassLineBetArea.classList.add('d-none');
+        fieldBetArea.classList.remove('d-none'); // Field is always visible
+
+        // SHOW and ENABLE all Place Bets for interaction
+        placeBetAreas.forEach(area => {
+            area.classList.remove('d-none');
+            area.classList.remove('disabled');
+            const number = parseInt(area.dataset.number);
+            if (point === number) {
+                area.classList.add('point-on'); // Highlight the active point number
+            }
+        });
+
+        // Disable bonus bets once point is established
+        smallBonusBetArea.classList.add('disabled');
+        tallBonusBetArea.classList.add('disabled');
+        allBonusBetArea.classList.add('disabled');
+    }
+    // Field bet is always enabled for interaction
+    fieldBetArea.classList.remove('disabled');
+}
+
+function renderAllBets() {
+    document.getElementById('passLineBetAmount').textContent = passLineBet > 0 ? `$${passLineBet}` : '';
+    document.getElementById('dontPassBetAmount').textContent = dontPassBet > 0 ? `$${dontPassBet}` : '';
+    document.getElementById('fieldBetAmount').textContent = fieldBet > 0 ? `$${fieldBet}` : '';
+    for (const num in placeBets) {
+        document.getElementById(`placeBetAmount${num}`).textContent = placeBets[num] > 0 ? `$${placeBets[num]}` : '';
+    }
+    // New: Render bonus bet amounts
+    document.getElementById('smallBonusBetAmount').textContent = smallBonusBet > 0 ? `$${smallBonusBet}` : '';
+    document.getElementById('tallBonusBetAmount').textContent = tallBonusBet > 0 ? `$${tallBonusBet}` : '';
+    document.getElementById('allBonusBetAmount').textContent = allBonusBet > 0 ? `$${allBonusBet}` : '';
+}
+
+function clearBoardForNewRound() {
+
+    //alert("clearing board!");
+
+    passLineBet = 0;
+
+    dontPassBet = 0;
+
+    fieldBet = 0;
+
+    for (const num in placeBets) { placeBets[num] = 0; }
+
+    point = 0; // Reset point
+
+    renderAllBets();
+
+    updatePointIndicator(); // Update UI for come-out roll phase
+
+    updateButtonState('betting'); // Re-enable betting phase
+
+    updateWalletDisplayAndCookie(); // Update wallet display and cookie
+
+    if (wallet <= 0) showStatusMessage("Game Over", 2000);
+
+}
+
+function clearActiveBets() {
+
+    //   alert("clear active bets?");
+
+    let returnedAmount = 0;
+
+    returnedAmount += fieldBet;
+    fieldBet = 0;
+
+    for (const num in placeBets) {
+        returnedAmount += placeBets[num];
+        placeBets[num] = 0;
+    }
+
+    if (point === 0) { // Only clear line and bonus bets if point is OFF (come out roll phase)
+        returnedAmount += passLineBet;
+        returnedAmount += dontPassBet;
+        returnedAmount += smallBonusBet;
+        returnedAmount += tallBonusBet;
+        returnedAmount += allBonusBet;
+
+        passLineBet = 0;
+        dontPassBet = 0;
+        smallBonusBet = 0;
+        tallBonusBet = 0;
+        allBonusBet = 0;
+    } else {
+        // Line and bonus bets cannot be removed if point is set, they are resolved by roll.
+        showStatusMessage("Pass/Don't Pass and Bonus bets cannot be cleared while point is set.", 2000);
+    }
+
+    if (returnedAmount > 0) {
+        wallet += returnedAmount;
+        updateWalletDisplayAndCookie(); // Update wallet display and cookie
+        renderAllBets();
+        showStatusMessage(`Bets cleared: +$${returnedAmount}`);
+        // After clearing, check if any bets remain to determine if game is ready to roll or betting.
+        const hasBets = passLineBet > 0 || dontPassBet > 0 || fieldBet > 0 || smallBonusBet > 0 || tallBonusBet > 0 || allBonusBet > 0 || Object.values(placeBets).some(b => b > 0);
+        updateButtonState(hasBets ? 'readyToRoll' : 'betting');
+    } else {
+        showStatusMessage("No bets to clear.", 1000);
+    }
+    updatePointIndicator(); // Re-evaluate disabled/visibility state for all bets
+}
+
+function handleRollResult(roll) {
+    let messages = [];
+
+    // Track bonus progress for any non-7 roll
+    if (roll !== 7) {
+        trackBonusProgress(roll);
+    }
+
+    // --- Resolve one-roll field bet first ---
+    if (fieldBet > 0) {
+        const bet = fieldBet;
+        let payout = 0;
+        let isWin = false;
+
+        if ([3, 4, 9, 10, 11].includes(roll)) {
+            payout = bet; // 1:1 payout
+            isWin = true;
+            messages.push(`Field bet wins <span style="color:#ffc107;">+$${payout}!</span>`);
+        } else if (roll === 2) { // Specific payout for 2
+            payout = bet * 2; // 2:1 payout
+            isWin = true;
+            messages.push(`Field bet wins <span style="color:#ffc107;">+$${payout}</span> on ${roll}!`);
+        } else if (roll === 12) { // Specific payout for 12 (TRIPLE)
+            payout = bet * 3; // 3:1 payout
+            isWin = true;
+            messages.push(`Field bet wins <span style="color:#ffc107;">+$${payout}</span> on ${roll}!`);
+        }
+
+        if (isWin) {
+            wallet += payout; // Add winnings
+            if (!keepWinningBets) {
+                wallet += bet; // Return original bet if not keeping
+                fieldBet = 0; // Clear field bet if not keeping
+            }
+            // If keepWinningBets is true, fieldBet remains on the table.
+        } else {
+            messages.push(`Field bet loses.`);
+            fieldBet = 0; // Field bet is always lost and removed
+        }
+    }
+
+    // --- POINT IS ON (After Come-Out Roll) ---
+    if (point !== 0) {
+        // Resolve Place Bets
+        for (const num in placeBets) {
+            const bet = placeBets[num];
+            if (bet > 0) {
+                if (parseInt(num) === roll) { // This place bet hits
+                    let payout = 0;
+                    if ([4, 10].includes(roll)) payout = Math.floor(bet * 9 / 5);
+                    else if ([5, 9].includes(roll)) payout = Math.floor(bet * 7 / 5);
+                    else if ([6, 8].includes(roll)) payout = Math.floor(bet * 7 / 6);
+
+                    wallet += payout; // Add only the winnings
+                    messages.push(`Place ${roll} wins <span style="color:#ffc107;">+$${payout}!</span>`);
+
+                    if (!keepWinningBets) {
+                        wallet += bet; // Return the original bet to the wallet
+                        placeBets[num] = 0; // Clear the bet from the table
+                    }
+                }
+            }
+        }
+
+        if (roll === point) {
+            messages.push(`Point ${point} Hit! Pass Line Wins!`);
+            if (passLineBet > 0) wallet += passLineBet * 2; // Win original bet + payout
+            if (dontPassBet > 0) messages.push("Don't Pass loses.");
+
+            // All remaining Place bets are returned (not paid, just returned) when point hits
+            let returnedPlaceBets = 0;
+            for (const num in placeBets) {
+                returnedPlaceBets += placeBets[num];
+                placeBets[num] = 0; // Clear all place bets
+            }
+            if (returnedPlaceBets > 0) {
+                wallet += returnedPlaceBets;
+                messages.push(`Remaining place bets returned: +$${returnedPlaceBets}`);
+            }
+            clearBoardForNewRound(); // Reset game state for new come-out roll
+
+        } else if (roll === 7) {
+            messages.push(`Seven Out! Pass Line and Place Bets Lose.`);
+            if (dontPassBet > 0) {
+                wallet += dontPassBet * 2; // Win original bet + payout
+                messages.push("Don't Pass Wins!");
+            }
+            // Bonus bets are lost on 7-out if not already won
+            if (smallBonusBet > 0) { showStatusMessage("Small Bonus bet loses."); smallBonusBet = 0; }
+            if (tallBonusBet > 0) { showStatusMessage("Tall Bonus bet loses."); tallBonusBet = 0; }
+            if (allBonusBet > 0) { showStatusMessage("All Bonus bet loses."); allBonusBet = 0; }
+
+            resetBonusProgress(); // Reset bonus tracking on Seven Out
+            clearBoardForNewRound(); // Reset game state for new come-out roll
+
+        }
+    }
+    // --- COME-OUT ROLL ---
+    else {
+        if ([7, 11].includes(roll)) {
+            messages.push(`${roll}! Pass Line Wins!`);
+            if (passLineBet > 0) wallet += passLineBet * 2;
+            if (dontPassBet > 0) messages.push("Don't Pass loses.");
+            clearBoardForNewRound();
+        } else if ([2, 3].includes(roll)) {
+            messages.push(`${roll}! Craps! Pass loses.`);
+            if (dontPassBet > 0) { wallet += dontPassBet * 2; messages.push("Don't Pass wins!"); }
+            clearBoardForNewRound();
+        } else if (roll === 12) {
+            messages.push(`12! Pass loses. Don't Pass PUSH.`);
+            if (dontPassBet > 0) wallet += dontPassBet; // Push (return original bet)
+            clearBoardForNewRound();
+        } else {
+            point = roll;
+            messages.push(`Point is now ${point}.`);
+            updatePointIndicator(); // Switch to point-on UI
+        }
+    }
+
+    showStatusMessage(messages.length > 0 ? messages.join('<br>') : `Rolled ${roll}.`);
+    updateWalletDisplayAndCookie(); // Update wallet display and cookie
+    renderAllBets();
+
+    // Determine if ready for next roll or back to betting phase
+    const hasBets = passLineBet > 0 || dontPassBet > 0 || fieldBet > 0 || smallBonusBet > 0 || tallBonusBet > 0 || allBonusBet > 0 || (point !== 0 && Object.values(placeBets).some(b => b > 0));
+    if (point !== 0) updateButtonState('readyToRoll'); // If point is set, you can always roll
+    else if (hasBets) updateButtonState('readyToRoll'); // If no point, but still have bets (e.g. field), you can roll
+    else updateButtonState('betting'); // If no point and no bets, go to betting phase
+}
+
+function rollDice() {
+
+    const hasLineBet = passLineBet > 0 || dontPassBet > 0;
+    const hasOtherBets = fieldBet > 0 || Object.values(placeBets).some(b => b > 0);
+    const hasBonusBets = smallBonusBet > 0 || tallBonusBet > 0 || allBonusBet > 0;
+
+    // Can only roll if there's a Pass/Don't Pass bet (if point is off)
+    // Or if there are any bets at all (if point is on or if it's a field bet or bonus bet)
+    if (point === 0 && !hasLineBet && !hasOtherBets && !hasBonusBets) { // No point, and no line bets to set a point
+        showStatusMessage("Place a Pass Line or Don't Pass bet to start!");
+        return;
+    } else if (point !== 0 && !hasLineBet && !hasOtherBets && !hasBonusBets) { // Point is on, but no bets remain (e.g., cleared them all)
+        showStatusMessage("Place a bet to continue the round!");
+        return;
+    }
+
+    const gameConsoleEl = document.getElementById('playingSurface');
+
+    gameConsoleEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    // Scroll to the top of the game console so dice are visible
+    //die1El.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    updateButtonState('inProgress'); // Disable buttons during roll animation
+
+    throwDice();
+
+}
+
+function handleBetPlacement(area) {
+    const type = area.dataset.betType;
+    const number = parseInt(area.dataset.number); // For place bets
+    const bonusTarget = area.dataset.bonusTarget; // For bonus bets
+
+    if (currentBet <= 0 || wallet < currentBet) {
+        showStatusMessage("Insufficient funds or invalid bet amount!");
+        return;
+    }
+
+    // Prevent placing bets if the area is visually disabled (d-none)
+    if (area.classList.contains('d-none')) {
+        showStatusMessage("This bet cannot be placed at this time.", 1000);
+        return;
+    }
+
+    // Specific rules for bet placement based on game state
+    if (type === 'pass') {
+        if (point !== 0) { showStatusMessage("Pass Line bets can only be placed on a Come-Out roll.", 1000); return; }
+        if (dontPassBet > 0) { showStatusMessage("Cannot bet Pass and Don't Pass at the same time.", 1000); return; }
+        passLineBet += currentBet;
+    } else if (type === 'dontpass') {
+        if (point !== 0) { showStatusMessage("Don't Pass bets can only be placed on a Come-Out roll.", 1000); return; }
+        if (passLineBet > 0) { showStatusMessage("Cannot bet Pass and Don't Pass at the same time.", 1000); return; }
+        dontPassBet += currentBet;
+    } else if (type === 'place') {
+        if (point === 0) { showStatusMessage("A point must be set before placing Place bets.", 1000); return; }
+        placeBets[number] = (placeBets[number] || 0) + currentBet;
+    } else if (type === 'field') {
+        fieldBet += currentBet;
+    } else if (type === 'bonus') {
+        if (point !== 0) { showStatusMessage("Bonus bets can only be placed on a Come-Out roll.", 1000); return; }
+        if (bonusTarget === 'small') {
+            if (smallBonusBet > 0) { showStatusMessage("You already have a Small Bonus bet placed.", 1000); return; }
+            smallBonusBet += currentBet;
+        } else if (bonusTarget === 'tall') {
+            if (tallBonusBet > 0) { showStatusMessage("You already have a Tall Bonus bet placed.", 1000); return; }
+            tallBonusBet += currentBet;
+        } else if (bonusTarget === 'all') {
+            if (allBonusBet > 0) { showStatusMessage("You already have an All Bonus bet placed.", 1000); return; }
+            allBonusBet += currentBet;
+        }
+    }
+
+    wallet -= currentBet;
+    updateWalletDisplayAndCookie(); // Update wallet display and cookie
+    renderAllBets();
+    updateButtonState('readyToRoll'); // Game is ready to roll once bets are placed
+    updatePointIndicator(); // Re-evaluate UI state after placing a bet
+}
+
+const bettingLayoutElements = document.querySelectorAll('.bet-area');
+bettingLayoutElements.forEach(area => {
+    area.addEventListener('click', () => {
+        handleBetPlacement(area);
+    });
+});
+
+// New: Event delegation for bonus bet areas
+const bonusBettingElements = document.querySelectorAll('.bonus-bet-area');
+bonusBettingElements.forEach(area => {
+    area.addEventListener('click', () => {
+        handleBetPlacement(area);
+    });
+});
+
+btnRoll.addEventListener('click', rollDice);
+
+btnClearBets.addEventListener('click', clearActiveBets);
+
+// Event listener for the Keep Bets button (toggle functionality)
+btnKeepBets.addEventListener('click', () => {
+    keepWinningBets = !keepWinningBets; // Toggle the boolean
+    btnKeepBets.classList.toggle('active-toggle-button', keepWinningBets); // Toggle the class for visual feedback
+    showStatusMessage(keepWinningBets ? "Winning bets will stay up." : "Winning bets will be returned.", 1000);
+});
+
+// Event listeners for bet value selection buttons
+betButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const betValue = button.dataset.bet;
+        currentBet = (betValue === 'max') ? wallet : parseInt(betValue);
+        if (currentBet > wallet) currentBet = wallet; // Cap bet at wallet amount
+        betAmountEl.textContent = currentBet.toLocaleString('en-US'); updateActiveBetButton(currentBet);
+    });
+});
+
+#### file: ./js/common.js
+const playingSurfaceEl = document.querySelector('.playing-surface');
+
+playingSurfaceEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+// Adjust body padding-top based on fixed navbar height
+document.addEventListener('DOMContentLoaded', function() {
+    const navbar = document.querySelector('.navbar.fixed-top');
+    if (navbar) {
+        const setBodyPadding = () => {
+            const navbarHeight = navbar.offsetHeight;
+            document.body.style.paddingTop = navbarHeight + 'px';
+        };
+        setBodyPadding(); // Set initially
+        window.addEventListener('resize', setBodyPadding); // Adjust on resize
+    }
+});
+#### file: ./js/hardways.js
+class HardwaysWatcher {
+
+    constructor() {
+
+        console.log("HardwaysWatcher initialized");
+
+        events.subscribe('dieRolled', this.checkHardways.bind(this));
+
+        console.log("HardwaysWatcher initialized");
+
+    }
+
+    checkHardways({ dieOne, dieTwo, dieTotal }) {
+
+        console.log(`[HardwaysWatcher] Event Received: dieOne=${dieOne}, dieTwo=${dieTwo}, Total=${dieTotal}`);
+
+        if (dieOne === dieTwo && [2, 3, 4, 5].includes(dieOne)) {
+
+            // alert(`🔥 Hardways! Rolled doubles ${dieOne} + ${dieTwo} = ${dieTotal}`);
+
+            console.log("🔥 Hardways! Rolled doubles: " + dieOne + " + " + dieTwo + " = " + dieTotal);
+
+        }
+
+    }
+
+}
+
+new HardwaysWatcher();
+

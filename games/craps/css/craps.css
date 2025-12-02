@@ -1,4 +1,3 @@
-
 /* Custom styles adapted for the Quartz theme */
 :root {
     --quartz-primary: #593196;
@@ -322,11 +321,30 @@ body {
 }
 
 
+/* This is the key that makes the children sit on the same row on DESKTOP */
+#diceAndBonusArea {
+    display: flex; /* Default is flex-direction: row for desktop */
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 1rem;
+    gap: 10px; /* Provides space between the items */
+}
+
+.equal-bonus-area {
+    flex: 1 1 0; /* Grow, Shrink, and Base Width (for desktop side layout) */
+    text-align: center;
+    font-size: 1.4em; /* Centering and bigger text from first request */
+}
+
+
+
+
 /* --- Mobile Responsiveness --- */
 @media (max-width: 768px) {
     .game-console, #bonusTrackerPanel {
         padding: 1rem;
-        margin-top: 1rem; /* Keep consistent margin for mobile too */
+        margin-top: 1rem;
     }
     .action-button { font-size: 1.2rem; }
     .bet-button { font-size: 0.8rem; }
@@ -337,21 +355,50 @@ body {
     .place-bets-grid {
         grid-template-columns: repeat(3, 1fr);
     }
-}
+    
+    /* === CRITICAL MOBILE LAYOUT CHANGES FOR BONUS/DICE AREA === */
 
+    /* A. Main Container: Stack the children vertically */
+    #diceAndBonusArea {
+        flex-direction: column; 
+        gap: 0.5rem; /* This controls the spacing between rows (bonus group and dice) */
+    }
+    
+    /* B. Dice Area Reset: Remove desktop margin that causes vertical gaps */
+    #diceWrapper {
+        order: 2; 
+        width: 100%; 
+        **margin-bottom: 0;** /* Critical: Remove the 1rem margin-bottom from the .dice-area rule */
+    }
 
-/* This is the key that makes the children sit on the same row */
-#diceAndBonusArea {
-    display: flex; 
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    margin-bottom: 1rem;
-    gap: 10px; /* Provides space between the items */
-}
+    /* C. Bonus Areas: Force to top (order: 1) and make them share the row space */
+    #bonusTextLeft {
+        order: 1; 
+        flex: 0 0 49%; 
+    }
 
-/* This is the key that makes the bonus areas expand equally */
-.equal-bonus-area {
-    flex: 1 1 0; /* Grow, Shrink, and Base Width */
-    /* ... (rest of your styling) ... */
+    #bonusTextRight {
+        order: 1; 
+        flex: 0 0 49%; 
+    }
+
+    /* D. General Cleanup for Bonus/Dice area */
+    .equal-bonus-area {
+        /* Ensure no extra vertical margin/padding is causing gaps within the row */
+        margin: 0;
+        padding: 0.5rem; /* Keep some padding inside the element if necessary */
+    }
+    
+    /* E. Restore Horizontal Alignment (The trick to put order 1 items side-by-side) */
+    #diceAndBonusArea {
+        /* The `align-items: center` from the desktop rule is what keeps them centered. */
+        /* To make the two 49% bonus areas sit next to each other when in column mode, 
+           we need to make the parent container wider than 100% or allow wrapping,
+           but since the dice area is also a child, the best way is usually to 
+           ensure the bonus areas are aligned to the start/center of the column.
+           Let's keep the desktop's `align-items: center;` and rely on `width: 100%`.
+           We will just remove the left/right margins on the children that might be pushing them apart. */
+        align-items: center; 
+    }
+    /* ========================================================= */
 }
