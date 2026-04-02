@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const btnDeal = document.getElementById('btnDeal');
     const btnClearBet = document.getElementById('btnClearBet');
     const betButtons = document.querySelectorAll('.bet-value-button');
-    const walletAmountEl = document.getElementById('walletAmount');
+   // const walletAmountEl = document.getElementById('walletAmount');
     const betAmountEl = document.getElementById('betAmount');
     const playerActionButtonsEl = document.getElementById('playerActionButtons');
 
