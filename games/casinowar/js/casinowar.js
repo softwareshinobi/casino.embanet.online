@@ -30,7 +30,7 @@ const btnWar = document.getElementById('btnWar');
 const btnSurrender = document.getElementById('btnSurrender');
 const btnDeal = document.getElementById('btnDeal');
 const betButtons = document.querySelectorAll('.bet-button');
-const walletAmountEl = document.getElementById('walletAmount');
+//const walletAmountEl = document.getElementById('walletAmount');
 const betAmountEl = document.getElementById('betAmount');
 
 // --- Game State Variables ---

@@ -1,10 +1,10 @@
 services:
 
-    casino.softwareshinobi.online:
+    casino.embanet.online:
 
-        container_name: casino.softwareshinobi.online
+        container_name: casino.embanet.online
 
-        image: softwareshinobi/casino.softwareshinobi.online:main
+        image: softwareshinobi/casino.embanet.online:main
 
         build:
 

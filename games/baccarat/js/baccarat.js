@@ -34,7 +34,7 @@ const btnDeal = document.getElementById('btnDeal');
 const btnClearBet = document.getElementById('btnClearBet');
 const betTypeButtons = [btnBetPlayer, btnBetBanker, btnBetTie];
 const betButtons = document.querySelectorAll('.bet-value-button');
-const walletAmountEl = document.getElementById('walletAmount');
+//const walletAmountEl = document.getElementById('walletAmount');
 const betAmountEl = document.getElementById('betAmount');
 
 // --- Game State Variables ---
