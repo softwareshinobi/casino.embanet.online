@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
         const bettingMatContainer = document.getElementById('bettingMat');
-        const walletAmountEl = document.getElementById('walletAmount');
+//        const walletAmountEl = document.getElementById('walletAmount');
         const totalBetAmountEl = document.getElementById('totalBetAmount');
         const betButtons = document.querySelectorAll('.bet-button');
         const btnSpin = document.getElementById('btnSpin');

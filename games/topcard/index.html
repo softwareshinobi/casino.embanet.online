@@ -4,6 +4,8 @@
 
 <head>
 
+    <title>TopCard / EmbaNET Casino </title>
+
 <!-- html / styling / begin -->
 
 <meta charset="UTF-8" />
@@ -24,8 +26,6 @@
 
 <!-- html / styling / end -->
 
-    <title>Casino War / EmbaNET Hotal & Casino </title>
-
     <style>
         /* Custom styles adapted for the Quartz theme */
         :root {
@@ -33,28 +33,28 @@
             --quartz-secondary: #18b2b2;
             --quartz-dark: #343f56;
             --quartz-light: #f8f9fa;
-            --surrender-red: #B71C1C;
+            --tie-yellow: #ffc107;
+            /* Define custom colors for bet buttons, consistent with Roulette/Slots */
+            --custom-pink-button: #e91e63;
+            --custom-pink-button-hover: #ff4081;
+            --custom-pink-button-active: #ff4081;
         }
 
         html, body {
             height: 100%;
             margin: 0;
-            /* Allow vertical scrolling on all screen sizes */
-            overflow-y: auto;
+            overflow-y: auto; /* Allow vertical scrolling on all screen sizes */
             overflow-x: hidden; /* Prevent horizontal scrolling */
         }
 
         body {
-            /* Use a consistent system font stack */
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             display: flex;
             justify-content: center;
-            /* Align items to the top to respect padding-top */
-            align-items: flex-start;
+            align-items: flex-start; /* Align items to the top to respect padding-top */
             padding: 0.5rem; /* Padding for small screens (sides) */
             background-color: var(--bs-body-bg);
             box-sizing: border-box; /* Include padding in element's total width and height */
-            /* min-height and flex-direction for stacking already handled by flex properties */
         }
 
         .game-console {
@@ -69,9 +69,8 @@
             display: flex;
             flex-direction: column;
             z-index: 1; /* Ensure it's above the background if any */
-            /* Add a top margin for consistent spacing below the fixed navbar */
             margin-top: 1rem;
-            margin-bottom: 20px; /* Add some space at the bottom */
+            margin-bottom: 20px;
         }
 
         .playing-surface {
@@ -82,7 +81,7 @@
             box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
             display: flex;
             justify-content: space-around;
-            align-items: center;
+            align-items: flex-start; /* Default desktop alignment */
             min-height: 250px;
         }
 
@@ -91,6 +90,15 @@
             flex-direction: column;
             align-items: center;
             gap: 0.5rem;
+            width: 45%; /* Default desktop width */
+        }
+
+        .hand-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
         }
 
         .hand-area {
@@ -106,6 +114,16 @@
             font-size: 1rem;
             color: var(--quartz-light);
             text-transform: uppercase;
+        }
+
+        .score-display {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--quartz-light);
+            background-color: rgba(0,0,0,0.3);
+            padding: 3px 10px;
+            border-radius: 10px;
+            border: 2px solid var(--quartz-secondary);
         }
 
         .card {
@@ -131,20 +149,17 @@
         .card-top { align-self: flex-start; }
         .card-bottom { align-self: flex-end; transform: rotate(180deg); }
 
+        /* Action and Bet Panels - General Styling */
         .actions-panel, .betting-panel, .info-panel {
             background-color: rgba(0, 0, 0, 0.2);
             padding: 1rem 1.5rem;
             border-radius: 15px;
         }
-        .actions-panel{
-            border-top: 3px solid var(--quartz-secondary);
-        }
-        .betting-panel, .info-panel {
-            border-top: 2px solid #212529;
-           }
+        .actions-panel{ border-top: 3px solid var(--quartz-secondary); }
+        .betting-panel, .info-panel { border-top: 2px solid #212529; }
 
+        /* Action and Bet Buttons - General Styling */
         .action-button, .bet-button {
-            /* Use system font for consistency */
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             font-weight: 700;
             text-transform: uppercase;
@@ -153,13 +168,60 @@
             width: 100%;
         }
 
-        .btn-surrender {
-            background-color: var(--surrender-red);
-            border-color: var(--surrender-red);
+        .bet-type-button {
+            border: 3px solid transparent;
+        }
+
+        .bet-type-button.active {
+            border-color: var(--tie-yellow);
+            box-shadow: 0 0 10px var(--tie-yellow);
         }
 
         .action-button { font-size: 1.2rem; }
         .bet-button { font-size: 1rem; }
+
+        /* --- Specific Bet Button Styles (from Roulette/Craps based on image) --- */
+        .betting-panel .bet-button {
+            background-color: var(--custom-pink-button);
+            border: none;
+            color: var(--quartz-light);
+            box-shadow: none;
+            border-radius: 0.375rem;
+        }
+
+        .betting-panel .bet-button:hover {
+            background-color: var(--custom-pink-button-hover);
+            border-color: var(--custom-pink-button-hover);
+            box-shadow: 0 0 10px rgba(var(--bs-primary-rgb),.5);
+        }
+
+        .betting-panel .bet-button.active {
+            background-color: var(--custom-pink-button-active);
+            border: 2px solid var(--quartz-secondary);
+            box-shadow: 0 0 15px rgba(24, 178, 178, 0.7);
+            color: var(--quartz-light);
+        }
+        /* --- End Specific Bet Button Styles --- */
+
+        /* --- Specific Info Panel Styles (from Roulette/Craps based on image) --- */
+        .info-panel {
+            background-color: var(--quartz-dark);
+            border: 2px solid var(--quartz-secondary);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+            padding: 1.2rem 1.5rem;
+        }
+
+        .info-display {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--quartz-light);
+            text-align: center;
+        }
+
+        .info-display span {
+            color: var(--quartz-secondary);
+        }
+        /* --- End Specific Info Panel Styles --- */
 
         .status-message {
             position: absolute;
@@ -178,32 +240,33 @@
             width: 90%;
         }
 
-        /* Updated info-display styles to match Craps' for better mobile responsiveness */
-        .info-display {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--quartz-light);
-            text-align: center;
-        }
-        .info-display span {
-            color: var(--quartz-secondary);
-        }
-
         /* --- Mobile Responsiveness --- */
         @media (max-width: 768px) {
-            /* Body overflow and alignment already handled globally */
-            .game-console {
-                padding: 1rem;
-                margin-top: 1rem; /* Keep consistent margin for mobile too */
-                margin-bottom: 10px; /* Adjust bottom margin for mobile */
-            }
+            .game-console { padding: 1rem; margin-top: 1rem; }
             .hand-area { min-height: 105px; gap: 5px; }
             .card { width: 60px; height: 90px; font-size: 1.5rem; }
             .card .suit { font-size: 1rem; }
-            .action-button { font-size: 1rem; }
+            .action-button, .bet-type-button { font-size: 1rem; }
             .bet-button { font-size: 0.8rem; }
-            .info-display { font-size: 1rem; } /* Override for smaller font on mobile */
-            .actions-panel, .betting-panel, .info-panel { padding: 0.75rem; }
+            .info-panel { padding: 0.75rem; }
+            .info-display { font-size: 1rem; }
+
+            /* --- Baccarat Specific Mobile Layout for Hands (Mimicking Blackjack) --- */
+            .playing-surface {
+                flex-direction: column; /* Stack hands vertically */
+                align-items: center; /* Center stacked hands */
+                padding: 0.5rem; /* Adjust padding for mobile playing surface */
+                min-height: initial; /* Allow height to adjust */
+            }
+            .hand-container {
+                width: 100%; /* Take full width to stack */
+                margin-top: 0.5rem; /* Small margin between stacked hands */
+                margin-bottom: 0.5rem;
+            }
+            .hand-container:first-child {
+                margin-top: 0; /* Remove top margin for the first hand */
+            }
+            /* Cards should already scale down from previous mobile rules */
         }
     </style>
 
@@ -270,43 +333,68 @@
 <div class="game-console">
         <div id="statusMessage" class="status-message"></div>
 
-        <div class="playing-surface">
-            <div class="hand-container">
-                <span class="hand-label">Dealer</span>
-                <div id="dealerHand" class="hand-area"></div>
+        <div id="playingSurface" class="playing-surface">
+
+                    <div class="hand-container">
+                       <div class="hand-header">
+                    <span class="hand-label">DRAGON</span>
+                    <span id="playerScore" class="score-display">0</span>
+                </div>
+                <div id="playerHand" class="hand-area"></div>
             </div>
 
             <div class="hand-container">
-                       <span class="hand-label">Player</span>
-                <div id="playerHand" class="hand-area"></div>
+                <div class="hand-header">
+                    <span class="hand-label">TIGER</span>
+                    <span id="bankerScore" class="score-display">0</span>
+                </div>
+                <div id="bankerHand" class="hand-area"></div>
+            </div>
+
+
+        </div>
+
+        <div class="actions-panel mt-2">
+            <div class="row g-2">
+
+                <div class="col-5"><button id="btnBetDragon" class="btn btn-info bet-type-button action-button">DRAGON</button></div>
+
+
+                <div class="col-2"><button id="btnBetTie" class="btn btn-warning bet-type-button action-button">T</button></div>
+
+                <div class="col-5"><button id="btnBetTiger" class="btn btn-primary bet-type-button action-button">TIGER</button></div>
+
+
+
+
+                <div class="col-12 mt-2">
+                    <button id="btnDeal" class="btn btn-success action-button">Deal</button>
+                </div>
+
             </div>
         </div>
 
-        <div class="actions-panel mt-3">
-            <div class="row g-2">
-                <div class="col-6"><button id="btnWar" class="btn btn-secondary action-button" disabled="">War</button></div>
-                <div class="col-6"><button id="btnSurrender" class="btn btn-danger action-button btn-surrender" disabled="">Surrender</button></div>
-                <div class="col-12 mt-2">
-                    <button id="btnDeal" class="btn btn-info action-button">Deal</button>
+        <div class="betting-panel mt-2">
+    <div class="row g-2">
+        <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="1000" style="background-color: black; color: white; border-color: black;">$1000</button></div>
+        <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="5000" style="background-color: purple; color: white; border-color: purple;">$5000</button></div>
+        <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button active" data-bet="25000" style="background-color: yellow; color: black; border-color: yellow;">$25000</button></div>
+        <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="100000" style="background-color: orange; color: white; border-color: orange;">$100000</button></div>
+    </div>
+            <div class="row g-2 mt-0">
+                <div class="col-12">
+                    <button id="btnClearBet" class="btn btn-secondary bet-button w-100">Clear Bet</button>
                 </div>
             </div>
         </div>
 
-        <div class="betting-panel mt-3">
-              <div class="row g-2">
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button active" data-bet="1000">$1000</button></div>
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="5000">$500</button></div>
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="10000">$10000</button></div>
-                <div class="col-6 col-sm-3"><button class="btn btn-primary bet-button bet-value-button" data-bet="50000">$50000</button></div>
-            </div>
-        </div>
-
-        <div class="info-panel mt-3">
+        <div class="info-panel mt-2">
             <div class="row">
                 <div class="col-12 col-sm-6 info-display mb-2 mb-sm-0">Bet: $<span id="betAmount">--</span></div>
                 <div class="col-12 col-sm-6 info-display">Wallet: $<span id="walletAmount">--</span></div>
             </div>
         </div>
+
     </div>
 
 <!-- html / scripting / begin -->
@@ -325,7 +413,7 @@
 
 <!-- html / scripting / end -->
 
-<script src="js/casinowar.js"></script>
+<script src="js/topcard.js"></script>
 
 </body>
 

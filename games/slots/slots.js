@@ -30,7 +30,7 @@ const reelColumns = [
 const statusMessageEl = document.getElementById('statusMessage');
 const btnSpin = document.getElementById('btnSpin');
 const betButtons = document.querySelectorAll('.bet-button');
-const walletAmountEl = document.getElementById('walletAmount');
+//const walletAmountEl = document.getElementById('walletAmount');
 const betAmountEl = document.getElementById('betAmount');
 
 // --- Game Config ---
